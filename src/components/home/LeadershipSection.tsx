@@ -36,6 +36,7 @@ export default function LeadershipSection() {
                                     src={leader.image}
                                     alt={leader.name}
                                     fill
+                                    sizes="(max-width: 768px) 160px, 192px"
                                     className="object-cover transition-all duration-500 scale-105 group-hover:scale-110"
                                 />
                             </div>
