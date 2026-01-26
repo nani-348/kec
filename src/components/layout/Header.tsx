@@ -26,8 +26,11 @@ const NAV_ITEMS = [
         label: "Groundwater Levels",
         href: "/groundwater/current-status",
         subItems: [
+            { label: "Real-Time Piezometer Levels", href: "/groundwater/real-time" },
             { label: "Current Level Status", href: "/groundwater/current-status" },
             { label: "Seasonal Groundwater Fluctuation", href: "/groundwater/seasonal-fluctuation" },
+            { label: "Seasonal GWis", href: "/groundwater/seasonal-gwis" },
+            { label: "Monsoon Rise & Power Savings", href: "/groundwater/monsoon-power" },
             { label: "Annual & Long-Term Trends", href: "/groundwater/annual-trends" },
             { label: "Piezometer-Based Observations", href: "/groundwater/piezometer-obs" },
             { label: "Spatial Distribution of Water Levels", href: "/groundwater/spatial-distribution" },

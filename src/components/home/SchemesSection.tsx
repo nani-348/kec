@@ -42,7 +42,7 @@ export default function SchemesSection() {
                                 groundwater management strategies based on hydrogeological assessments.
                             </p>
                             <Link
-                                href="#conservation"
+                                href="/conservation/proposed"
                                 className="flex items-center gap-2 text-blue-600 font-semibold group-hover:gap-3 transition-all duration-300 ease-in-out"
                             >
                                 View Analysis <ArrowRight className="w-4 h-4" />
@@ -71,7 +71,7 @@ export default function SchemesSection() {
                                 assessment including GEC norms, water balance equations, and spatial analysis techniques.
                             </p>
                             <Link
-                                href="#data-methods"
+                                href="/data-methods/methodology"
                                 className="flex items-center gap-2 text-primary font-semibold group-hover:gap-3 transition-all duration-300 ease-in-out"
                             >
                                 View Details <ArrowRight className="w-4 h-4" />

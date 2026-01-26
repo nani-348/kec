@@ -42,6 +42,14 @@ export default function SeasonalFluctuationPage() {
             Fluctuation: 4.62,
             color: "#06b6d4"
         },
+        {
+            name: "KADA Region (Avg)",
+            PreMonsoon: 20.30,
+            PostMonsoon: 15.26,
+            Fluctuation: 5.04,
+            color: "#10b981", // Emerald green for the average to stand out
+            isAverage: true
+        },
     ];
 
     const CustomTooltip = ({ active, payload, label }: any) => {

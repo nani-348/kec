@@ -4,14 +4,15 @@ import React from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import InteractiveMap from "@/components/overview/InteractiveMap";
-import { ArrowDown, ArrowUp, Droplets, Activity, Layers } from "lucide-react";
+import { ArrowDown, ArrowUp, Droplets, Activity, Layers, TrendingUp, Info } from "lucide-react";
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-    ReferenceLine, LabelList
+    LabelList, Legend, Cell
 } from "recharts";
+import clsx from "clsx";
 
 export default function CurrentStatusPage() {
-    // Data from PDF Page 10 Analysis
+    // Data Updated from User Image
     const waterLevelData = [
         {
             name: "Previous Year (2024)",
@@ -30,8 +31,32 @@ export default function CurrentStatusPage() {
     ];
 
     const comparisonData = [
-        { name: "2024 Rise", value: 1.68, fill: "#94a3b8" },
-        { name: "2025 Rise", value: 5.04, fill: "#3b82f6" }
+        { name: "Prev Water Year (2024)", rise: 1.68, fill: "#94a3b8" },
+        { name: "Present Water Year (2025)", rise: 5.04, fill: "#3b82f6" }
+    ];
+
+    const zoneAreaData = [
+        {
+            period: "Premonsoon / May",
+            less3m: 0,
+            range3to8m: 7.7,
+            range8to20m: 53.8,
+            more20m: 38.5
+        },
+        {
+            period: "Post Monsoon / Nov 2024",
+            less3m: 7.7,
+            range3to8m: 7.7,
+            range8to20m: 53.8,
+            more20m: 30.8
+        },
+        {
+            period: "Post Monsoon / Nov 2025",
+            less3m: 7.7,
+            range3to8m: 15.4,
+            range8to20m: 53.8,
+            more20m: 23.1
+        },
     ];
 
     return (
@@ -40,188 +65,195 @@ export default function CurrentStatusPage() {
             <main className="flex-grow container mx-auto px-4 py-8 lg:py-12 max-w-7xl">
 
                 {/* Header Section */}
-                <div className="text-center max-w-3xl mx-auto mb-12">
-                    <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 font-serif mb-4">
+                <div className="text-center max-w-4xl mx-auto mb-12">
+                    <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 font-serif mb-4 leading-tight">
                         Current Groundwater Level Status
                     </h1>
                     <p className="text-gray-600 text-lg">
-                        Monitoring the impact of monsoonal recharge on groundwater levels.
-                        Significant recovery observed in the current water year.
+                        Influence of additional recharge due to filling of MI Tanks through <span className="font-semibold text-blue-700">HNSS canal releases</span> in KADA.
                     </p>
                 </div>
 
-                {/* KPI Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    <div className="bg-white p-6 rounded-xl border border-blue-100 shadow-sm relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-10">
-                            <Droplets size={64} className="text-blue-600" />
-                        </div>
-                        <p className="text-sm font-medium text-gray-500 mb-2">Monsoon Rise (2025)</p>
-                        <div className="flex items-end gap-2">
-                            <h3 className="text-4xl font-bold text-blue-600">5.04 m</h3>
-                            <span className="text-sm font-medium text-green-600 mb-1 flex items-center">
-                                <ArrowUp size={16} /> +3.36m vs 2024
-                            </span>
-                        </div>
-                        <p className="text-xs text-gray-400 mt-2">May '25 to Nov '25</p>
+                {/* Comparison Card (Replaces KPI Grid logic with specific requested data) */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-12">
+                    <div className="px-6 py-5 border-b border-gray-100 flex items-center gap-2 bg-gradient-to-r from-blue-50 to-white">
+                        <Droplets className="text-blue-600" size={20} />
+                        <h2 className="font-bold text-gray-800 text-lg">Monsoon Rise Analysis</h2>
                     </div>
 
-                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                        <p className="text-sm font-medium text-gray-500 mb-2">Current Level (Nov '25)</p>
-                        <div className="flex items-end gap-2">
-                            <h3 className="text-3xl font-bold text-gray-900">15.26 m</h3>
-                            <span className="text-xs text-gray-500 mb-1">bgl</span>
+                    <div className="grid grid-cols-1 lg:grid-cols-2">
+                        {/* Comparison Table */}
+                        <div className="p-0 border-r border-gray-100 overflow-x-auto">
+                            <table className="w-full text-sm text-left">
+                                <thead className="bg-blue-600 text-white uppercase text-xs">
+                                    <tr>
+                                        <th className="px-6 py-4">Region</th>
+                                        <th className="px-6 py-4">Period</th>
+                                        <th className="px-6 py-4 text-center">Monsoon Rise in<br />GW Levels</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100 bg-white">
+                                    <tr className="hover:bg-gray-50">
+                                        <td rowSpan={2} className="px-6 py-4 font-bold text-gray-900 align-top border-r border-gray-50">
+                                            KADA Region
+                                        </td>
+                                        <td className="px-6 py-4 text-gray-700">
+                                            <span className="font-bold block mb-1">Previous Water Year</span>
+                                            (May 2024 - Nov 2024)
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="font-bold text-gray-900 text-lg">1.68 m</div>
+                                            <div className="text-xs text-gray-500 font-mono">(19.67 - 17.99)</div>
+                                        </td>
+                                    </tr>
+                                    <tr className="bg-blue-50/30 hover:bg-blue-50/50">
+                                        <td className="px-6 py-4 text-gray-700">
+                                            <span className="font-bold block mb-1 text-blue-800">Present Water Year</span>
+                                            (May 2025 - Nov 2025)
+                                        </td>
+                                        <td className="px-6 py-4 text-center">
+                                            <div className="font-bold text-blue-700 text-xl">5.04 m</div>
+                                            <div className="text-xs text-gray-500 font-mono">(20.30 - 15.26)</div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <div className="mt-3 flex items-center gap-2 text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded w-fit">
-                            <ArrowDown size={14} /> Improved from 20.30m (May)
-                        </div>
-                    </div>
 
-                    <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                        <p className="text-sm font-medium text-gray-500 mb-2">Reference Average</p>
-                        <div className="flex items-end gap-2">
-                            <h3 className="text-3xl font-bold text-gray-900">18.31 m</h3>
-                            <span className="text-xs text-gray-500 mb-1">bgl</span>
-                        </div>
-                        <p className="text-xs text-gray-400 mt-2">Decadal Mean (Last 10 Yrs)</p>
-                    </div>
-                </div>
-
-                {/* Analysis Section */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                    {/* Chart */}
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <div className="flex items-center justify-between mb-6">
-                            <h2 className="text-lg font-bold text-gray-800">Monsoon Rise Comparison</h2>
-                            <span className="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-600 rounded">
-                                2024 vs 2025
-                            </span>
-                        </div>
-                        <div className="h-[300px] w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={comparisonData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
-                                    <XAxis
-                                        dataKey="name"
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: '#6b7280', fontSize: 12 }}
-                                        dy={10}
-                                    />
-                                    <YAxis
-                                        hide
-                                        domain={[0, 6]}
-                                    />
-                                    <Tooltip
-                                        cursor={{ fill: '#f9fafb' }}
-                                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                    />
-                                    <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={80}>
-                                        <LabelList dataKey="value" position="top" formatter={(val) => `${val} m`} style={{ fill: '#374151', fontWeight: 600 }} />
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                        <p className="text-sm text-gray-500 mt-4 text-center">
-                            The monsoonal rise in 2025 is <span className="font-bold text-gray-900">3x higher</span> than in 2024, indicating highly effective recharge.
-                        </p>
-                    </div>
-
-                    {/* Text / Context */}
-                    <div className="flex flex-col justify-center space-y-6">
-                        <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-                            <h3 className="text-lg font-bold text-blue-800 mb-2">Impact Analysis</h3>
-                            <p className="text-blue-900/80 leading-relaxed text-sm">
-                                The significant rise of <strong>5.04 meters</strong> in groundwater levels during the 2025 monsoon season (May to Nov) highlights a robust aquifer response to rainfall and conservation measures.
-                            </p>
-                            <div className="mt-4 pt-4 border-t border-blue-200 flex flex-col gap-2">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-blue-800/70">Recharge vs Reference Level:</span>
-                                    <span className="font-bold text-blue-900">27.52%</span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-blue-800/70">Net Improvement vs 2024:</span>
-                                    <span className="font-bold text-blue-900">+3.36 m</span>
-                                </div>
+                        {/* Chart */}
+                        <div className="p-6 flex flex-col justify-center bg-gray-50/30">
+                            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-6 text-center">Comparative Rise (Meters)</h3>
+                            <div className="h-[200px] w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={comparisonData} layout="vertical" margin={{ left: 20, right: 30 }}>
+                                        <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} />
+                                        <XAxis type="number" hide />
+                                        <YAxis dataKey="name" type="category" width={150} tick={{ fontSize: 11, fontWeight: 600 }} />
+                                        <Tooltip cursor={{ fill: 'transparent' }} />
+                                        <Bar dataKey="rise" barSize={32} radius={[0, 4, 4, 0]}>
+                                            <LabelList dataKey="rise" position="right" formatter={(val: number) => `${val} m`} style={{ fontWeight: 'bold' }} />
+                                            {comparisonData.map((entry, index) => (
+                                                <Cell key={index} fill={entry.fill} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
                             </div>
-                        </div>
-
-                        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                            <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                <Activity size={18} className="text-orange-500" />
-                                Critical Observation
-                            </h3>
-                            <p className="text-gray-600 text-sm leading-relaxed">
-                                While the rise is substantial, maintaining these levels requires sustained demand-side management as the region enters the non-monsoon extraction period.
-                            </p>
                         </div>
                     </div>
                 </div>
 
-                {/* Spatial Distribution Map */}
-                <section className="mb-12">
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="p-2 bg-indigo-100 rounded-lg text-indigo-600">
-                                <Layers size={24} />
-                            </div>
-                            <h2 className="text-xl font-bold text-gray-900">Spatial Distribution of Water Levels</h2>
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <InteractiveMap
-                                src="/images/about-kada/page5_img44.png"
-                                alt="Pre-Monsoon Water Levels"
-                                title="Pre-Monsoon Depth to Water Level (May)"
-                                className="h-[400px]"
-                            />
-                            <InteractiveMap
-                                src="/images/about-kada/page5_img45.png"
-                                alt="Post-Monsoon Water Levels"
-                                title="Post-Monsoon Depth to Water Level (Nov)"
-                                className="h-[400px]"
-                            />
-                        </div>
-                        <p className="text-sm text-gray-500 mt-4 italic text-center">
-                            Comparison of Depth to Water Level (DTW) maps between Pre-monsoon and Post-monsoon periods.
-                        </p>
+                {/* Key Observations List */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+                    <div className="lg:col-span-7 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 className="font-bold text-gray-900 text-xl mb-6 flex items-center gap-2">
+                            <Info className="text-amber-500" /> Key Observations
+                        </h3>
+                        <ul className="space-y-4">
+                            <li className="flex items-start gap-3 text-gray-700 text-sm leading-relaxed p-3 bg-gray-50 rounded-lg">
+                                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
+                                <span>
+                                    <strong>Reference Water Level:</strong> Decadal / Last 10 years Premonsoon Average Ground water level in KADA is about <span className="font-bold">18.31 m bgl</span>.
+                                </span>
+                            </li>
+                            <li className="flex items-start gap-3 text-gray-700 text-sm leading-relaxed p-3 bg-gray-50 rounded-lg">
+                                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></div>
+                                <span>
+                                    <strong>Previous Water Year (2024):</strong> Monsoon Rise is <span className="font-bold">1.68 m</span> (from 19.67 m to 17.99 m), which is <span className="font-bold text-blue-700">9.17%</span> of Reference Water level.
+                                </span>
+                            </li>
+                            <li className="flex items-start gap-3 text-gray-700 text-sm leading-relaxed p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></div>
+                                <span>
+                                    <strong>Present Water Year (2025):</strong> Monsoon Rise is <span className="text-xl font-bold text-blue-700 block my-1">5.04 m</span> (from 20.30 m to 15.26 m), which is <span className="font-bold text-blue-700">27.52%</span> of Reference Water level.
+                                </span>
+                            </li>
+                            <li className="flex items-start gap-3 text-gray-700 text-sm leading-relaxed p-3 bg-green-50 border border-green-100 rounded-lg">
+                                <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-600 shrink-0"></div>
+                                <span>
+                                    <strong>Net Improvement:</strong> Increase in Monsoon Rise is about <span className="font-bold text-green-700">3.36 m</span> (from 1.68 to 5.04 m). This increase represents <span className="font-bold text-green-700">18.35%</span> of the Reference Water level.
+                                </span>
+                            </li>
+                        </ul>
                     </div>
-                </section>
 
-                {/* Data Table */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-                        <h3 className="font-semibold text-gray-800">Water Year Comparison</h3>
-                        <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">KADA Region Avg</span>
+                    <div className="lg:col-span-5 flex flex-col gap-6">
+                        <div className="bg-gradient-to-br from-indigo-900 to-blue-900 text-white p-8 rounded-2xl shadow-lg relative overflow-hidden flex-grow flex flex-col justify-center">
+                            <div className="relative z-10">
+                                <h3 className="font-serif text-2xl font-bold mb-4 text-indigo-100">Zone Shift Analysis</h3>
+                                <p className="text-blue-200/90 leading-relaxed mb-6">
+                                    About <span className="text-white font-bold text-lg">8% area increased</span> in Shallow Water zone (3-8 m Zone) and about <span className="text-white font-bold text-lg">8% area reduced</span> in Deep Water Zone (&gt;20m Zone).
+                                </p>
+                                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-indigo-300/60">
+                                    <Activity size={16} /> Significant Recovery
+                                </div>
+                            </div>
+                            <Activity className="absolute bottom-[-20px] right-[-20px] text-white/5 w-40 h-40" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Zone Area Table Table */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mb-12">
+                    <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <Layers className="text-gray-400" size={20} />
+                            <h3 className="font-bold text-gray-800">Zone Area Distribution (%)</h3>
+                        </div>
                     </div>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm text-left">
-                            <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
-                                <tr>
-                                    <th className="px-6 py-4">Water Year</th>
-                                    <th className="px-6 py-4">Pre-Monsoon (May)</th>
-                                    <th className="px-6 py-4">Post-Monsoon (Nov)</th>
-                                    <th className="px-6 py-4">Monsoon Rise</th>
-                                    <th className="px-6 py-4">Status</th>
+                        <table className="w-full text-sm text-center">
+                            <thead>
+                                <tr className="bg-gray-100 text-xs uppercase font-bold text-gray-600 border-b border-gray-200">
+                                    <th className="px-6 py-4 text-left w-1/4">Period</th>
+                                    <th className="px-6 py-4 bg-cyan-500 text-white">&lt; 3m</th>
+                                    <th className="px-6 py-4 bg-green-500 text-white">3 - 8m</th>
+                                    <th className="px-6 py-4 bg-yellow-500 text-white">8 - 20m</th>
+                                    <th className="px-6 py-4 bg-red-500 text-white">&gt; 20m</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
-                                <tr className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 font-bold text-gray-900">2024-25 (Present)</td>
-                                    <td className="px-6 py-4 text-gray-600">20.30 m</td>
-                                    <td className="px-6 py-4 font-bold text-blue-600">15.26 m</td>
-                                    <td className="px-6 py-4 text-green-600 font-bold">+5.04 m</td>
-                                    <td className="px-6 py-4"><span className="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold">Excellent</span></td>
-                                </tr>
-                                <tr className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 font-medium text-gray-900">2023-24 (Previous)</td>
-                                    <td className="px-6 py-4 text-gray-600">19.67 m</td>
-                                    <td className="px-6 py-4 text-gray-600">17.99 m</td>
-                                    <td className="px-6 py-4 text-gray-600">+1.68 m</td>
-                                    <td className="px-6 py-4"><span className="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-semibold">Moderate</span></td>
-                                </tr>
+                                {zoneAreaData.map((row, idx) => (
+                                    <tr key={idx} className="hover:bg-gray-50 transition-colors bg-white">
+                                        <td className="px-6 py-4 font-bold text-gray-900 text-left border-r border-gray-100">
+                                            {row.period}
+                                        </td>
+                                        <td className="px-6 py-4 text-gray-700 font-medium tabular-nums">{row.less3m}</td>
+                                        <td className="px-6 py-4 text-gray-700 font-medium tabular-nums bg-green-50/30">{row.range3to8m}</td>
+                                        <td className="px-6 py-4 text-gray-700 font-medium tabular-nums">{row.range8to20m}</td>
+                                        <td className="px-6 py-4 text-gray-700 font-medium tabular-nums bg-red-50/20">{row.more20m}</td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="p-4 bg-gray-50 text-xs text-center text-gray-500 border-t border-gray-100">
+                        Shows the percentage of KADA Region area falling within specific groundwater depth zones.
+                    </div>
+                </div>
+
+                {/* Spatial Distribution Map (Leftover from previous design, useful context) */}
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div className="flex items-center gap-3 mb-6">
+                        <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">
+                            <Layers size={20} />
+                        </div>
+                        <h2 className="text-lg font-bold text-gray-900">Spatial Context: Pre vs Post Monsoon</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <InteractiveMap
+                            src="/images/about-kada/page5_img44.png"
+                            alt="Pre-Monsoon Water Levels"
+                            title="Pre-Monsoon Depth (May '25)"
+                            className="h-[350px]"
+                        />
+                        <InteractiveMap
+                            src="/images/about-kada/page5_img45.png"
+                            alt="Post-Monsoon Water Levels"
+                            title="Post-Monsoon Depth (Nov '25)"
+                            className="h-[350px]"
+                        />
                     </div>
                 </div>
 

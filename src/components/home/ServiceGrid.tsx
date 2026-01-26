@@ -20,7 +20,7 @@ const ANALYSIS_CATEGORIES = [
         icon: Droplets,
         color: "text-blue-600",
         bg: "bg-blue-50",
-        href: "#groundwater-levels"
+        href: "/groundwater/current-status"
     },
     {
         label: "Aquifer & Storage Analysis",
@@ -28,7 +28,7 @@ const ANALYSIS_CATEGORIES = [
         icon: Layers,
         color: "text-cyan-600",
         bg: "bg-cyan-50",
-        href: "#aquifer-storage"
+        href: "/aquifer/storage-estimation"
     },
     {
         label: "Hydrology & Flow Analysis",
@@ -36,7 +36,7 @@ const ANALYSIS_CATEGORIES = [
         icon: Activity,
         color: "text-green-600",
         bg: "bg-green-50",
-        href: "#hydrology"
+        href: "/hydrology/surface"
     },
     {
         label: "MI Tanks & Surface Storage",
@@ -44,7 +44,7 @@ const ANALYSIS_CATEGORIES = [
         icon: Waves,
         color: "text-teal-600",
         bg: "bg-teal-50",
-        href: "#mi-tanks"
+        href: "/mi-tanks/inventory"
     },
     {
         label: "Water Balance & Energy",
@@ -52,7 +52,7 @@ const ANALYSIS_CATEGORIES = [
         icon: Scale,
         color: "text-indigo-600",
         bg: "bg-indigo-50",
-        href: "#water-balance"
+        href: "/water-balance/groundwater-balance"
     },
     {
         label: "Agriculture & Wells",
@@ -60,7 +60,7 @@ const ANALYSIS_CATEGORIES = [
         icon: Sprout,
         color: "text-emerald-600",
         bg: "bg-emerald-50",
-        href: "#agriculture-wells"
+        href: "/agriculture/well-inventory"
     },
 ];
 
