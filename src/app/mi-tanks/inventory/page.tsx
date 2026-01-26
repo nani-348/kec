@@ -13,6 +13,8 @@ import {
     TrendingUp,
     Waves
 } from "lucide-react";
+import { DynamicSheetTable } from "@/components/ui/DynamicSheetTable";
+import { useSheetSync } from "@/hooks/useSheetSync";
 import {
     ScatterChart,
     Scatter,
@@ -56,23 +58,38 @@ export default function MiTankInventoryPage() {
     const [selectedMandal, setSelectedMandal] = useState<string>("All");
     const [selectedType, setSelectedType] = useState<string>("All");
 
+    // Fetch Full Tank Data
+    const { data: tankData, isLoading } = useSheetSync({
+        category: "MITanks",
+        table: "TANK INVENTORY"
+    });
+
+    // Unique Mandals for Filter
+    const mandals = useMemo(() => {
+        if (!tankData) return [];
+        const m = new Set(tankData.map((t: any) => t.mandal || t.Mandal));
+        return ["All", ...Array.from(m)];
+    }, [tankData]);
+
     // Filter Logic
     const filteredTanks = useMemo(() => {
-        return TANK_DATA.filter(tank => {
-            const matchesSearch = tank.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                tank.village.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesMandal = selectedMandal === "All" || tank.mandal === selectedMandal;
-            const matchesType = selectedType === "All" || tank.type === selectedType;
+        if (!tankData) return [];
+        return tankData.filter((tank: any) => {
+            const name = (tank.name || tank.Name || "").toLowerCase();
+            const village = (tank.village || tank.Village || "").toLowerCase();
+            const mandal = tank.mandal || tank.Mandal;
+            const type = tank.type || tank.Type;
+
+            const matchesSearch = name.includes(searchTerm.toLowerCase()) || village.includes(searchTerm.toLowerCase());
+            const matchesMandal = selectedMandal === "All" || mandal === selectedMandal;
+            const matchesType = selectedType === "All" || type === selectedType;
             return matchesSearch && matchesMandal && matchesType;
         });
-    }, [searchTerm, selectedMandal, selectedType]);
+    }, [searchTerm, selectedMandal, selectedType, tankData]);
 
     // Aggregated Stats
-    const totalCapacity = filteredTanks.reduce((sum, tank) => sum + tank.capacity, 0);
-    const totalAyacut = filteredTanks.reduce((sum, tank) => sum + tank.ayacut, 0);
-    const avgFillLevel = filteredTanks.length > 0
-        ? filteredTanks.reduce((sum, tank) => sum + tank.currentLevel, 0) / filteredTanks.length
-        : 0;
+    const totalCapacity = filteredTanks.reduce((sum, tank: any) => sum + (Number(tank.capacity || tank.Capacity) || 0), 0);
+    const totalAyacut = filteredTanks.reduce((sum, tank: any) => sum + (Number(tank.ayacut || tank.Ayacut) || 0), 0);
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50/50">
@@ -112,48 +129,47 @@ export default function MiTankInventoryPage() {
                     </div>
                 </div>
 
-                {/* Capacity Analysis Chart */}
-                <div className="mb-12 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <h3 className="font-bold text-gray-800 font-serif text-xl mb-2 flex items-center gap-2">
-                        <TrendingUp size={20} className="text-blue-500" />
-                        Storage Efficiency Analysis
-                    </h3>
-                    <p className="text-sm text-gray-500 mb-6">Comparing Tank Capacity (MCFT) vs. Irrigated Area (Ayacut). Larger bubbles represent higher Full Tank Levels (FTL).</p>
+                {/* Capacity Analysis Chart - Resilient to missing data */}
+                {filteredTanks.length > 0 && (
+                    <div className="mb-12 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                        <h3 className="font-bold text-gray-800 font-serif text-xl mb-2 flex items-center gap-2">
+                            <TrendingUp size={20} className="text-blue-500" />
+                            Storage Efficiency Analysis
+                        </h3>
+                        <p className="text-sm text-gray-500 mb-6">Comparing Tank Capacity (MCFT) vs. Irrigated Area (Ayacut).</p>
 
-                    <div className="h-[300px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                                <XAxis
-                                    type="number"
-                                    dataKey="capacity"
-                                    name="Capacity"
-                                    unit=" MCFT"
-                                    label={{ value: 'Storage Capacity (MCFT)', position: 'insideBottom', offset: -10, fontSize: 12 }}
-                                    tick={{ fontSize: 12 }}
-                                />
-                                <YAxis
-                                    type="number"
-                                    dataKey="ayacut"
-                                    name="Ayacut"
-                                    unit=" Ac"
-                                    label={{ value: 'Ayacut Area (Acres)', angle: -90, position: 'insideLeft', fontSize: 12 }}
-                                    tick={{ fontSize: 12 }}
-                                />
-                                <ZAxis type="number" dataKey="ftl" range={[60, 400]} name="FTL" unit="m" />
-                                <Tooltip
-                                    cursor={{ strokeDasharray: '3 3' }}
-                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                />
-                                <Legend />
-                                <Scatter name="MI Tanks" data={filteredTanks} fill="#0ea5e9" shape="circle" />
-                            </ScatterChart>
-                        </ResponsiveContainer>
+                        <div className="h-[300px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                                    <XAxis
+                                        type="number"
+                                        dataKey="capacity"
+                                        name="Capacity"
+                                        unit=" MCFT"
+                                        label={{ value: 'Storage Capacity (MCFT)', position: 'insideBottom', offset: -10, fontSize: 12 }}
+                                    />
+                                    <YAxis
+                                        type="number"
+                                        dataKey="ayacut"
+                                        name="Ayacut"
+                                        unit=" Ac"
+                                        label={{ value: 'Ayacut Area (Acres)', angle: -90, position: 'insideLeft', fontSize: 12 }}
+                                    />
+                                    <Tooltip
+                                        cursor={{ strokeDasharray: '3 3' }}
+                                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                    />
+                                    <Legend />
+                                    <Scatter name="MI Tanks" data={filteredTanks} fill="#0ea5e9" shape="circle" />
+                                </ScatterChart>
+                            </ResponsiveContainer>
+                        </div>
                     </div>
-                </div>
+                )}
 
                 {/* Filters & Actions */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-white p-4 rounded-xl shadow-sm border border-gray-100 sticky top-20 z-10 transition-shadow duration-300">
                     <div className="relative flex-grow max-w-md">
                         <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input
@@ -165,8 +181,8 @@ export default function MiTankInventoryPage() {
                         />
                     </div>
 
-                    <div className="flex items-center gap-3 overflow-x-auto pb-1 md:pb-0">
-                        <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                    <div className="flex items-center gap-3 overflow-x-auto pb-1 md:pb-0 hide-scrollbar">
+                        <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap">
                             <Filter size={14} className="text-gray-500" />
                             <select
                                 className="bg-transparent text-sm text-gray-700 font-medium focus:outline-none cursor-pointer"
@@ -174,14 +190,13 @@ export default function MiTankInventoryPage() {
                                 onChange={(e) => setSelectedMandal(e.target.value)}
                             >
                                 <option value="All">All Mandals</option>
-                                <option value="Gudupalle">Gudupalle</option>
-                                <option value="Kuppam">Kuppam</option>
-                                <option value="Ramakuppam">Ramakuppam</option>
-                                <option value="Shanthipuram">Shanthipuram</option>
+                                {mandals.filter(m => m !== 'All').map(m => (
+                                    <option key={m} value={m as string}>{m}</option>
+                                ))}
                             </select>
                         </div>
 
-                        <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                        <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200 whitespace-nowrap">
                             <Database size={14} className="text-gray-500" />
                             <select
                                 className="bg-transparent text-sm text-gray-700 font-medium focus:outline-none cursor-pointer"
@@ -196,67 +211,15 @@ export default function MiTankInventoryPage() {
                     </div>
                 </div>
 
-                {/* Tank Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredTanks.length > 0 ? (
-                        filteredTanks.map((tank) => (
-                            <div key={tank.id} className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 group overflow-hidden">
-                                <div className="p-5">
-                                    <div className="flex justify-between items-start mb-3">
-                                        <div>
-                                            <h3 className="font-bold text-gray-900 line-clamp-1">{tank.name}</h3>
-                                            <div className="flex items-center gap-1.5 text-gray-500 text-xs mt-1">
-                                                <MapPin size={12} />
-                                                <span>{tank.village}, {tank.mandal}</span>
-                                            </div>
-                                        </div>
-                                        <div className={clsx(
-                                            "text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full",
-                                            tank.type === "System" ? "bg-blue-50 text-blue-700" : "bg-orange-50 text-orange-700"
-                                        )}>
-                                            {tank.type}
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4 my-4 py-4 border-y border-gray-50">
-                                        <div>
-                                            <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Capacity</p>
-                                            <p className="text-lg font-bold text-gray-800">{tank.capacity} <span className="text-xs font-normal text-gray-500">MCFT</span></p>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wide">Ayacut</p>
-                                            <p className="text-lg font-bold text-gray-800">{tank.ayacut} <span className="text-xs font-normal text-gray-500">Acres</span></p>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between items-center text-xs">
-                                            <span className="text-gray-500 font-medium">Estimated Storage Level</span>
-                                            <span className="font-bold text-blue-600">{tank.currentLevel}%</span>
-                                        </div>
-                                        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
-                                            <div
-                                                className="h-full bg-blue-500 rounded-full transition-all duration-1000"
-                                                style={{ width: `${tank.currentLevel}%` }}
-                                            ></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="bg-gray-50 px-5 py-3 flex justify-between items-center text-xs border-t border-gray-100">
-                                    <span className="text-gray-500">FTL: <strong>{tank.ftl}m</strong></span>
-                                    <button className="text-primary font-bold hover:underline flex items-center gap-1">
-                                        View Details <ArrowUpRight size={12} />
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="col-span-full py-12 text-center text-gray-500">
-                            <Database size={48} className="mx-auto text-gray-300 mb-4" />
-                            <h3 className="text-lg font-semibold text-gray-700">No Tanks Found</h3>
-                            <p className="text-sm">Try adjusting your search or filters.</p>
-                        </div>
-                    )}
+                {/* Dynamic Table with Filtered Data */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <DynamicSheetTable
+                        category="MITanks"
+                        table="TANK INVENTORY"
+                        data={filteredTanks} // Pass filtered data
+                        title={`Tank Inventory (${filteredTanks.length})`}
+                        className="bg-transparent"
+                    />
                 </div>
 
             </main>

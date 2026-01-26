@@ -2,6 +2,7 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import InteractiveMap from "@/components/overview/InteractiveMap";
+import { DynamicSheetTable } from "@/components/ui/DynamicSheetTable";
 import { Landmark, Map as MapIcon, Droplets, Mountain } from "lucide-react";
 
 export default function AdminProfilePage() {
@@ -132,43 +133,13 @@ export default function AdminProfilePage() {
                         <h2 className="text-2xl font-bold text-gray-900">Assessment Units (Watersheds)</h2>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left">
-                                <thead className="bg-gray-50/50 text-gray-500 uppercase text-xs">
-                                    <tr>
-                                        <th className="px-6 py-4 font-medium">Assessment Unit Code</th>
-                                        <th className="px-6 py-4 font-medium">Basin</th>
-                                        <th className="px-6 py-4 font-medium">Watershed Name</th>
-                                        <th className="px-6 py-4 font-medium">Categorization</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100">
-                                    {assessmentUnits.map((row, idx) => (
-                                        <tr key={idx} className="hover:bg-gray-50 transition-colors">
-                                            <td className="px-6 py-4 font-medium text-gray-900 mono">{row.id}</td>
-                                            <td className="px-6 py-4 text-gray-600">
-                                                <span className={`px-2 py-1 rounded text-xs font-semibold ${row.basin === 'Palar' ? 'bg-blue-100 text-blue-700' : 'bg-indigo-100 text-indigo-700'}`}>
-                                                    {row.basin}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 text-gray-800">{row.watershed}</td>
-                                            <td className="px-6 py-4">
-                                                <span className={`px-2 py-1 rounded text-xs font-semibold ${row.category === 'Safe' ? 'bg-green-100 text-green-700' :
-                                                        row.category === 'Critical' ? 'bg-red-100 text-red-700' :
-                                                            'bg-orange-100 text-orange-700'
-                                                    }`}>
-                                                    {row.category}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="p-4 bg-gray-50 border-t border-gray-100 text-center text-xs text-gray-500">
-                            * Sample data for layout verification. Complete extracted dataset to be populated.
-                        </div>
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+                        <DynamicSheetTable
+                            category="Overview"
+                            table="ASSESSMENT UNITS"
+                            title="Watershed Categorization"
+                            className="w-full"
+                        />
                     </div>
                 </section>
 

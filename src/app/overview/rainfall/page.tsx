@@ -1,32 +1,65 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import InteractiveMap from "@/components/overview/InteractiveMap";
+import { DynamicSheetTable } from "@/components/ui/DynamicSheetTable";
 import { CloudRain, Droplets, TrendingUp, Calendar } from "lucide-react";
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     PieChart, Pie, Cell, Legend
 } from "recharts";
 
-export default function RainfallPage() {
-    // Data extracted from PDF / KADA Region Profile
-    const mandalData = [
-        { name: "Gudi Palle", rainfall: 856 },
-        { name: "Kuppam", rainfall: 865 },
-        { name: "Rama Kuppam", rainfall: 773 },
-        { name: "Santhi Puram", rainfall: 813 },
-        { name: "Regional Avg", rainfall: 827, isAverage: true },
-    ];
+// Fallback data
+const INITIAL_MANDAL_DATA = [
+    { name: "Gudi Palle", rainfall: 856 },
+    { name: "Kuppam", rainfall: 865 },
+    { name: "Rama Kuppam", rainfall: 773 },
+    { name: "Santhi Puram", rainfall: 813 },
+    { name: "Regional Avg", rainfall: 827, isAverage: true },
+];
 
-    // Estimated Seasonal Distribution (Typical for Chittoor/Rayalaseema Region)
-    // Adjust numeric values if precise PDF data is extracted later
-    const seasonalData = [
-        { name: "South-West Monsoon", value: 450, color: "#3b82f6" }, // Approx 55%
-        { name: "North-East Monsoon", value: 300, color: "#6366f1" }, // Approx 35%
-        { name: "Winter & Summer", value: 77, color: "#f59e0b" },    // Approx 10%
-    ];
+const INITIAL_SEASONAL_DATA = [
+    { name: "South-West Monsoon", value: 450, color: "#3b82f6" },
+    { name: "North-East Monsoon", value: 300, color: "#6366f1" },
+    { name: "Winter & Summer", value: 77, color: "#f59e0b" },
+];
+
+export default function RainfallPage() {
+    const [mandalData, setMandalData] = useState(INITIAL_MANDAL_DATA);
+    const [seasonalData, setSeasonalData] = useState(INITIAL_SEASONAL_DATA);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                // Fetch mandal rainfall data
+                const rainfallRes = await fetch('/api/sheets?sheet=Rainfall');
+                const rainfallResult = await rainfallRes.json();
+                if (rainfallResult.success && rainfallResult.data.length > 0) {
+                    setMandalData(rainfallResult.data.map((row: any) => ({
+                        name: row.name || '',
+                        rainfall: Number(row.rainfall) || 0,
+                        isAverage: row.isAverage === true || row.isAverage === 'true',
+                    })));
+                }
+
+                // Fetch seasonal data
+                const seasonalRes = await fetch('/api/sheets?sheet=RainfallSeasonal');
+                const seasonalResult = await seasonalRes.json();
+                if (seasonalResult.success && seasonalResult.data.length > 0) {
+                    setSeasonalData(seasonalResult.data.map((row: any) => ({
+                        name: row.name || '',
+                        value: Number(row.value) || 0,
+                        color: row.color || '#3b82f6',
+                    })));
+                }
+            } catch (error) {
+                console.error("Failed to fetch sheet data:", error);
+            }
+        }
+        fetchData();
+    }, []);
 
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
@@ -185,42 +218,12 @@ export default function RainfallPage() {
                 </div>
 
                 {/* Detailed Table */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-100">
-                        <h3 className="font-semibold text-gray-800">Detailed Classification</h3>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-sm text-left">
-                            <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
-                                <tr>
-                                    <th className="px-6 py-4">Mandal Name</th>
-                                    <th className="px-6 py-4">Annual Rainfall (mm)</th>
-                                    <th className="px-6 py-4">Deviation from Avg</th>
-                                    <th className="px-6 py-4">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {mandalData.filter(d => !d.isAverage).map((row, idx) => {
-                                    const deviation = row.rainfall - 827;
-                                    const isPositive = deviation >= 0;
-                                    return (
-                                        <tr key={idx} className="hover:bg-gray-50">
-                                            <td className="px-6 py-4 font-medium text-gray-900">{row.name}</td>
-                                            <td className="px-6 py-4 font-mono text-gray-600">{row.rainfall}</td>
-                                            <td className={`px-6 py-4 font-medium ${isPositive ? 'text-green-600' : 'text-red-500'}`}>
-                                                {isPositive ? '+' : ''}{deviation} mm
-                                            </td>
-                                            <td className="px-6 py-4">
-                                                <span className={`px-2 py-1 rounded text-xs font-semibold ${isPositive ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                                                    {isPositive ? 'Above Normal' : 'Below Normal'}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+                    <DynamicSheetTable
+                        category="Overview"
+                        table="RAINFALL BY MANDAL"
+                        title="Detailed Classification"
+                    />
                 </div>
 
             </main>

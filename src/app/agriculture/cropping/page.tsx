@@ -9,6 +9,7 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid
 } from "recharts";
 import clsx from "clsx";
+import { DynamicSheetTable } from "@/components/ui/DynamicSheetTable";
 
 // --- Data Models ---
 
@@ -185,24 +186,10 @@ export default function CroppingPage() {
                             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                                 <h3 className="font-bold text-gray-900 text-lg mb-6">Efficiency Comparison</h3>
                                 <div className="overflow-hidden rounded-xl border border-gray-100">
-                                    <table className="w-full text-sm text-left">
-                                        <thead className="bg-gray-50 text-gray-500 font-medium uppercase text-xs">
-                                            <tr>
-                                                <th className="px-6 py-3">Method</th>
-                                                <th className="px-6 py-3">Efficiency</th>
-                                                <th className="px-6 py-3">Water Saving</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-100">
-                                            {WATER_SAVINGS.map((row) => (
-                                                <tr key={row.method} className="hover:bg-gray-50/50">
-                                                    <td className="px-6 py-4 font-bold text-gray-800">{row.method}</td>
-                                                    <td className="px-6 py-4 text-emerald-600 font-bold">{row.efficiency}</td>
-                                                    <td className="px-6 py-4 text-blue-600">{row.savings}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                    <DynamicSheetTable
+                                        category="Agriculture"
+                                        table="WATER EFFICIENCY BY METHOD"
+                                    />
                                 </div>
                                 <div className="mt-4 flex gap-3 p-4 bg-blue-50 rounded-xl">
                                     <Info size={18} className="text-blue-600 shrink-0 mt-0.5" />

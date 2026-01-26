@@ -1,56 +1,54 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import InteractiveMap from "@/components/overview/InteractiveMap";
-import { ArrowDown, ThermometerSun, CloudRain, TrendingDown } from "lucide-react";
+import { ArrowDown, ThermometerSun, CloudRain, TrendingDown, RefreshCw } from "lucide-react";
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     Legend, ReferenceLine
 } from "recharts";
+import { DynamicSheetTable } from "@/components/ui/DynamicSheetTable";
+
+// Fallback data
+const INITIAL_DATA = [
+    { name: "Gudi Palle", PreMonsoon: 30.74, PostMonsoon: 25.53, Fluctuation: 5.21, color: "#6366f1" },
+    { name: "Kuppam", PreMonsoon: 19.36, PostMonsoon: 14.14, Fluctuation: 5.22, color: "#3b82f6" },
+    { name: "Rama Kuppam", PreMonsoon: 18.88, PostMonsoon: 11.83, Fluctuation: 7.05, color: "#8b5cf6" },
+    { name: "Santhi Puram", PreMonsoon: 14.35, PostMonsoon: 9.73, Fluctuation: 4.62, color: "#06b6d4" },
+    { name: "KADA Region (Avg)", PreMonsoon: 20.30, PostMonsoon: 15.26, Fluctuation: 5.04, color: "#10b981", isAverage: true },
+];
 
 export default function SeasonalFluctuationPage() {
-    // Data Extracted from PDF Page 8 (Nov 2025 Block)
-    // Comparisons: May (Pre) vs Nov (Post)
-    const mandalFluctuationData = [
-        {
-            name: "Gudi Palle",
-            PreMonsoon: 30.74,
-            PostMonsoon: 25.53,
-            Fluctuation: 5.21,
-            color: "#6366f1"
-        },
-        {
-            name: "Kuppam",
-            PreMonsoon: 19.36,
-            PostMonsoon: 14.14,
-            Fluctuation: 5.22,
-            color: "#3b82f6"
-        },
-        {
-            name: "Rama Kuppam",
-            PreMonsoon: 18.88,
-            PostMonsoon: 11.83,
-            Fluctuation: 7.05,
-            color: "#8b5cf6"
-        },
-        {
-            name: "Santhi Puram",
-            PreMonsoon: 14.35,
-            PostMonsoon: 9.73,
-            Fluctuation: 4.62,
-            color: "#06b6d4"
-        },
-        {
-            name: "KADA Region (Avg)",
-            PreMonsoon: 20.30,
-            PostMonsoon: 15.26,
-            Fluctuation: 5.04,
-            color: "#10b981", // Emerald green for the average to stand out
-            isAverage: true
-        },
-    ];
+    const [mandalFluctuationData, setData] = useState(INITIAL_DATA);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const response = await fetch('/api/sheets?sheet=SeasonalFluctuation');
+                const result = await response.json();
+
+                if (result.success && result.data.length > 0) {
+                    const sheetData = result.data.map((row: any) => ({
+                        name: row.name || '',
+                        PreMonsoon: Number(row.PreMonsoon) || 0,
+                        PostMonsoon: Number(row.PostMonsoon) || 0,
+                        Fluctuation: Number(row.Fluctuation) || 0,
+                        color: row.color || '#3b82f6',
+                        isAverage: row.isAverage === true || row.isAverage === 'true',
+                    }));
+                    setData(sheetData);
+                }
+            } catch (error) {
+                console.error("Failed to fetch sheet data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
 
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
@@ -189,40 +187,17 @@ export default function SeasonalFluctuationPage() {
 
                     {/* Right: Detailed Table */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-                        <div className="p-4 border-b border-gray-100 bg-gray-50/50">
-                            <h3 className="font-bold text-gray-800">Fluctuation Data Table</h3>
-                        </div>
-                        <div className="flex-grow overflow-x-auto">
-                            <table className="w-full text-sm text-left">
-                                <thead className="bg-gray-50 text-gray-500 uppercase text-[10px] tracking-wider">
-                                    <tr>
-                                        <th className="px-4 py-3">Mandal</th>
-                                        <th className="px-4 py-3 text-right">May '25</th>
-                                        <th className="px-4 py-3 text-right">Nov '25</th>
-                                        <th className="px-4 py-3 text-right">Rise</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-50">
-                                    {mandalFluctuationData.map((row, idx) => (
-                                        <tr key={idx} className="hover:bg-blue-50/30 transition-colors">
-                                            <td className="px-4 py-3 font-semibold text-gray-700">{row.name}</td>
-                                            <td className="px-4 py-3 text-right text-gray-500">{row.PreMonsoon}</td>
-                                            <td className="px-4 py-3 text-right text-gray-900 font-medium">{row.PostMonsoon}</td>
-                                            <td className="px-4 py-3 text-right">
-                                                <span className="text-green-600 font-bold bg-green-50 px-1.5 py-0.5 rounded text-xs">
-                                                    +{row.Fluctuation.toFixed(2)}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <DynamicSheetTable
+                            category="Groundwater"
+                            table="SEASONAL FLUCTUATION"
+                            title="Fluctuation Data Table"
+                            className="bg-transparent"
+                        />
                         <div className="p-4 border-t border-gray-100 bg-blue-50/50">
                             <div className="flex items-start gap-2">
                                 <TrendingDown size={16} className="text-blue-500 mt-0.5 shrink-0" />
                                 <p className="text-xs text-gray-600 leading-snug">
-                                    <strong>Rama Kuppam</strong> recorded the most significant recharge (7.05m), indicating highly effective percolation structures or favorable geology in that zone.
+                                    <strong>Rama Kuppam</strong> recorded the most significant recharge, indicating highly effective percolation structures or favorable geology in that zone.
                                 </p>
                             </div>
                         </div>

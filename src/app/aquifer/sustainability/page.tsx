@@ -9,10 +9,10 @@ import {
     AlertTriangle,
     CheckCircle,
     Activity,
-    ArrowDownRight,
     ArrowUpRight,
     Info
 } from "lucide-react";
+import { DynamicSheetTable } from "@/components/ui/DynamicSheetTable";
 import {
     BarChart,
     Bar,
@@ -259,65 +259,13 @@ export default function SustainabilityPage() {
                 </div>
 
                 {/* Detailed Data Table */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
-                        <h3 className="font-bold text-gray-800 text-lg">Detailed Mandal Report</h3>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left text-sm">
-                            <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
-                                <tr>
-                                    <th className="px-6 py-4">Mandal Name</th>
-                                    <th className="px-6 py-4">Availability (MCM)</th>
-                                    <th className="px-6 py-4">Draft (MCM)</th>
-                                    <th className="px-6 py-4">SOD %</th>
-                                    <th className="px-6 py-4">Category</th>
-                                    <th className="px-6 py-4">Trend</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                                {SUSTAINABILITY_DATA.map((row) => (
-                                    <tr key={row.id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4 font-semibold text-gray-900">{row.name}</td>
-                                        <td className="px-6 py-4 text-gray-600">{row.availability.toFixed(2)}</td>
-                                        <td className="px-6 py-4 text-gray-600">{row.draft.toFixed(2)}</td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-2">
-                                                <span className={clsx("font-bold",
-                                                    row.sod > 90 ? "text-red-600" :
-                                                        row.sod > 70 ? "text-yellow-600" : "text-green-600"
-                                                )}>
-                                                    {row.sod.toFixed(1)}%
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <span className={clsx("px-2.5 py-1 rounded-full text-xs font-semibold border", getCategoryColor(row.category))}>
-                                                {row.category}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {row.trend === "improving" && (
-                                                <span className="flex items-center gap-1 text-green-600 text-xs font-medium">
-                                                    <ArrowUpRight size={14} /> Improving
-                                                </span>
-                                            )}
-                                            {row.trend === "stable" && (
-                                                <span className="flex items-center gap-1 text-gray-500 text-xs font-medium">
-                                                    <Activity size={14} /> Stable
-                                                </span>
-                                            )}
-                                            {row.trend === "worsening" && (
-                                                <span className="flex items-center gap-1 text-red-500 text-xs font-medium">
-                                                    <ArrowDownRight size={14} /> Declining
-                                                </span>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden px-6 pb-6 pt-2">
+                    <DynamicSheetTable
+                        category="Aquifer"
+                        table="SUSTAINABILITY INDICATORS"
+                        title="Detailed Mandal Report"
+                        className="w-full"
+                    />
                 </div>
 
             </main>

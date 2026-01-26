@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Calculator, Database, Info, Droplets, PieChart as PieIcon, ArrowRight } from "lucide-react";
+import { DynamicSheetTable } from "@/components/ui/DynamicSheetTable";
 import {
     PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend,
     BarChart, Bar, XAxis, YAxis, CartesianGrid
@@ -142,13 +143,15 @@ export default function StorageEstimationPage() {
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
-                        <div className="mt-4 grid grid-cols-4 gap-4 text-center">
-                            {STORAGE_DATA.map((item) => (
-                                <div key={item.name} className="p-2 rounded-lg bg-gray-50">
-                                    <p className="text-[10px] text-gray-500 font-bold uppercase">{item.name}</p>
-                                    <p className="text-sm font-bold text-gray-900">{item.storage}</p>
-                                </div>
-                            ))}
+                        <div className="mt-6">
+                            <h4 className="font-bold text-gray-800 mb-3 text-sm uppercase tracking-wide">Live Storage Data</h4>
+                            <div className="bg-gray-50 rounded-xl border border-gray-100 overflow-hidden">
+                                <DynamicSheetTable
+                                    category="Aquifer"
+                                    table="STORAGE ESTIMATION"
+                                    className="bg-transparent"
+                                />
+                            </div>
                         </div>
                     </div>
 

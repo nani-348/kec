@@ -4,6 +4,7 @@ import React from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Activity, Droplets, Zap, Info, ArrowUpRight } from "lucide-react";
+import { DynamicSheetTable } from "@/components/ui/DynamicSheetTable";
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     Legend
@@ -174,7 +175,7 @@ export default function ParametersPage() {
                 </div>
 
                 {/* Educational / Context Section */}
-                <div className="bg-slate-900 rounded-2xl shadow-lg border border-slate-800 p-8 text-white relative overflow-hidden">
+                <div className="bg-slate-900 rounded-2xl shadow-lg border border-slate-800 p-8 text-white relative overflow-hidden mb-12">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
                     <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -206,6 +207,19 @@ export default function ParametersPage() {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {/* Dynamic Data Table */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6 mx-auto">
+                    <div className="mb-4">
+                        <h3 className="font-bold text-gray-800 text-xl">Hydraulic Parameters Data</h3>
+                        <p className="text-sm text-gray-500">Live measurements from aquifer performance tests.</p>
+                    </div>
+                    <DynamicSheetTable
+                        category="Aquifer"
+                        table="HYDRAULIC PARAMETERS"
+                        className="w-full"
+                    />
                 </div>
 
             </main>
