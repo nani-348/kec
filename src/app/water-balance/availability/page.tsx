@@ -164,7 +164,7 @@ export default function AvailabilityPage() {
                                         <XAxis type="number" hide />
                                         <YAxis dataKey="name" type="category" width={80} axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 11, fontWeight: 500 }} />
                                         <Tooltip
-                                            formatter={(value: any) => [unit === "TMC" ? value : value + " MCM", "Availability"]}
+                                            formatter={(value: number | string) => [unit === "TMC" ? value : `${value} MCM`, "Availability"]}
                                             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                                         />
                                         <Bar dataKey={unit === "TMC" ? "tmc" : "mcm"} radius={[0, 4, 4, 0]} barSize={20}>

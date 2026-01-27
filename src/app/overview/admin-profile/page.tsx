@@ -49,7 +49,7 @@ export default function AdminProfilePage() {
                         Administrative & Geographic Profile
                     </h1>
                     <p className="text-gray-600 text-lg">
-                        A detailed breakdown of the KADA region's administrative divisions, river basins, and groundwater assessment units.
+                        A detailed breakdown of the KADA region&apos;s administrative divisions, river basins, and groundwater assessment units.
                     </p>
                 </div>
 

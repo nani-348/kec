@@ -2,6 +2,7 @@
 
 import { useSheetSync, SyncStatus } from '@/hooks/useSheetSync';
 import { useMemo } from 'react';
+import type { ReactNode } from 'react';
 
 interface DynamicSheetTableProps {
     category: string;
@@ -9,7 +10,7 @@ interface DynamicSheetTableProps {
     title?: string;
     interval?: number;
     className?: string;
-    data?: any[]; // Allow passing pre-fetched/filtered data
+    data?: Array<Record<string, unknown>>; // Allow passing pre-fetched/filtered data
 }
 
 /**
@@ -68,7 +69,7 @@ export function DynamicSheetTable({
                 <h3 className="font-bold mb-2">Error Loading Data</h3>
                 <p>{error.message}</p>
                 <p className="text-sm mt-2 opacity-75">
-                    Check if the category "{category}" and table "{table}" exist in the Sheet.
+                    Check if the category &quot;{category}&quot; and table &quot;{table}&quot; exist in the Sheet.
                 </p>
             </div>
         );
@@ -109,10 +110,10 @@ export function DynamicSheetTable({
                                 className="hover:bg-gray-50 transition-colors duration-150"
                             >
                                 {headers.map((header, colIndex) => {
-                                    const value = row[header] as string | number | boolean | null;
+                                    const value = row[header];
 
                                     // Custom formatting for different types
-                                    let displayValue: React.ReactNode = value;
+                                    let displayValue: ReactNode = value as ReactNode;
 
                                     if (value === null || value === undefined) {
                                         displayValue = <span className="text-gray-300">-</span>;
@@ -126,6 +127,8 @@ export function DynamicSheetTable({
                                                 No
                                             </span>
                                         );
+                                    } else if (typeof value === 'object') {
+                                        displayValue = JSON.stringify(value);
                                     }
 
                                     return (

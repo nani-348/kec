@@ -132,17 +132,28 @@ export function useCategorySync(category: string, interval = 5000) {
  * Display component showing sync status
  */
 export function SyncStatus({ lastSynced }: { lastSynced: Date | null }) {
-    const [, forceUpdate] = useState({});
+    const [secondsAgo, setSecondsAgo] = useState<number | null>(null);
 
     // Update display every second
     useEffect(() => {
-        const timer = setInterval(() => forceUpdate({}), 1000);
-        return () => clearInterval(timer);
-    }, []);
+        if (!lastSynced) return;
+
+        const update = () => {
+            const diff = Math.floor((Date.now() - lastSynced.getTime()) / 1000);
+            setSecondsAgo(diff);
+        };
+
+        const timeoutId = setTimeout(update, 0);
+        const timer = setInterval(update, 1000);
+        return () => {
+            clearTimeout(timeoutId);
+            clearInterval(timer);
+        };
+    }, [lastSynced]);
 
     if (!lastSynced) return null;
 
-    const secondsAgo = Math.floor((Date.now() - lastSynced.getTime()) / 1000);
+    if (secondsAgo === null) return null;
 
     return (
         <div className="flex items-center gap-2 text-xs text-gray-500">

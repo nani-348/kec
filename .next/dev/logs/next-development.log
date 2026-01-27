@@ -1,0 +1,127 @@
+[00:00:05.372] Server  LOG     ✓ Ready in 4.5s
+[00:00:19.894] Server  LOG     ○ Compiling / ...
+[00:02:04.455] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:05.143] Browser WARN    Image with src "/images/logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:02:14.440] Server  LOG     ○ Compiling /api/sheets ...
+[00:02:42.939] Server  WARN    Google Sheets credentials not configured. Using mock data.
+[00:02:43.610] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:43.612] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:43.638] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:43.639] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:44.056] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:44.061] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:44.126] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:44.127] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:44.262] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:44.311] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:44.445] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:44.446] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:44.471] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:44.472] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:44.575] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:44.576] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:47.325] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:47.327] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:52.313] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:52.316] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:02:57.306] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:02:57.307] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:02.307] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:02.308] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:07.305] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:07.305] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:12.304] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:12.305] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:17.305] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:17.306] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:21.421] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:21.421] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:26.428] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:26.429] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:31.424] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:31.425] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:36.566] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:36.567] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:41.430] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:41.431] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:46.434] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:46.434] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:51.420] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:51.420] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:03:56.422] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:03:56.422] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:04:01.424] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:04:01.424] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:04:06.757] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:04:06.758] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:04:11.457] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:04:11.461] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:04:12.036] Server  LOG     ○ Compiling /groundwater/current-status ...
+[00:04:17.303] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:04:17.304] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:04:21.426] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:04:21.430] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:04:25.523] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[00:04:25.523] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[00:04:26.638] Browser WARN    Image with src "/images/about-kada/page5_img45.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:04:26.638] Browser WARN    Image with src "/images/about-kada/page5_img44.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:04:27.643] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[00:04:27.643] Browser WARN    The width(-1) and height(-1) of chart should be greater than 0,
+       please check the style of container, or the props width(100%) and height(100%),
+       or add a minWidth(0) or minHeight(undefined) or use aspect(undefined) to control the
+       height and width.
+[00:05:11.040] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:05:11.573] Browser WARN    Image with src "/images/logo.png" has "fill" but is missing "sizes" prop. Please add it to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes
+[00:05:17.519] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:17.520] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:05:17.639] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:17.640] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:05:22.502] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:22.503] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:05:28.306] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:28.306] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:05:33.308] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:33.308] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:05:38.309] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:38.310] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:05:43.305] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:43.305] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:05:47.513] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:47.514] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:05:52.730] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:52.731] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:05:58.305] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:05:58.305] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:03.308] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:03.309] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:08.305] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:08.305] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:13.305] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:13.305] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:18.378] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:18.378] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:23.304] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:23.304] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:28.310] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:28.310] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:33.305] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:33.305] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:38.304] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:38.304] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:43.305] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:43.306] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:48.304] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:48.305] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:06:53.303] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:06:53.303] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater
+[00:07:36.307] Server  WARN    Sheet data not available for Groundwater. Using fallback.
+[00:07:36.307] Server  WARN    Table "REAL-TIME WATER LEVELS" not found in Groundwater

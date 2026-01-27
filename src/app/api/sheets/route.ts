@@ -8,6 +8,11 @@ import {
 
 export const dynamic = 'force-dynamic'; // Disable caching for real-time data
 
+type SheetCategory = (typeof CATEGORY_SHEETS)[number];
+
+const isSheetCategory = (value: string): value is SheetCategory =>
+    CATEGORY_SHEETS.includes(value as SheetCategory);
+
 export async function GET(request: NextRequest) {
     try {
         const searchParams = request.nextUrl.searchParams;
@@ -27,7 +32,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Check if category is valid
-        if (!CATEGORY_SHEETS.includes(category as any)) {
+        if (!isSheetCategory(category)) {
             return NextResponse.json(
                 {
                     error: `Invalid category: ${category}`,
@@ -39,7 +44,7 @@ export async function GET(request: NextRequest) {
 
         // If table is specified, return just that table
         if (table) {
-            const data = await getTableData(category as any, table);
+            const data = await getTableData(category, table);
             return NextResponse.json({
                 success: true,
                 category,
@@ -51,7 +56,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Otherwise return all tables in the category
-        const rawData = await getCategoryData(category as any);
+        const rawData = await getCategoryData(category);
         const tables = parseTables(rawData);
 
         // Convert Map to object for JSON

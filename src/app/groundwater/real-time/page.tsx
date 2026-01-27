@@ -35,6 +35,15 @@ type WaterDataRow = {
     today: number | null;    // Live
 };
 
+type RawWaterRow = Record<string, unknown>;
+
+const toNumber = (value: unknown) => (typeof value === "number" ? value : Number(value) || 0);
+const toNullableNumber = (value: unknown) => {
+    if (value === null || value === undefined || value === "") return null;
+    const numeric = typeof value === "number" ? value : Number(value);
+    return Number.isNaN(numeric) ? null : numeric;
+};
+
 // Complete Data Set matching the User's Image + New Analysis columns
 const INITIAL_DATA: WaterDataRow[] = [
     { mandal: "Gudupalle", village: "Dravida University", preMonsoon: 15.88, postMonsoon: 16.34, lastYearDec: 12.47, presentMonth: 11.52, jan1: 12.87, jan8: 12.86, jan15: 13.58, jan22: 13.65, yesterday: 13.70, today: null },
@@ -82,19 +91,19 @@ export default function RealTimeWaterLevelPage() {
             const result = await response.json();
 
             if (result.success && result.data.length > 0) {
-                const sheetData: WaterDataRow[] = result.data.map((row: any) => ({
-                    mandal: row.mandal || '',
-                    village: row.village || '',
-                    preMonsoon: Number(row.preMonsoon) || 0,
-                    postMonsoon: Number(row.postMonsoon) || 0,
-                    lastYearDec: Number(row.lastYearDec) || 0,
-                    presentMonth: Number(row.presentMonth) || 0,
-                    jan1: Number(row.jan1) || 0,
-                    jan8: Number(row.jan8) || 0,
-                    jan15: Number(row.jan15) || 0,
-                    jan22: Number(row.jan22) || 0,
-                    yesterday: Number(row.yesterday) || 0,
-                    today: row.today ? Number(row.today) : null,
+                const sheetData: WaterDataRow[] = (result.data as RawWaterRow[]).map((row) => ({
+                    mandal: typeof row.mandal === "string" ? row.mandal : "",
+                    village: typeof row.village === "string" ? row.village : "",
+                    preMonsoon: toNumber(row.preMonsoon),
+                    postMonsoon: toNumber(row.postMonsoon),
+                    lastYearDec: toNumber(row.lastYearDec),
+                    presentMonth: toNumber(row.presentMonth),
+                    jan1: toNumber(row.jan1),
+                    jan8: toNumber(row.jan8),
+                    jan15: toNumber(row.jan15),
+                    jan22: toNumber(row.jan22),
+                    yesterday: toNumber(row.yesterday),
+                    today: toNullableNumber(row.today),
                 }));
                 setData(sheetData);
                 setLastUpdated(new Date().toLocaleTimeString());

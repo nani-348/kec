@@ -294,7 +294,7 @@ export default function DemarcationPage() {
                             <div className="flex items-start gap-2">
                                 <Info size={16} className="text-indigo-500 mt-0.5 shrink-0" />
                                 <p className="text-xs text-indigo-900/80 leading-relaxed">
-                                    <strong>Geological Context:</strong> The region is predominantly underlain by Archaean Granites and Gneisses. Groundwater occurrence represents a typical "Hard Rock" environment where storage depends entirely on the depth of weathering and intensity of secondary fractures.
+                                    <strong>Geological Context:</strong> The region is predominantly underlain by Archaean Granites and Gneisses. Groundwater occurrence represents a typical &quot;Hard Rock&quot; environment where storage depends entirely on the depth of weathering and intensity of secondary fractures.
                                 </p>
                             </div>
                         </div>

@@ -42,6 +42,11 @@ type Tank = {
     currentLevel: number; // % full mock
 };
 
+type SheetTankRow = Record<string, unknown>;
+
+const getString = (value: unknown) => (typeof value === "string" ? value : value != null ? String(value) : "");
+const getNumber = (value: unknown) => (typeof value === "number" ? value : Number(value) || 0);
+
 const TANK_DATA: Tank[] = [
     { id: "t1", name: "Pedda Cheruvu", village: "Gudupalle", mandal: "Gudupalle", type: "System", ayacut: 120, capacity: 15.5, ftl: 98.5, currentLevel: 65 },
     { id: "t2", name: "Chinana Cheruvu", village: "Nallagampalle", mandal: "Gudupalle", type: "Non-System", ayacut: 45, capacity: 4.2, ftl: 96.0, currentLevel: 30 },
@@ -59,7 +64,7 @@ export default function MiTankInventoryPage() {
     const [selectedType, setSelectedType] = useState<string>("All");
 
     // Fetch Full Tank Data
-    const { data: tankData, isLoading } = useSheetSync({
+    const { data: tankData, isLoading } = useSheetSync<SheetTankRow>({
         category: "MITanks",
         table: "TANK INVENTORY"
     });
@@ -67,18 +72,18 @@ export default function MiTankInventoryPage() {
     // Unique Mandals for Filter
     const mandals = useMemo(() => {
         if (!tankData) return [];
-        const m = new Set(tankData.map((t: any) => t.mandal || t.Mandal));
+        const m = new Set(tankData.map((t) => getString(t.mandal ?? t.Mandal)).filter(Boolean));
         return ["All", ...Array.from(m)];
     }, [tankData]);
 
     // Filter Logic
     const filteredTanks = useMemo(() => {
         if (!tankData) return [];
-        return tankData.filter((tank: any) => {
-            const name = (tank.name || tank.Name || "").toLowerCase();
-            const village = (tank.village || tank.Village || "").toLowerCase();
-            const mandal = tank.mandal || tank.Mandal;
-            const type = tank.type || tank.Type;
+        return tankData.filter((tank) => {
+            const name = getString(tank.name ?? tank.Name).toLowerCase();
+            const village = getString(tank.village ?? tank.Village).toLowerCase();
+            const mandal = getString(tank.mandal ?? tank.Mandal);
+            const type = getString(tank.type ?? tank.Type);
 
             const matchesSearch = name.includes(searchTerm.toLowerCase()) || village.includes(searchTerm.toLowerCase());
             const matchesMandal = selectedMandal === "All" || mandal === selectedMandal;
@@ -88,8 +93,8 @@ export default function MiTankInventoryPage() {
     }, [searchTerm, selectedMandal, selectedType, tankData]);
 
     // Aggregated Stats
-    const totalCapacity = filteredTanks.reduce((sum, tank: any) => sum + (Number(tank.capacity || tank.Capacity) || 0), 0);
-    const totalAyacut = filteredTanks.reduce((sum, tank: any) => sum + (Number(tank.ayacut || tank.Ayacut) || 0), 0);
+    const totalCapacity = filteredTanks.reduce((sum, tank) => sum + getNumber(tank.capacity ?? tank.Capacity), 0);
+    const totalAyacut = filteredTanks.reduce((sum, tank) => sum + getNumber(tank.ayacut ?? tank.Ayacut), 0);
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50/50">

@@ -78,7 +78,7 @@ export default function AboutKadaPage() {
                         </h1>
                         <p className="text-gray-600 text-lg leading-relaxed max-w-2xl mx-auto lg:mx-0">
                             Comprehensive geographical and groundwater profile of the Kuppam Area Development Authority region.
-                            Explore the detailed breakdown of the region's recharge areas, hilly terrain, and rainfall statistics.
+                            Explore the detailed breakdown of the region&apos;s recharge areas, hilly terrain, and rainfall statistics.
                         </p>
                     </div>
 

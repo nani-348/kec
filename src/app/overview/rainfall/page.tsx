@@ -10,6 +10,7 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     PieChart, Pie, Cell, Legend
 } from "recharts";
+import type { TooltipProps } from "recharts";
 
 // Fallback data
 const INITIAL_MANDAL_DATA = [
@@ -26,6 +27,36 @@ const INITIAL_SEASONAL_DATA = [
     { name: "Winter & Summer", value: 77, color: "#f59e0b" },
 ];
 
+type MandalRow = {
+    name?: unknown;
+    rainfall?: unknown;
+    isAverage?: unknown;
+};
+
+type SeasonalRow = {
+    name?: unknown;
+    value?: unknown;
+    color?: unknown;
+};
+
+const toNumber = (value: unknown) => (typeof value === "number" ? value : Number(value) || 0);
+const toString = (value: unknown) => (typeof value === "string" ? value : value != null ? String(value) : "");
+const toBoolean = (value: unknown) => value === true || value === "true";
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-lg">
+                <p className="font-semibold text-gray-800">{label}</p>
+                <p className="text-primary font-medium">
+                    {payload[0]?.value} mm
+                </p>
+            </div>
+        );
+    }
+    return null;
+};
+
 export default function RainfallPage() {
     const [mandalData, setMandalData] = useState(INITIAL_MANDAL_DATA);
     const [seasonalData, setSeasonalData] = useState(INITIAL_SEASONAL_DATA);
@@ -37,10 +68,10 @@ export default function RainfallPage() {
                 const rainfallRes = await fetch('/api/sheets?sheet=Rainfall');
                 const rainfallResult = await rainfallRes.json();
                 if (rainfallResult.success && rainfallResult.data.length > 0) {
-                    setMandalData(rainfallResult.data.map((row: any) => ({
-                        name: row.name || '',
-                        rainfall: Number(row.rainfall) || 0,
-                        isAverage: row.isAverage === true || row.isAverage === 'true',
+                    setMandalData((rainfallResult.data as MandalRow[]).map((row) => ({
+                        name: toString(row.name),
+                        rainfall: toNumber(row.rainfall),
+                        isAverage: toBoolean(row.isAverage),
                     })));
                 }
 
@@ -48,10 +79,10 @@ export default function RainfallPage() {
                 const seasonalRes = await fetch('/api/sheets?sheet=RainfallSeasonal');
                 const seasonalResult = await seasonalRes.json();
                 if (seasonalResult.success && seasonalResult.data.length > 0) {
-                    setSeasonalData(seasonalResult.data.map((row: any) => ({
-                        name: row.name || '',
-                        value: Number(row.value) || 0,
-                        color: row.color || '#3b82f6',
+                    setSeasonalData((seasonalResult.data as SeasonalRow[]).map((row) => ({
+                        name: toString(row.name),
+                        value: toNumber(row.value),
+                        color: toString(row.color) || '#3b82f6',
                     })));
                 }
             } catch (error) {
@@ -60,20 +91,6 @@ export default function RainfallPage() {
         }
         fetchData();
     }, []);
-
-    const CustomTooltip = ({ active, payload, label }: any) => {
-        if (active && payload && payload.length) {
-            return (
-                <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-lg">
-                    <p className="font-semibold text-gray-800">{label}</p>
-                    <p className="text-primary font-medium">
-                        {payload[0].value} mm
-                    </p>
-                </div>
-            );
-        }
-        return null;
-    };
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50/50">

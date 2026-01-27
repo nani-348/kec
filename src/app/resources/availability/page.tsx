@@ -117,7 +117,7 @@ export default function AvailabilityPage() {
                         Groundwater Availability & Balance
                     </h1>
                     <p className="text-gray-600 text-lg">
-                        Comprehensive assessment of the aquifer's <span className="font-semibold text-blue-600">Replenishable Resources</span> versus <span className="font-semibold text-red-600">Extraction Draft</span>.
+                        Comprehensive assessment of the aquifer&apos;s <span className="font-semibold text-blue-600">Replenishable Resources</span> versus <span className="font-semibold text-red-600">Extraction Draft</span>.
                     </p>
                 </motion.div>
 

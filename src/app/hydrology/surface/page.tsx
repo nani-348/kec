@@ -78,7 +78,7 @@ export default function SurfaceHydrologyPage() {
                                         <GitMerge size={20} className="text-blue-600" />
                                         Stream Order Analysis
                                     </h3>
-                                    <p className="text-sm text-gray-500">Horton's Laws of Stream Numbers</p>
+                                    <p className="text-sm text-gray-500">Horton&apos;s Laws of Stream Numbers</p>
                                 </div>
                             </div>
 

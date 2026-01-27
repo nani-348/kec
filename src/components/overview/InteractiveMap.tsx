@@ -21,10 +21,26 @@ export default function InteractiveMap({ src, alt, title, className }: Interacti
     const [zoom, setZoom] = useState(1);
     const [isPanning, setIsPanning] = useState(false);
     const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
     const imageContainerRef = useRef<HTMLDivElement>(null);
     const magnifierSize = 200;
     const magnifierZoom = 3;
+
+    useEffect(() => {
+        const node = imageContainerRef.current;
+        if (!node) return;
+
+        const updateSize = () => {
+            setContainerSize({ width: node.offsetWidth, height: node.offsetHeight });
+        };
+
+        updateSize();
+        const resizeObserver = new ResizeObserver(updateSize);
+        resizeObserver.observe(node);
+
+        return () => resizeObserver.disconnect();
+    }, [isExpanded]);
 
     // Handle magnifier movement
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -79,6 +95,11 @@ export default function InteractiveMap({ src, alt, title, className }: Interacti
         setIsMagnifierActive(false);
     };
 
+    const closeModal = () => {
+        handleReset();
+        setIsExpanded(false);
+    };
+
     const handleMouseDown = (e: React.MouseEvent) => {
         if (zoom > 1 && !isMagnifierActive) {
             setIsPanning(true);
@@ -113,7 +134,7 @@ export default function InteractiveMap({ src, alt, title, className }: Interacti
 
             switch (e.key) {
                 case 'Escape':
-                    setIsExpanded(false);
+                    closeModal();
                     break;
                 case '+':
                 case '=':
@@ -135,13 +156,6 @@ export default function InteractiveMap({ src, alt, title, className }: Interacti
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isExpanded]);
-
-    // Reset on close
-    useEffect(() => {
-        if (!isExpanded) {
-            handleReset();
-        }
     }, [isExpanded]);
 
     return (
@@ -199,7 +213,7 @@ export default function InteractiveMap({ src, alt, title, className }: Interacti
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex flex-col"
-                        onClick={() => setIsExpanded(false)}
+                        onClick={closeModal}
                     >
                         {/* Top Control Bar */}
                         <motion.div
@@ -283,7 +297,7 @@ export default function InteractiveMap({ src, alt, title, className }: Interacti
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        setIsExpanded(false);
+                                        closeModal();
                                     }}
                                     className="p-3 rounded-xl bg-red-500/80 hover:bg-red-500 text-white transition-colors backdrop-blur-md shadow-lg"
                                     title="Close (ESC)"
@@ -340,8 +354,8 @@ export default function InteractiveMap({ src, alt, title, className }: Interacti
                                     <div
                                         className="absolute rounded-full"
                                         style={{
-                                            width: imageContainerRef.current?.offsetWidth || 0,
-                                            height: imageContainerRef.current?.offsetHeight || 0,
+                                            width: containerSize.width,
+                                            height: containerSize.height,
                                             transform: `scale(${magnifierZoom})`,
                                             transformOrigin: `${magnifierPosition.x}px ${magnifierPosition.y}px`,
                                             left: -(magnifierPosition.x * magnifierZoom - magnifierSize / 2),

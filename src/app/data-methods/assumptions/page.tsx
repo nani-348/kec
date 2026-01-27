@@ -16,7 +16,7 @@ export default function AssumptionsPage() {
                             Assumptions & Limitations
                         </h1>
                         <p className="text-white/80 text-lg max-w-2xl leading-relaxed">
-                            Understanding the constraints and scientific assumptions inherent in the KADA Groundwater Observatory's data models and projections.
+                            Understanding the constraints and scientific assumptions inherent in the KADA Groundwater Observatory&apos;s data models and projections.
                         </p>
                     </div>
                 </div>

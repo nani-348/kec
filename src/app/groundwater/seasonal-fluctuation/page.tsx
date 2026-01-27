@@ -9,6 +9,7 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     Legend, ReferenceLine
 } from "recharts";
+import type { TooltipProps } from "recharts";
 import { DynamicSheetTable } from "@/components/ui/DynamicSheetTable";
 
 // Fallback data
@@ -19,6 +20,42 @@ const INITIAL_DATA = [
     { name: "Santhi Puram", PreMonsoon: 14.35, PostMonsoon: 9.73, Fluctuation: 4.62, color: "#06b6d4" },
     { name: "KADA Region (Avg)", PreMonsoon: 20.30, PostMonsoon: 15.26, Fluctuation: 5.04, color: "#10b981", isAverage: true },
 ];
+
+type FluctuationRow = {
+    name?: unknown;
+    PreMonsoon?: unknown;
+    PostMonsoon?: unknown;
+    Fluctuation?: unknown;
+    color?: unknown;
+    isAverage?: unknown;
+};
+
+const toNumber = (value: unknown) => (typeof value === "number" ? value : Number(value) || 0);
+const toString = (value: unknown) => (typeof value === "string" ? value : value != null ? String(value) : "");
+const toBoolean = (value: unknown) => value === true || value === "true";
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-white p-4 border border-gray-100 shadow-lg rounded-lg">
+                <p className="font-bold text-gray-800 mb-2">{label}</p>
+                {payload.map((entry, index) => (
+                    <div key={index} className="flex items-center gap-2 text-sm mb-1">
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: (entry.color as string | undefined) ?? entry.stroke }}></span>
+                        <span className="text-gray-600">{entry.name}:</span>
+                        <span className="font-semibold text-gray-900">{entry.value} m</span>
+                    </div>
+                ))}
+                <div className="mt-2 pt-2 border-t border-gray-100">
+                    <p className="text-xs text-green-600 font-bold">
+                        Rise: {payload.length > 1 ? (Number(payload[0]?.value) - Number(payload[1]?.value)).toFixed(2) : "0.00"} m
+                    </p>
+                </div>
+            </div>
+        );
+    }
+    return null;
+};
 
 export default function SeasonalFluctuationPage() {
     const [mandalFluctuationData, setData] = useState(INITIAL_DATA);
@@ -31,13 +68,13 @@ export default function SeasonalFluctuationPage() {
                 const result = await response.json();
 
                 if (result.success && result.data.length > 0) {
-                    const sheetData = result.data.map((row: any) => ({
-                        name: row.name || '',
-                        PreMonsoon: Number(row.PreMonsoon) || 0,
-                        PostMonsoon: Number(row.PostMonsoon) || 0,
-                        Fluctuation: Number(row.Fluctuation) || 0,
-                        color: row.color || '#3b82f6',
-                        isAverage: row.isAverage === true || row.isAverage === 'true',
+                    const sheetData = (result.data as FluctuationRow[]).map((row) => ({
+                        name: toString(row.name),
+                        PreMonsoon: toNumber(row.PreMonsoon),
+                        PostMonsoon: toNumber(row.PostMonsoon),
+                        Fluctuation: toNumber(row.Fluctuation),
+                        color: toString(row.color) || '#3b82f6',
+                        isAverage: toBoolean(row.isAverage),
                     }));
                     setData(sheetData);
                 }
@@ -49,29 +86,6 @@ export default function SeasonalFluctuationPage() {
         }
         fetchData();
     }, []);
-
-    const CustomTooltip = ({ active, payload, label }: any) => {
-        if (active && payload && payload.length) {
-            return (
-                <div className="bg-white p-4 border border-gray-100 shadow-lg rounded-lg">
-                    <p className="font-bold text-gray-800 mb-2">{label}</p>
-                    {payload.map((entry: any, index: number) => (
-                        <div key={index} className="flex items-center gap-2 text-sm mb-1">
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }}></span>
-                            <span className="text-gray-600">{entry.name}:</span>
-                            <span className="font-semibold text-gray-900">{entry.value} m</span>
-                        </div>
-                    ))}
-                    <div className="mt-2 pt-2 border-t border-gray-100">
-                        <p className="text-xs text-green-600 font-bold">
-                            Rise: {(payload[0].value - payload[1].value).toFixed(2)} m
-                        </p>
-                    </div>
-                </div>
-            );
-        }
-        return null;
-    };
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50/50">
@@ -106,7 +120,7 @@ export default function SeasonalFluctuationPage() {
                         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Best Water Level</p>
                         <h3 className="text-xl font-bold text-gray-900 mb-1">Santhi Puram</h3>
                         <p className="text-2xl font-bold text-cyan-600">9.73 m</p>
-                        <p className="text-xs text-gray-400 mt-2">Post-Monsoon (Nov '25)</p>
+                        <p className="text-xs text-gray-400 mt-2">Post-Monsoon (Nov &apos;25)</p>
                     </div>
 
                     {/* Deepest Level */}
@@ -114,7 +128,7 @@ export default function SeasonalFluctuationPage() {
                         <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Deepest Level</p>
                         <h3 className="text-xl font-bold text-gray-900 mb-1">Gudi Palle</h3>
                         <p className="text-2xl font-bold text-red-500">25.53 m</p>
-                        <p className="text-xs text-gray-400 mt-2">Post-Monsoon (Nov '25)</p>
+                        <p className="text-xs text-gray-400 mt-2">Post-Monsoon (Nov &apos;25)</p>
                     </div>
 
                     {/* Regional Avg */}
@@ -181,7 +195,7 @@ export default function SeasonalFluctuationPage() {
                             </ResponsiveContainer>
                         </div>
                         <p className="text-center text-sm text-gray-400 mt-4 italic">
-                            * Note: Since y-axis represents "Depth to Water", lower bars indicate deeper water, higher bars (closer to 0) indicate shallower (better) water levels.
+                            * Note: Since y-axis represents &quot;Depth to Water&quot;, lower bars indicate deeper water, higher bars (closer to 0) indicate shallower (better) water levels.
                         </p>
                     </div>
 

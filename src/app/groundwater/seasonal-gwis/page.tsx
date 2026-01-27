@@ -108,13 +108,13 @@ export default function SeasonalGWisPage() {
                             <TrendingUp size={24} />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">KADA Avg (Dec '25)</p>
+                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">KADA Avg (Dec &apos;25)</p>
                             <div className="flex items-baseline gap-2">
                                 <h3 className="text-3xl font-bold text-gray-900">14.70</h3>
                                 <span className="text-sm text-gray-500">m bgl</span>
                             </div>
                             <p className="text-xs text-emerald-600 font-medium mt-1 flex items-center gap-1">
-                                <ArrowDown size={12} /> 2.92m improvement vs Dec '24
+                                <ArrowDown size={12} /> 2.92m improvement vs Dec &apos;24
                             </p>
                         </div>
                     </div>
@@ -124,7 +124,7 @@ export default function SeasonalGWisPage() {
                             <Droplets size={24} />
                         </div>
                         <div>
-                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">State Avg (Dec '25)</p>
+                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">State Avg (Dec &apos;25)</p>
                             <div className="flex items-baseline gap-2">
                                 <h3 className="text-3xl font-bold text-gray-900">6.54</h3>
                                 <span className="text-sm text-gray-500">m bgl</span>
@@ -167,8 +167,8 @@ export default function SeasonalGWisPage() {
                                             <th className="px-4 py-3 text-center border-r border-gray-200 bg-orange-50/30">Post (Nov)</th>
                                             <th className="px-4 py-3 text-center border-r border-gray-200 bg-emerald-50/30">Pre (May)</th>
                                             <th className="px-4 py-3 text-center border-r border-gray-200 bg-emerald-50/30">Post (Nov)</th>
-                                            <th className="px-4 py-3 text-center border-r border-gray-200 bg-indigo-50/30">Dec '24</th>
-                                            <th className="px-4 py-3 text-center bg-indigo-50/30 text-indigo-700 font-bold">Dec '25</th>
+                                            <th className="px-4 py-3 text-center border-r border-gray-200 bg-indigo-50/30">Dec &apos;24</th>
+                                            <th className="px-4 py-3 text-center bg-indigo-50/30 text-indigo-700 font-bold">Dec &apos;25</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-100">
@@ -246,7 +246,7 @@ export default function SeasonalGWisPage() {
                                         <Legend />
                                         <Bar dataKey="preMay25" name="Pre Monsoon (May '25)" fill="#f59e0b" radius={[4, 4, 0, 0]} />
                                         <Bar dataKey="postNov25" name="Post Monsoon (Nov '25)" fill="#10b981" radius={[4, 4, 0, 0]} />
-                                        <Bar dataKey="presentDec25" name="Present (Dec '25)" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey="presentDec25" name="Present (Dec &apos;25)" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                                         {/* Reference Line for KADA Avg? */}
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -257,7 +257,7 @@ export default function SeasonalGWisPage() {
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 className="font-bold text-gray-900 mb-6 flex items-center gap-2">
                                 <trending-up size={20} className="text-emerald-600" />
-                                Mandal Level Fluctuations (Dec '24 vs Dec '25)
+                                Mandal Level Fluctuations (Dec &apos;24 vs Dec &apos;25)
                             </h3>
                             <div className="h-[400px]">
                                 <ResponsiveContainer width="100%" height="100%">

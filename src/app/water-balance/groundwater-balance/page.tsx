@@ -77,7 +77,7 @@ export default function WaterBalancePage() {
                         Groundwater Water Balance
                     </h1>
                     <p className="text-gray-600 text-lg leading-relaxed">
-                        Comprehensive accounting of the aquifer's budget. Comparing total <strong>Inflow (Recharge)</strong> vs. total <strong>Outflow (Draft)</strong> to determine the sustainability status.
+                        Comprehensive accounting of the aquifer&apos;s budget. Comparing total <strong>Inflow (Recharge)</strong> vs. total <strong>Outflow (Draft)</strong> to determine the sustainability status.
                     </p>
                 </div>
 
@@ -277,7 +277,7 @@ export default function WaterBalancePage() {
                 <div className="mt-8 bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex gap-3 text-sm text-indigo-900">
                     <Info size={20} className="shrink-0 text-indigo-600 mt-0.5" />
                     <div>
-                        <h4 className="font-bold mb-1">Hydrogeologist's Assessment</h4>
+                        <h4 className="font-bold mb-1">Hydrogeologist&apos;s Assessment</h4>
                         <p className="opacity-90 leading-relaxed">
                             The current water balance indicates a <span className="font-bold text-red-600">Net Deficit of {Math.abs(NET_BALANCE).toFixed(1)} MCM</span>.
                             Extraction for irrigation (primarily paddy/sugarcane) exceeds the natural and artificial recharge rates.

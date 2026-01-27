@@ -8,6 +8,28 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     ReferenceLine, Legend, AreaChart, Area
 } from "recharts";
+import type { TooltipProps } from "recharts";
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-white p-4 border border-gray-100 shadow-lg rounded-lg">
+                <p className="font-bold text-gray-800 mb-2">{label}</p>
+                {payload.map((entry, index) => (
+                    <div key={index} className="flex items-center gap-2 text-sm mb-1">
+                        <span
+                            className="w-2 h-2 rounded-full"
+                            style={{ backgroundColor: (entry.stroke as string | undefined) ?? entry.color }}
+                        ></span>
+                        <span className="text-gray-600">{entry.name}:</span>
+                        <span className="font-semibold text-gray-900">{entry.value} m</span>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+    return null;
+};
 
 export default function AnnualTrendsPage() {
     // Data Structure for Trend Comparison
@@ -21,24 +43,6 @@ export default function AnnualTrendsPage() {
         { month: "Nov (Post)", DecadalAvg: 18.31, PreviousYear: 17.99, CurrentYear: 15.26 },
     ];
 
-    const CustomTooltip = ({ active, payload, label }: any) => {
-        if (active && payload && payload.length) {
-            return (
-                <div className="bg-white p-4 border border-gray-100 shadow-lg rounded-lg">
-                    <p className="font-bold text-gray-800 mb-2">{label}</p>
-                    {payload.map((entry: any, index: number) => (
-                        <div key={index} className="flex items-center gap-2 text-sm mb-1">
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.stroke }}></span>
-                            <span className="text-gray-600">{entry.name}:</span>
-                            <span className="font-semibold text-gray-900">{entry.value} m</span>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
-        return null;
-    };
-
     return (
         <div className="flex flex-col min-h-screen bg-gray-50/50">
             <Header />
@@ -50,7 +54,7 @@ export default function AnnualTrendsPage() {
                         Annual & Long-Term Trends
                     </h1>
                     <p className="text-gray-600 text-lg">
-                        Analyzing the region's groundwater recovery against the 10-year decadal baseline.
+                        Analyzing the region&apos;s groundwater recovery against the 10-year decadal baseline.
                     </p>
                 </div>
 
@@ -108,7 +112,7 @@ export default function AnnualTrendsPage() {
                                 Recovery Trajectory Analysis
                             </h2>
                             <p className="text-sm text-gray-500 mt-1">
-                                Notice the sharp "V-Shape" recovery in 2025 where it crosses the dashed baseline, unlike the shallow curve of 2024.
+                                Notice the sharp &quot;V-Shape&quot; recovery in 2025 where it crosses the dashed baseline, unlike the shallow curve of 2024.
                             </p>
                         </div>
                         <div className="flex items-center gap-4 mt-4 md:mt-0 text-sm">
@@ -205,7 +209,7 @@ export default function AnnualTrendsPage() {
                             From Stress to Surplus
                         </h2>
                         <p className="text-blue-100 text-lg leading-relaxed mb-8">
-                            For the first time in recent cycles, the groundwater curve has aggressively crossed the decadal average. This "Golden Crossover" in late 2025 signifies that the combination of recharge structures and favorable rainfall has successfully reversed the depletion trend.
+                            For the first time in recent cycles, the groundwater curve has aggressively crossed the decadal average. This &quot;Golden Crossover&quot; in late 2025 signifies that the combination of recharge structures and favorable rainfall has successfully reversed the depletion trend.
                         </p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="bg-white/10 backdrop-blur-md rounded-lg p-4 border border-white/10">

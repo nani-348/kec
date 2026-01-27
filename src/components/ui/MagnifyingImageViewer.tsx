@@ -21,10 +21,26 @@ export default function MagnifyingImageViewer({ src, alt, title, className }: Ma
     const [zoom, setZoom] = useState(1);
     const [isPanning, setIsPanning] = useState(false);
     const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+    const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
     const imageContainerRef = useRef<HTMLDivElement>(null);
     const magnifierSize = 180;
     const magnifierZoom = 2.5;
+
+    useEffect(() => {
+        const node = imageContainerRef.current;
+        if (!node) return;
+
+        const updateSize = () => {
+            setContainerSize({ width: node.offsetWidth, height: node.offsetHeight });
+        };
+
+        updateSize();
+        const resizeObserver = new ResizeObserver(updateSize);
+        resizeObserver.observe(node);
+
+        return () => resizeObserver.disconnect();
+    }, [isExpanded]);
 
     // Handle magnifier movement
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -79,6 +95,11 @@ export default function MagnifyingImageViewer({ src, alt, title, className }: Ma
         setIsMagnifierActive(false);
     };
 
+    const closeModal = () => {
+        handleReset();
+        setIsExpanded(false);
+    };
+
     const handleMouseDown = (e: React.MouseEvent) => {
         if (zoom > 1 && !isMagnifierActive) {
             setIsPanning(true);
@@ -105,13 +126,6 @@ export default function MagnifyingImageViewer({ src, alt, title, className }: Ma
             });
         }
     }, []);
-
-    // Reset on close
-    useEffect(() => {
-        if (!isExpanded) {
-            handleReset();
-        }
-    }, [isExpanded]);
 
     return (
         <>
@@ -167,7 +181,7 @@ export default function MagnifyingImageViewer({ src, alt, title, className }: Ma
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex flex-col"
-                        onClick={() => setIsExpanded(false)}
+                        onClick={closeModal}
                     >
                         {/* Top Control Bar */}
                         <div className="absolute top-0 left-0 right-0 z-50 p-4 flex justify-between items-center bg-gradient-to-b from-black/60 to-transparent">
@@ -242,7 +256,7 @@ export default function MagnifyingImageViewer({ src, alt, title, className }: Ma
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        setIsExpanded(false);
+                                        closeModal();
                                     }}
                                     className="bg-red-500/80 hover:bg-red-600 text-white p-2.5 rounded-full transition-colors backdrop-blur-md"
                                     title="Close"
@@ -295,8 +309,8 @@ export default function MagnifyingImageViewer({ src, alt, title, className }: Ma
                                     <div
                                         className="absolute"
                                         style={{
-                                            width: imageContainerRef.current?.offsetWidth || 0,
-                                            height: imageContainerRef.current?.offsetHeight || 0,
+                                            width: containerSize.width,
+                                            height: containerSize.height,
                                             transform: `scale(${magnifierZoom})`,
                                             transformOrigin: `${magnifierPosition.x}px ${magnifierPosition.y}px`,
                                             left: -(magnifierPosition.x * magnifierZoom - magnifierSize / 2),
