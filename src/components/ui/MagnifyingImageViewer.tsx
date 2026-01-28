@@ -131,7 +131,7 @@ export default function MagnifyingImageViewer({ src, alt, title, className }: Ma
         <>
             {/* Inline Preview Card */}
             <div
-                className={`relative w-full rounded-2xl overflow-hidden shadow-lg border border-gray-100 bg-gray-50 group cursor-pointer ${className}`}
+                className={`relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-gray-100 bg-gray-50 group cursor-pointer ${className}`}
                 onClick={() => setIsExpanded(true)}
             >
                 <Image
@@ -200,8 +200,8 @@ export default function MagnifyingImageViewer({ src, alt, title, className }: Ma
                                         setIsMagnifierActive(!isMagnifierActive);
                                     }}
                                     className={`p-2.5 rounded-full transition-all backdrop-blur-md border ${isMagnifierActive
-                                            ? 'bg-secondary text-white border-secondary'
-                                            : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
+                                        ? 'bg-secondary text-white border-secondary'
+                                        : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
                                         }`}
                                     title="Toggle Magnifier"
                                 >

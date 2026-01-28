@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
 
   // Experimental Performance Features
   experimental: {
-    optimizePackageImports: ['lucide-react', 'recharts', 'framer-motion'],
+    optimizePackageImports: ['recharts', 'framer-motion'],
   },
 
   // Production Optimization

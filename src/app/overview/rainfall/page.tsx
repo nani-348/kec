@@ -43,7 +43,7 @@ const toNumber = (value: unknown) => (typeof value === "number" ? value : Number
 const toString = (value: unknown) => (typeof value === "string" ? value : value != null ? String(value) : "");
 const toBoolean = (value: unknown) => value === true || value === "true";
 
-const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-lg">

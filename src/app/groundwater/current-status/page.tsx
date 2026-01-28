@@ -131,7 +131,7 @@ export default function CurrentStatusPage() {
                                         <YAxis dataKey="name" type="category" width={150} tick={{ fontSize: 11, fontWeight: 600 }} />
                                         <Tooltip cursor={{ fill: 'transparent' }} />
                                         <Bar dataKey="rise" barSize={32} radius={[0, 4, 4, 0]}>
-                                            <LabelList dataKey="rise" position="right" formatter={(val: number) => `${val} m`} style={{ fontWeight: 'bold' }} />
+                                            <LabelList dataKey="rise" position="right" formatter={(val) => val != null ? `${val} m` : ''} style={{ fontWeight: 'bold' }} />
                                             {comparisonData.map((entry, index) => (
                                                 <Cell key={index} fill={entry.fill} />
                                             ))}

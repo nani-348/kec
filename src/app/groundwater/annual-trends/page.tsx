@@ -3,19 +3,17 @@
 import React from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { TrendingUp, TrendingDown, Clock, Activity, AlertCircle, CheckCircle2 } from "lucide-react";
+import { TrendingUp, Clock, Activity, AlertCircle, CheckCircle2 } from "lucide-react";
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-    ReferenceLine, Legend, AreaChart, Area
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from "recharts";
-import type { TooltipProps } from "recharts";
 
-const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-white p-4 border border-gray-100 shadow-lg rounded-lg">
                 <p className="font-bold text-gray-800 mb-2">{label}</p>
-                {payload.map((entry, index) => (
+                {payload.map((entry: any, index: number) => (
                     <div key={index} className="flex items-center gap-2 text-sm mb-1">
                         <span
                             className="w-2 h-2 rounded-full"
@@ -41,6 +39,50 @@ export default function AnnualTrendsPage() {
         { month: "Jun", DecadalAvg: 18.31, PreviousYear: 19.40, CurrentYear: 19.50 }, // Estimated interpolation
         { month: "Aug", DecadalAvg: 18.31, PreviousYear: 19.00, CurrentYear: 17.80 }, // Estimated interpolation
         { month: "Nov (Post)", DecadalAvg: 18.31, PreviousYear: 17.99, CurrentYear: 15.26 },
+    ];
+
+    const commandSplitData = [
+        {
+            region: "GUDI PALLE",
+            nonCommand: { working: 1072, partial: 460, abandoned: 359 },
+            hnss: { working: 763, partial: 277, abandoned: 105 },
+        },
+        {
+            region: "KUPPAM",
+            nonCommand: { working: 1349, partial: 764, abandoned: 245 },
+            hnss: { working: 401, partial: 206, abandoned: 109 },
+        },
+        {
+            region: "RAMA KUPPAM",
+            nonCommand: { working: 676, partial: 1094, abandoned: 296 },
+            hnss: { working: 402, partial: 530, abandoned: 316 },
+        },
+        {
+            region: "SANTHI PURAM",
+            nonCommand: { working: 693, partial: 521, abandoned: 344 },
+            hnss: { working: 616, partial: 552, abandoned: 229 },
+        },
+        {
+            region: "KADA TOTAL",
+            nonCommand: { working: 3790, partial: 2839, abandoned: 1244 },
+            hnss: { working: 2182, partial: 1565, abandoned: 759 },
+        },
+    ];
+
+    const nonCommandMandalTotals = [
+        { mandal: "GUDI PALLE", total: 1798, working: 1072, partial: 460, abandoned: 359 },
+        { mandal: "KUPPAM", total: 2379, working: 1349, partial: 764, abandoned: 245 },
+        { mandal: "RAMA KUPPAM", total: 2201, working: 676, partial: 1094, abandoned: 296 },
+        { mandal: "SANTHI PURAM", total: 1491, working: 693, partial: 521, abandoned: 344 },
+        { mandal: "KADA", total: 7869, working: 3790, partial: 2839, abandoned: 1244 },
+    ];
+
+    const hnssMandalTotals = [
+        { mandal: "GUDI PALLE", total: 1238, working: 763, partial: 277, abandoned: 105, addBw: 191 },
+        { mandal: "KUPPAM", total: 695, working: 401, partial: 206, abandoned: 109, addBw: 100 },
+        { mandal: "RAMA KUPPAM", total: 1113, working: 402, partial: 530, abandoned: 316, addBw: 101 },
+        { mandal: "SANTHI PURAM", total: 1464, working: 616, partial: 552, abandoned: 229, addBw: 154 },
+        { mandal: "KADA", total: 4510, working: 2182, partial: 1565, abandoned: 759, addBw: 546 },
     ];
 
     return (
@@ -190,6 +232,114 @@ export default function AnnualTrendsPage() {
                                 />
                             </LineChart>
                         </ResponsiveContainer>
+                    </div>
+                </div>
+
+                {/* Additional Insight: Why the Change? */}
+                <div className="bg-white p-6 lg:p-8 rounded-2xl shadow-sm border border-gray-100 mb-12">
+                    <div className="mb-6">
+                        <h2 className="text-xl font-bold text-gray-900">Detailed Split: Non-Command vs HNSS Area</h2>
+                        <p className="text-sm text-gray-500 mt-1">
+                            Breakdown of operational status by specific command area zones.
+                        </p>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm border-collapse">
+                            <thead>
+                                <tr className="bg-gray-50 text-gray-600">
+                                    <th className="text-left px-4 py-3 border-b">Region</th>
+                                    <th className="text-center px-4 py-3 border-b" colSpan={3}>Non Command Area</th>
+                                    <th className="text-center px-4 py-3 border-b" colSpan={3}>HNSS &amp; MIT Command Area</th>
+                                </tr>
+                                <tr className="text-gray-500">
+                                    <th className="text-left px-4 py-2 border-b"></th>
+                                    <th className="text-right px-4 py-2 border-b">Working</th>
+                                    <th className="text-right px-4 py-2 border-b">Partial</th>
+                                    <th className="text-right px-4 py-2 border-b">Abandoned</th>
+                                    <th className="text-right px-4 py-2 border-b">Working</th>
+                                    <th className="text-right px-4 py-2 border-b">Partial</th>
+                                    <th className="text-right px-4 py-2 border-b">Abandoned</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {commandSplitData.map((row) => (
+                                    <tr key={row.region} className="border-b last:border-b-0">
+                                        <td className="px-4 py-3 font-medium text-gray-800">{row.region}</td>
+                                        <td className="px-4 py-3 text-right text-gray-700">{row.nonCommand.working.toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-right text-gray-700">{row.nonCommand.partial.toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-right text-gray-700">{row.nonCommand.abandoned.toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-right text-gray-700">{row.hnss.working.toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-right text-gray-700">{row.hnss.partial.toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-right text-gray-700">{row.hnss.abandoned.toLocaleString()}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                        <div className="border border-gray-100 rounded-xl overflow-hidden">
+                            <div className="bg-gray-50 px-4 py-3">
+                                <h3 className="text-sm font-semibold text-gray-700">Non-Command Area: Mandal Totals</h3>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="text-gray-500">
+                                            <th className="text-left px-4 py-2 border-b">Mandal</th>
+                                            <th className="text-right px-4 py-2 border-b">Total</th>
+                                            <th className="text-right px-4 py-2 border-b">Working</th>
+                                            <th className="text-right px-4 py-2 border-b">Partial</th>
+                                            <th className="text-right px-4 py-2 border-b">Abandoned</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {nonCommandMandalTotals.map((row) => (
+                                            <tr key={row.mandal} className="border-b last:border-b-0">
+                                                <td className="px-4 py-3 font-medium text-gray-800">{row.mandal}</td>
+                                                <td className="px-4 py-3 text-right text-gray-700">{row.total.toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-right text-gray-700">{row.working.toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-right text-gray-700">{row.partial.toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-right text-gray-700">{row.abandoned.toLocaleString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div className="border border-gray-100 rounded-xl overflow-hidden">
+                            <div className="bg-gray-50 px-4 py-3">
+                                <h3 className="text-sm font-semibold text-gray-700">HNSS &amp; MIT Command Area: Mandal Totals</h3>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="text-gray-500">
+                                            <th className="text-left px-4 py-2 border-b">Mandal</th>
+                                            <th className="text-right px-4 py-2 border-b">Total</th>
+                                            <th className="text-right px-4 py-2 border-b">Working</th>
+                                            <th className="text-right px-4 py-2 border-b">Partial</th>
+                                            <th className="text-right px-4 py-2 border-b">Abandoned</th>
+                                            <th className="text-right px-4 py-2 border-b">Possibility of AddBW</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {hnssMandalTotals.map((row) => (
+                                            <tr key={row.mandal} className="border-b last:border-b-0">
+                                                <td className="px-4 py-3 font-medium text-gray-800">{row.mandal}</td>
+                                                <td className="px-4 py-3 text-right text-gray-700">{row.total.toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-right text-gray-700">{row.working.toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-right text-gray-700">{row.partial.toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-right text-gray-700">{row.abandoned.toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-right text-gray-700">{row.addBw.toLocaleString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

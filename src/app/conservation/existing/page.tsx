@@ -206,7 +206,7 @@ export default function ExistingStructuresPage() {
                                             ))}
                                         </Pie>
                                         <Tooltip
-                                            formatter={(value: number | string) => [`${value}%`, 'Share']}
+                                            formatter={(value: any) => [`${value}%`, 'Share']}
                                             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                                         />
                                     </PieChart>
@@ -257,7 +257,7 @@ export default function ExistingStructuresPage() {
                                     <Tooltip
                                         cursor={{ fill: '#f9fafb' }}
                                         contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                        formatter={(value: number | string) => [`${value} MCM`, 'Recharge']}
+                                        formatter={(value: any) => [`${value} MCM`, 'Recharge']}
                                     />
                                     <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={48}>
                                         {IMPACT_DATA.map((entry, index) => (

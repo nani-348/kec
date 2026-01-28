@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import MagnifyingImageViewer from "@/components/ui/MagnifyingImageViewer";
 import {
     Droplets,
-    AlertTriangle,
-    ArrowUp,
-    ArrowDown,
-    Waves,
-    CloudRain,
-    Info
+    PieChart as PieChartIcon,
+    BarChart3,
+    ArrowUpRight,
+    Layout,
+    Database
 } from "lucide-react";
 import {
     BarChart,
@@ -21,233 +21,274 @@ import {
     Tooltip,
     Legend,
     ResponsiveContainer,
+    PieChart,
+    Pie,
     Cell
 } from "recharts";
+import { motion } from "framer-motion";
 import clsx from "clsx";
 
-// --- Mock Data: Real-time Status ---
+// --- Real Data Constants ---
 
-type TankStatus = {
-    id: string;
-    name: string;
-    mandal: string;
-    capacity: number; // MCFT
-    currentStorage: number; // MCFT
-    ftl: number; // Meters
-    currentLevel: number; // Meters
-};
-
-const STATUS_DATA: TankStatus[] = [
-    { id: "t1", name: "Pedda Cheruvu", mandal: "Gudupalle", capacity: 15.5, currentStorage: 14.8, ftl: 98.5, currentLevel: 97.2 },
-    { id: "t2", name: "Chinana Cheruvu", mandal: "Gudupalle", capacity: 4.2, currentStorage: 1.1, ftl: 96.0, currentLevel: 92.5 },
-    { id: "t3", name: "Kuppam P.T.", mandal: "Kuppam", capacity: 28.0, currentStorage: 25.2, ftl: 102.4, currentLevel: 101.8 },
-    { id: "t4", name: "Kangundhi Tank", mandal: "Kuppam", capacity: 8.5, currentStorage: 3.4, ftl: 94.2, currentLevel: 90.1 },
-    { id: "t5", name: "Ramakuppam Tank", mandal: "Ramakuppam", capacity: 18.2, currentStorage: 18.2, ftl: 99.1, currentLevel: 99.2 }, // Overflowing slightly
-    { id: "t6", name: "Balla Tank", mandal: "Ramakuppam", capacity: 6.8, currentStorage: 0.5, ftl: 95.5, currentLevel: 90.0 }, // Near empty
-    { id: "t7", name: "Shanthipuram C.", mandal: "Shanthipuram", capacity: 22.5, currentStorage: 15.0, ftl: 100.0, currentLevel: 96.5 },
-    { id: "t8", name: "Rallaboduguru", mandal: "Shanthipuram", capacity: 11.0, currentStorage: 8.8, ftl: 97.8, currentLevel: 96.2 },
+const STORAGE_DATA = [
+    { name: "GUDI PALLE", capacity: 232.61, current: 122.9 },
+    { name: "KUPPAM", capacity: 336.66, current: 121.08 },
+    { name: "RAMA KUPPAM", capacity: 325.95, current: 88.26 },
+    { name: "SANTHI PURAM", capacity: 301.16, current: 168.36 },
 ];
 
-// Calculate Derived Stats
-const getFillPercentage = (current: number, capacity: number) => Math.min((current / capacity) * 100, 100);
+const FILLING_STATUS_DATA = [
+    { name: "100% Filled", value: 95, color: "#3b82f6" }, // Blue
+    { name: "75% Filled", value: 63, color: "#f59e0b" }, // Amber
+    { name: "50% Filled", value: 93, color: "#94a3b8" }, // Gray
+    { name: "25% Filled", value: 112, color: "#fbbf24" }, // Yellow
+    { name: "0% Filled", value: 192, color: "#64748b" }, // Slate
+];
 
-const getStatusColor = (percentage: number) => {
-    if (percentage >= 90) return "bg-blue-600"; // High / Full
-    if (percentage >= 50) return "bg-cyan-500"; // Good
-    if (percentage >= 20) return "bg-yellow-500"; // Low
-    return "bg-red-500"; // Critical
+const TABLE_DATA = [
+    { region: "GUDI PALLE", tanks: 182, capacity: 232.61, current: 122.9, percent: 52.84, full: 41, p75: 19, p50: 30, p25: 30, p0: 62 },
+    { region: "KUPPAM", tanks: 129, capacity: 336.66, current: 121.08, percent: 35.97, full: 37, p75: 4, p50: 8, p25: 28, p0: 52 },
+    { region: "RAMA KUPPAM", tanks: 133, capacity: 325.95, current: 88.26, percent: 27.08, full: 12, p75: 6, p50: 9, p25: 31, p0: 75 },
+    { region: "SANTHI PURAM", tanks: 111, capacity: 301.16, current: 168.36, percent: 55.9, full: 5, p75: 34, p50: 46, p25: 23, p0: 3 },
+    { region: "KADA Region", tanks: 555, capacity: 1196.38, current: 500.6, percent: 41.8, full: 95, p75: 63, p50: 93, p25: 112, p0: 192, isTotal: true },
+];
+
+const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
-// Aggregation for Chart
-const MANDAL_STATS = [
-    { name: "Gudupalle", capacity: 19.7, current: 15.9 },
-    { name: "Kuppam", capacity: 36.5, current: 28.6 },
-    { name: "Ramakuppam", capacity: 25.0, current: 18.7 },
-    { name: "Shanthipuram", capacity: 33.5, current: 23.8 },
-];
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+};
 
 export default function StorageStatusPage() {
-
-    // Total Stats
-    const totalCapacity = STATUS_DATA.reduce((acc, curr) => acc + curr.capacity, 0);
-    const totalStorage = STATUS_DATA.reduce((acc, curr) => acc + curr.currentStorage, 0);
-    const totalPercentage = (totalStorage / totalCapacity) * 100;
-
-    // Filter Alerts
-    const criticalTanks = STATUS_DATA.filter(t => (t.currentStorage / t.capacity) < 0.2);
-    const floodRiskTanks = STATUS_DATA.filter(t => (t.currentStorage / t.capacity) >= 0.9);
-
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50/50">
+        <div className="flex flex-col min-h-screen bg-slate-50">
             <Header />
             <main className="flex-grow container mx-auto px-4 py-8 lg:py-12 max-w-7xl">
 
-                {/* Hero Section */}
-                <div className="mb-10 text-center max-w-4xl mx-auto">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wide mb-4">
-                        <Waves size={14} />
+                {/* Hero / Header */}
+                <div className="mb-12">
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        variants={fadeInUp}
+                        className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100 border border-blue-200 text-blue-800 text-xs font-bold uppercase tracking-wider mb-6"
+                    >
+                        <Database size={14} />
                         Real-Time Monitoring
-                    </div>
-                    <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 font-serif mb-4">
-                        MI Tank Storage Status
-                    </h1>
-                    <p className="text-gray-600 text-lg leading-relaxed">
-                        Live dashboard of water levels across the Minor Irrigation network.
-                        Monitor <strong>Storage vs. Capacity</strong> and identify critical deficit or surplus conditions.
-                    </p>
-                </div>
+                    </motion.div>
 
-                {/* Dashboard Metrics */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                    {/* Total Storage */}
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-blue-100 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-5">
-                            <Droplets size={100} className="text-blue-600" />
-                        </div>
-                        <p className="text-sm font-bold text-gray-500 uppercase tracking-wide">Total Water Available</p>
-                        <div className="mt-2 flex items-baseline gap-2">
-                            <h2 className="text-4xl font-bold text-blue-600">{totalStorage.toFixed(1)}</h2>
-                            <span className="text-sm font-medium text-gray-500">MCFT</span>
-                        </div>
-                        <div className="mt-4 w-full bg-gray-100 rounded-full h-2">
-                            <div className="h-full bg-blue-500 rounded-full" style={{ width: `${totalPercentage}%` }}></div>
-                        </div>
-                        <p className="text-xs text-gray-500 mt-2">{totalPercentage.toFixed(1)}% of Total Capacity ({totalCapacity.toFixed(1)} MCFT)</p>
-                    </div>
+                    <div className="grid lg:grid-cols-2 gap-12 items-start">
+                        <motion.div
+                            initial="hidden"
+                            animate="visible"
+                            variants={fadeInUp}
+                        >
+                            <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 font-serif mb-6 leading-tight">
+                                MI Tank Current <span className="text-blue-600">Storage/Filling Report</span>
+                            </h1>
+                            <p className="text-slate-600 text-lg leading-relaxed mb-8">
+                                Comprehensive analysis of Minor Irrigation tank storage levels across the KADA region.
+                                Tracking capacity utilization and filling status distribution.
+                            </p>
 
-                    {/* Alerts Card */}
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-red-100 md:col-span-2">
-                        <div className="flex items-center gap-2 mb-4">
-                            <AlertTriangle size={20} className="text-red-500" />
-                            <h3 className="font-bold text-gray-800">Operational Alerts</h3>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {/* Flood Risk */}
-                            <div className="bg-blue-50 p-3 rounded-xl border border-blue-100">
-                                <p className="text-xs font-bold text-blue-700 uppercase mb-2 flex items-center gap-1">
-                                    <Waves size={12} /> Near Full / Overflow
-                                </p>
-                                {floodRiskTanks.length > 0 ? (
-                                    <ul className="space-y-1">
-                                        {floodRiskTanks.map(t => (
-                                            <li key={t.id} className="text-sm text-blue-900 font-medium flex justify-between">
-                                                <span>{t.name}</span>
-                                                <span className="font-bold">{((t.currentStorage / t.capacity) * 100).toFixed(0)}%</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : <p className="text-sm text-gray-500">No tanks at risk.</p>}
-                            </div>
-
-                            {/* Drought Risk */}
-                            <div className="bg-red-50 p-3 rounded-xl border border-red-100">
-                                <p className="text-xs font-bold text-red-700 uppercase mb-2 flex items-center gap-1">
-                                    <CloudRain size={12} /> Critical Deficit (&lt;20%)
-                                </p>
-                                {criticalTanks.length > 0 ? (
-                                    <ul className="space-y-1">
-                                        {criticalTanks.map(t => (
-                                            <li key={t.id} className="text-sm text-red-900 font-medium flex justify-between">
-                                                <span>{t.name}</span>
-                                                <span className="font-bold">{((t.currentStorage / t.capacity) * 100).toFixed(0)}%</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : <p className="text-sm text-gray-500">No tanks at risk.</p>}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
-                    {/* Left: Individual Tank Monitors */}
-                    <div className="lg:col-span-7">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="font-bold text-gray-800 font-serif text-xl">Real-time Tank Levels</h3>
-                            <div className="flex gap-2 text-xs">
-                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-600"></span> Full</span>
-                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-cyan-500"></span> Normal</span>
-                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500"></span> Critical</span>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                            {STATUS_DATA.map((tank) => {
-                                const fill = getFillPercentage(tank.currentStorage, tank.capacity);
-                                const isOverflowing = tank.currentLevel >= tank.ftl;
-
-                                return (
-                                    <div key={tank.id} className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all group">
-                                        <div className="flex justify-between items-start mb-3">
-                                            <div className="text-xs font-semibold text-gray-900 line-clamp-1">{tank.name}</div>
-                                            {isOverflowing && <AlertTriangle size={14} className="text-blue-600 animate-pulse" />}
-                                        </div>
-
-                                        {/* Visual Tank Container */}
-                                        <div className="relative h-24 w-full bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                                            {/* Water */}
-                                            <div
-                                                className={clsx(
-                                                    "absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-in-out opacity-80",
-                                                    getStatusColor(fill)
-                                                )}
-                                                style={{ height: `${fill}%` }}
-                                            >
-                                                {/* Wave Effect Overlay */}
-                                                <div className="absolute top-0 w-full h-[2px] bg-white/30"></div>
-                                            </div>
-
-                                            {/* FTL Marker */}
-                                            <div className="absolute bottom-[90%] w-full border-t border-dashed border-gray-500 text-[9px] text-gray-500 text-right pr-1">FTL</div>
-
-                                            {/* Text Overlay */}
-                                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                                <span className={clsx("text-lg font-bold shadow-sm", fill > 50 ? "text-white drop-shadow-md" : "text-gray-700")}>
-                                                    {fill.toFixed(0)}%
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div className="mt-3 flex justify-between text-[10px] text-gray-500">
-                                            <span>Cap: {tank.capacity} MCFT</span>
-                                            <span>{tank.currentStorage.toFixed(1)} MCFT</span>
-                                        </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="p-5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                    <div className="flex items-center gap-2 text-blue-600 mb-2">
+                                        <Database size={20} />
+                                        <span className="font-bold">Total Storage</span>
                                     </div>
-                                );
-                            })}
+                                    <div className="flex items-baseline gap-2">
+                                        <p className="text-3xl font-bold text-slate-900">500.6</p>
+                                        <span className="text-sm font-medium text-slate-500">MCFT</span>
+                                    </div>
+                                    <p className="text-xs text-slate-400 mt-1">out of 1196.38 Capacity</p>
+                                </div>
+                                <div className="p-5 bg-white rounded-xl border border-slate-100 shadow-sm">
+                                    <div className="flex items-center gap-2 text-emerald-600 mb-2">
+                                        <PieChartIcon size={20} />
+                                        <span className="font-bold">Avg Filling</span>
+                                    </div>
+                                    <div className="flex items-baseline gap-2">
+                                        <p className="text-3xl font-bold text-slate-900">41.8%</p>
+                                    </div>
+                                    <p className="text-xs text-slate-400 mt-1">Regional Average</p>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* Reference Image */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8 }}
+                            className="relative group rounded-2xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-slate-200"
+                        >
+                            <MagnifyingImageViewer
+                                src="/images/about-kada/micurrent.jpg"
+                                alt="MI Tank Current Storage Report"
+                                title="Current Storage Status"
+                                className="aspect-[4/3] bg-slate-100"
+                            />
+                        </motion.div>
+                    </div>
+                </div>
+
+                {/* Charts Section */}
+                <motion.div
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12"
+                >
+                    {/* Storage Chart */}
+                    <motion.div variants={fadeInUp} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div className="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                    <BarChart3 size={18} className="text-blue-500" />
+                                    MI Tanks Storage vs Capacity
+                                </h3>
+                                <p className="text-xs text-slate-500">MCFT (Million Cubic Feet)</p>
+                            </div>
+                        </div>
+
+                        <div className="h-[350px] w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart
+                                    data={STORAGE_DATA}
+                                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                                    barGap={8}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                    <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#64748b" }} />
+                                    <YAxis tick={{ fontSize: 11, fill: "#64748b" }} />
+                                    <Tooltip
+                                        cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
+                                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
+                                    />
+                                    <Legend />
+                                    <Bar dataKey="capacity" name="Total Capacity" fill="#3b82f6" radius={[4, 4, 0, 0]} maxBarSize={50} />
+                                    <Bar dataKey="current" name="Current Storage" fill="#f97316" radius={[4, 4, 0, 0]} maxBarSize={50} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </motion.div>
+
+                    {/* Filling Status Donut Chart */}
+                    <motion.div variants={fadeInUp} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div className="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                    <PieChartIcon size={18} className="text-emerald-500" />
+                                    Filling Status Distribution
+                                </h3>
+                                <p className="text-xs text-slate-500">Number of Tanks by Fill Level</p>
+                            </div>
+                        </div>
+
+                        <div className="h-[350px] w-full relative">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={FILLING_STATUS_DATA}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={80}
+                                        outerRadius={120}
+                                        paddingAngle={2}
+                                        dataKey="value"
+                                    >
+                                        {FILLING_STATUS_DATA.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} strokeWidth={0} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip
+                                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
+                                    />
+                                    <Legend verticalAlign="bottom" height={36} />
+                                </PieChart>
+                            </ResponsiveContainer>
+                            {/* Center Text */}
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div className="text-center">
+                                    <p className="text-3xl font-bold text-slate-900">555</p>
+                                    <p className="text-xs text-slate-500 font-medium uppercase">Total Tanks</p>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </motion.div>
+
+                {/* Data Table */}
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={fadeInUp}
+                    className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"
+                >
+                    <div className="p-6 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <span className="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-100 text-indigo-600">
+                                <Layout size={20} />
+                            </span>
+                            <div>
+                                <h2 className="text-xl font-bold text-slate-800">MI Tank Current Storage / Filling Report</h2>
+                                <p className="text-sm text-slate-500">Detailed Regional Breakdown</p>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Right: Comparative Chart */}
-                    <div className="lg:col-span-5 flex flex-col">
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 h-full">
-                            <h3 className="font-bold text-gray-800 font-serif text-xl mb-4">Mandal Storage Comparison</h3>
-                            <div className="flex-grow h-[300px]">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart
-                                        data={MANDAL_STATS}
-                                        layout="vertical"
-                                        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                                    >
-                                        <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f0f0f0" />
-                                        <XAxis type="number" hide />
-                                        <YAxis dataKey="name" type="category" width={90} tick={{ fontSize: 12 }} />
-                                        <Tooltip
-                                            cursor={{ fill: '#f8fafc' }}
-                                            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                        />
-                                        <Legend />
-                                        <Bar dataKey="current" name="Current Water" stackId="a" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={20} />
-                                        <Bar dataKey="capacity" name="Remaining Capacity" stackId="a" fill="#e2e8f0" radius={[0, 4, 4, 0]} barSize={20} />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                            <div className="mt-4 text-xs text-gray-400 italic">
-                                * Comparison of total storage volume vs capacity per mandal.
-                            </div>
-                        </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm text-left">
+                            <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                                <tr>
+                                    <th rowSpan={2} className="px-6 py-4 border-r border-slate-200">Region</th>
+                                    <th rowSpan={2} className="px-4 py-4 text-right border-r border-slate-200">No. of Tanks</th>
+                                    <th colSpan={3} className="px-4 py-2 text-center border-b border-r border-slate-200 bg-blue-50/20">Storage Analysis</th>
+                                    <th colSpan={5} className="px-4 py-2 text-center border-b border-slate-200 bg-emerald-50/20">No. of Tanks with Filling Status</th>
+                                </tr>
+                                <tr>
+                                    <th className="px-4 py-2 text-right bg-blue-50/20">Capacity <span className="text-[10px] text-slate-400 block">(mcft)</span></th>
+                                    <th className="px-4 py-2 text-right bg-blue-50/20">Current <span className="text-[10px] text-slate-400 block">(mcft)</span></th>
+                                    <th className="px-4 py-2 text-right bg-blue-50/20">% Fill</th>
+                                    <th className="px-3 py-2 text-center bg-emerald-50/20 text-blue-600">Full</th>
+                                    <th className="px-3 py-2 text-center bg-emerald-50/20 text-amber-600">75%</th>
+                                    <th className="px-3 py-2 text-center bg-emerald-50/20 text-slate-500">50%</th>
+                                    <th className="px-3 py-2 text-center bg-emerald-50/20 text-yellow-600">25%</th>
+                                    <th className="px-3 py-2 text-center bg-emerald-50/20 text-slate-400">0%</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {TABLE_DATA.map((row, idx) => (
+                                    <tr key={idx} className={clsx("transition-colors hover:bg-slate-50", row.isTotal ? "bg-slate-100 font-bold text-slate-900" : "text-slate-600")}>
+                                        <td className="px-6 py-4 font-medium border-r border-slate-100">{row.region}</td>
+                                        <td className="px-4 py-4 text-right border-r border-slate-100">{row.tanks}</td>
+
+                                        <td className="px-4 py-4 text-right tabular-nums bg-blue-50/5 border-r border-slate-100">{row.capacity.toFixed(2)}</td>
+                                        <td className="px-4 py-4 text-right tabular-nums bg-blue-50/5 border-r border-slate-100 font-medium text-slate-800">{row.current.toFixed(2)}</td>
+                                        <td className="px-4 py-4 text-right tabular-nums bg-blue-50/5 border-r border-slate-100">
+                                            <span className={clsx("px-1.5 py-0.5 rounded text-xs", row.percent > 50 ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700")}>
+                                                {row.percent}%
+                                            </span>
+                                        </td>
+
+                                        <td className="px-3 py-4 text-center tabular-nums bg-emerald-50/5 text-blue-600 font-medium border-r border-slate-100">{row.full}</td>
+                                        <td className="px-3 py-4 text-center tabular-nums bg-emerald-50/5 border-r border-slate-100">{row.p75}</td>
+                                        <td className="px-3 py-4 text-center tabular-nums bg-emerald-50/5 border-r border-slate-100">{row.p50}</td>
+                                        <td className="px-3 py-4 text-center tabular-nums bg-emerald-50/5 border-r border-slate-100">{row.p25}</td>
+                                        <td className="px-3 py-4 text-center tabular-nums bg-emerald-50/5 text-slate-400">{row.p0}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
-                </div>
+                </motion.div>
 
             </main>
             <Footer />

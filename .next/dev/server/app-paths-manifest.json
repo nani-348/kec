@@ -1,6 +1,7 @@
 {
-  "/api/sheets/route": "app/api/sheets/route.js",
-  "/groundwater/current-status/page": "app/groundwater/current-status/page.js",
-  "/groundwater/real-time/page": "app/groundwater/real-time/page.js",
-  "/page": "app/page.js"
+  "/agriculture/groundwater-stress/page": "app/agriculture/groundwater-stress/page.js",
+  "/hydrology/indexing/page": "app/hydrology/indexing/page.js",
+  "/hydrology/surface/page": "app/hydrology/surface/page.js",
+  "/page": "app/page.js",
+  "/resources/recharge/page": "app/resources/recharge/page.js"
 }

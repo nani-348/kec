@@ -94,24 +94,16 @@ const NAV_ITEMS = [
         ]
     },
     {
-        label: "Aquifer & Storage",
-        href: "/aquifer/demarcation",
+        label: "Conservation Planning",
+        href: "/conservation/water-conservation-plan",
         subItems: [
             {
-                label: "Aquifer Demarcation",
-                href: "/aquifer/demarcation"
+                label: "Water Conservation Plan Status",
+                href: "/conservation/water-conservation-plan"
             },
             {
-                label: "Aquifer Parameters",
-                href: "/aquifer/parameters"
-            },
-            {
-                label: "Groundwater In-Storage Estimation",
-                href: "/aquifer/storage-estimation"
-            },
-            {
-                label: "Sustainability Indicators",
-                href: "/aquifer/sustainability"
+                label: "Conservation Maps & Analysis",
+                href: "/conservation/maps-analysis"
             }
         ]
     },
@@ -120,31 +112,19 @@ const NAV_ITEMS = [
         href: "/hydrology/surface",
         subItems: [
             {
-                label: "Surface Hydrology",
+                label: "Flow Accumulation Analysis",
                 href: "/hydrology/surface"
             },
             {
-                label: "Subsurface Hydrology",
-                href: "/hydrology/subsurface"
-            },
-            {
-                label: "Sink Analysis",
-                href: "/hydrology/sink-analysis"
-            },
-            {
-                label: "Recharge–Intermediate–Discharge Zonation",
-                href: "/hydrology/zonation"
+                label: "Indexing & Zone Identification",
+                href: "/hydrology/indexing"
             }
         ]
     },
     {
         label: "MI Tanks & HNSS",
-        href: "/mi-tanks/inventory",
+        href: "/mi-tanks/storage-status",
         subItems: [
-            {
-                label: "MI Tank Inventory",
-                href: "/mi-tanks/inventory"
-            },
             {
                 label: "MI Tank Storage Status",
                 href: "/mi-tanks/storage-status"
@@ -156,11 +136,15 @@ const NAV_ITEMS = [
             {
                 label: "HNSS-Linked MI Tanks",
                 href: "/mi-tanks/hnss-linked"
+            },
+            {
+                label: "HNSS Interventions",
+                href: "/mi-tanks/hnss-interventions"
             }
         ]
     },
     {
-        label: "Water Balance & Energy",
+        label: "Water Balance",
         href: "/water-balance/groundwater-balance",
         subItems: [
             {
@@ -168,22 +152,34 @@ const NAV_ITEMS = [
                 href: "/water-balance/groundwater-balance"
             },
             {
-                label: "Groundwater Availability (TMC)",
-                href: "/water-balance/availability"
+                label: "Monthly Ground Water Resources",
+                href: "/water-balance/monthly-gwr"
             },
             {
-                label: "Energy Implications",
-                href: "/water-balance/energy"
+                label: "Annual GW Estimation",
+                href: "/groundwater/gw-estimation"
             }
         ]
     },
     {
         label: "Agriculture & Wells",
-        href: "/agriculture/well-inventory",
+        href: "/agriculture/well-status",
         subItems: [
             {
-                label: "Agricultural Well Inventory",
-                href: "/agriculture/well-inventory"
+                label: "Status of Bore Wells",
+                href: "/agriculture/well-status"
+            },
+            {
+                label: "Well Density",
+                href: "/agriculture/well-density"
+            },
+            {
+                label: "Ground Water Stress",
+                href: "/agriculture/groundwater-stress"
+            },
+            {
+                label: "HNSS & MIT Influence",
+                href: "/agriculture/hnss-influence"
             },
             {
                 label: "Well Characteristics",
@@ -215,22 +211,26 @@ const MORE_MENU_ITEMS = [
         href: "/resources/availability"
     },
     {
-        label: "Conservation Planning",
+        label: "Aquifer & Storage",
         href: "/#",
         heading: true,
         className: "mt-3"
     },
     {
-        label: "Existing Conservation Structures",
-        href: "/conservation/existing"
+        label: "Aquifer Demarcation",
+        href: "/aquifer/demarcation"
     },
     {
-        label: "Proposed Conservation Structures",
-        href: "/conservation/proposed"
+        label: "Aquifer Parameters",
+        href: "/aquifer/parameters"
     },
     {
-        label: "Village-Level Implementation",
-        href: "/conservation/village-level"
+        label: "Groundwater In-Storage Estimation",
+        href: "/aquifer/storage-estimation"
+    },
+    {
+        label: "Sustainability Indicators",
+        href: "/aquifer/sustainability"
     },
     {
         label: "Case Studies",

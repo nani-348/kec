@@ -256,7 +256,7 @@ export default function SeasonalGWisPage() {
                         {/* Mandal Wise Trend */}
                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                             <h3 className="font-bold text-gray-900 mb-6 flex items-center gap-2">
-                                <trending-up size={20} className="text-emerald-600" />
+                                <TrendingUp size={20} className="text-emerald-600" />
                                 Mandal Level Fluctuations (Dec &apos;24 vs Dec &apos;25)
                             </h3>
                             <div className="h-[400px]">

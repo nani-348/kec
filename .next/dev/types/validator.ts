@@ -56,6 +56,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/agriculture/groundwater-stress/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/agriculture/groundwater-stress">> = Specific
+  const handler = {} as typeof import("../../../src/app/agriculture/groundwater-stress/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/agriculture/hnss-influence/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/agriculture/hnss-influence">> = Specific
+  const handler = {} as typeof import("../../../src/app/agriculture/hnss-influence/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/agriculture/well-characteristics/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/agriculture/well-characteristics">> = Specific
@@ -65,10 +83,19 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
-// Validate ../../../src/app/agriculture/well-inventory/page.tsx
+// Validate ../../../src/app/agriculture/well-density/page.tsx
 {
-  type __IsExpected<Specific extends AppPageConfig<"/agriculture/well-inventory">> = Specific
-  const handler = {} as typeof import("../../../src/app/agriculture/well-inventory/page.js")
+  type __IsExpected<Specific extends AppPageConfig<"/agriculture/well-density">> = Specific
+  const handler = {} as typeof import("../../../src/app/agriculture/well-density/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/agriculture/well-status/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/agriculture/well-status">> = Specific
+  const handler = {} as typeof import("../../../src/app/agriculture/well-status/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -128,6 +155,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/conservation/maps-analysis/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/conservation/maps-analysis">> = Specific
+  const handler = {} as typeof import("../../../src/app/conservation/maps-analysis/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/conservation/proposed/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/conservation/proposed">> = Specific
@@ -141,6 +177,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends AppPageConfig<"/conservation/village-level">> = Specific
   const handler = {} as typeof import("../../../src/app/conservation/village-level/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/conservation/water-conservation-plan/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/conservation/water-conservation-plan">> = Specific
+  const handler = {} as typeof import("../../../src/app/conservation/water-conservation-plan/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -209,6 +254,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/groundwater/gw-estimation/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/groundwater/gw-estimation">> = Specific
+  const handler = {} as typeof import("../../../src/app/groundwater/gw-estimation/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/groundwater/monsoon-power/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/groundwater/monsoon-power">> = Specific
@@ -263,6 +317,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../../src/app/hydrology/indexing/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/hydrology/indexing">> = Specific
+  const handler = {} as typeof import("../../../src/app/hydrology/indexing/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../src/app/hydrology/sink-analysis/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/hydrology/sink-analysis">> = Specific
@@ -294,6 +357,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends AppPageConfig<"/hydrology/zonation">> = Specific
   const handler = {} as typeof import("../../../src/app/hydrology/zonation/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/mi-tanks/hnss-interventions/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/mi-tanks/hnss-interventions">> = Specific
+  const handler = {} as typeof import("../../../src/app/mi-tanks/hnss-interventions/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -429,6 +501,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends AppPageConfig<"/water-balance/groundwater-balance">> = Specific
   const handler = {} as typeof import("../../../src/app/water-balance/groundwater-balance/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/water-balance/mi-tanks-energy/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/water-balance/mi-tanks-energy">> = Specific
+  const handler = {} as typeof import("../../../src/app/water-balance/mi-tanks-energy/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../../src/app/water-balance/monthly-gwr/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/water-balance/monthly-gwr">> = Specific
+  const handler = {} as typeof import("../../../src/app/water-balance/monthly-gwr/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

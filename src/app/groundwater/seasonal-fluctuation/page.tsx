@@ -34,14 +34,14 @@ const toNumber = (value: unknown) => (typeof value === "number" ? value : Number
 const toString = (value: unknown) => (typeof value === "string" ? value : value != null ? String(value) : "");
 const toBoolean = (value: unknown) => value === true || value === "true";
 
-const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-white p-4 border border-gray-100 shadow-lg rounded-lg">
                 <p className="font-bold text-gray-800 mb-2">{label}</p>
-                {payload.map((entry, index) => (
+                {payload.map((entry: any, index: number) => (
                     <div key={index} className="flex items-center gap-2 text-sm mb-1">
-                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: (entry.color as string | undefined) ?? entry.stroke }}></span>
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: (entry.color as string | undefined) ?? entry.stroke ?? entry.fill }}></span>
                         <span className="text-gray-600">{entry.name}:</span>
                         <span className="font-semibold text-gray-900">{entry.value} m</span>
                     </div>

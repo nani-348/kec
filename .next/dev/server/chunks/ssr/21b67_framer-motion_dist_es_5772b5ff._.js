@@ -941,6 +941,10 @@ function useVisualElement(Component, visualState, props, createVisualElement, Pr
     const reducedMotionConfig = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useContext"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$context$2f$MotionConfigContext$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MotionConfigContext"]).reducedMotion;
     const visualElementRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     /**
+     * Track whether the component has been through React's commit phase.
+     * Used to detect when LazyMotion features load after the component has mounted.
+     */ const hasMountedOnce = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(false);
+    /**
      * If we haven't preloaded a renderer, check to see if we have one lazy-loaded
      */ createVisualElement = createVisualElement || lazyContext.renderer;
     if (!visualElementRef.current && createVisualElement) {
@@ -953,6 +957,14 @@ function useVisualElement(Component, visualState, props, createVisualElement, Pr
             reducedMotionConfig,
             isSVG
         });
+        /**
+         * If the component has already mounted before features loaded (e.g. via
+         * LazyMotion with async feature loading), we need to force the initial
+         * animation to run. Otherwise state changes that occurred before features
+         * loaded will be lost and the element will snap to its final state.
+         */ if (hasMountedOnce.current && visualElementRef.current) {
+            visualElementRef.current.manuallyAnimateOnMount = true;
+        }
     }
     const visualElement = visualElementRef.current;
     /**
@@ -977,6 +989,10 @@ function useVisualElement(Component, visualState, props, createVisualElement, Pr
      */ const optimisedAppearId = props[__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$motion$2d$dom$2f$dist$2f$es$2f$animation$2f$optimized$2d$appear$2f$data$2d$id$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["optimizedAppearDataAttribute"]];
     const wantsHandoff = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(Boolean(optimisedAppearId) && !window.MotionHandoffIsComplete?.(optimisedAppearId) && window.MotionHasOptimisedAnimation?.(optimisedAppearId));
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$utils$2f$use$2d$isomorphic$2d$effect$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useIsomorphicLayoutEffect"])(()=>{
+        /**
+         * Track that this component has mounted. This is used to detect when
+         * LazyMotion features load after the component has already committed.
+         */ hasMountedOnce.current = true;
         if (!visualElement) return;
         isMounted.current = true;
         window.MotionIsMounted = true;
@@ -2378,10 +2394,17 @@ class DragGesture extends __TURBOPACK__imported__module__$5b$project$5d2f$Deskto
         this.removeGroupControls();
         this.removeListeners();
         /**
-         * Only clean up the pan session if one exists. We use endPanSession()
-         * instead of cancel() because cancel() also modifies projection animation
-         * state and drag locks, which could interfere with nested drag scenarios.
-         */ this.controls.endPanSession();
+         * In React 19, during list reorder reconciliation, components may
+         * briefly unmount and remount while the drag is still active. If we're
+         * actively dragging, we should NOT end the pan session - it will
+         * continue tracking pointer events via its window-level listeners.
+         *
+         * The pan session will be properly cleaned up when:
+         * 1. The drag ends naturally (pointerup/pointercancel)
+         * 2. The component is truly removed from the DOM
+         */ if (!this.controls.isDragging) {
+            this.controls.endPanSession();
+        }
     }
 }
 ;
@@ -2595,6 +2618,7 @@ class MeasureLayoutWithContext extends __TURBOPACK__imported__module__$5b$projec
             });
             projection.setOptions({
                 ...projection.options,
+                layoutDependency: this.props.layoutDependency,
                 onExitComplete: ()=>this.safeToRemove()
             });
         }
@@ -2611,6 +2635,12 @@ class MeasureLayoutWithContext extends __TURBOPACK__imported__module__$5b$projec
          * have to be that we markForRelegation and then find a new lead some other way,
          * perhaps in didUpdate
          */ projection.isPresent = isPresent;
+        if (prevProps.layoutDependency !== layoutDependency) {
+            projection.setOptions({
+                ...projection.options,
+                layoutDependency
+            });
+        }
         hasTakenAnySnapshot = true;
         if (drag || prevProps.layoutDependency !== layoutDependency || layoutDependency === undefined || prevProps.isPresent !== isPresent) {
             projection.willUpdate();
@@ -4387,21 +4417,28 @@ function isSequence(value) {
 /**
  * Creates an animation function that is optionally scoped
  * to a specific element.
- */ function createScopedAnimate(scope) {
+ */ function createScopedAnimate(options = {}) {
+    const { scope, reduceMotion } = options;
     /**
      * Implementation
      */ function scopedAnimate(subjectOrSequence, optionsOrKeyframes, options) {
         let animations = [];
         let animationOnComplete;
         if (isSequence(subjectOrSequence)) {
-            animations = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$animation$2f$animate$2f$sequence$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["animateSequence"])(subjectOrSequence, optionsOrKeyframes, scope);
+            animations = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$animation$2f$animate$2f$sequence$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["animateSequence"])(subjectOrSequence, reduceMotion !== undefined ? {
+                reduceMotion,
+                ...optionsOrKeyframes
+            } : optionsOrKeyframes, scope);
         } else {
             // Extract top-level onComplete so it doesn't get applied per-value
             const { onComplete, ...rest } = options || {};
             if (typeof onComplete === "function") {
                 animationOnComplete = onComplete;
             }
-            animations = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$animation$2f$animate$2f$subject$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["animateSubject"])(subjectOrSequence, optionsOrKeyframes, rest, scope);
+            animations = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$animation$2f$animate$2f$subject$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["animateSubject"])(subjectOrSequence, optionsOrKeyframes, reduceMotion !== undefined ? {
+                reduceMotion,
+                ...rest
+            } : rest, scope);
         }
         const animation = new __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$motion$2d$dom$2f$dist$2f$es$2f$animation$2f$GroupAnimationWithThen$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["GroupAnimationWithThen"](animations);
         if (animationOnComplete) {

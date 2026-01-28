@@ -94,24 +94,12 @@ const NAV_ITEMS = [
         ]
     },
     {
-        label: "Aquifer & Storage",
-        href: "/aquifer/demarcation",
+        label: "Conservation Planning",
+        href: "/conservation/water-conservation-plan",
         subItems: [
             {
-                label: "Aquifer Demarcation",
-                href: "/aquifer/demarcation"
-            },
-            {
-                label: "Aquifer Parameters",
-                href: "/aquifer/parameters"
-            },
-            {
-                label: "Groundwater In-Storage Estimation",
-                href: "/aquifer/storage-estimation"
-            },
-            {
-                label: "Sustainability Indicators",
-                href: "/aquifer/sustainability"
+                label: "Water Conservation Plan Status",
+                href: "/conservation/water-conservation-plan"
             }
         ]
     },
@@ -139,12 +127,8 @@ const NAV_ITEMS = [
     },
     {
         label: "MI Tanks & HNSS",
-        href: "/mi-tanks/inventory",
+        href: "/mi-tanks/storage-status",
         subItems: [
-            {
-                label: "MI Tank Inventory",
-                href: "/mi-tanks/inventory"
-            },
             {
                 label: "MI Tank Storage Status",
                 href: "/mi-tanks/storage-status"
@@ -156,6 +140,10 @@ const NAV_ITEMS = [
             {
                 label: "HNSS-Linked MI Tanks",
                 href: "/mi-tanks/hnss-linked"
+            },
+            {
+                label: "HNSS Interventions",
+                href: "/mi-tanks/hnss-interventions"
             }
         ]
     },
@@ -174,16 +162,32 @@ const NAV_ITEMS = [
             {
                 label: "Energy Implications",
                 href: "/water-balance/energy"
+            },
+            {
+                label: "MI Tanks Storage & Energy",
+                href: "/water-balance/mi-tanks-energy"
             }
         ]
     },
     {
         label: "Agriculture & Wells",
-        href: "/agriculture/well-inventory",
+        href: "/agriculture/well-status",
         subItems: [
             {
-                label: "Agricultural Well Inventory",
-                href: "/agriculture/well-inventory"
+                label: "Status of Bore Wells",
+                href: "/agriculture/well-status"
+            },
+            {
+                label: "Well Density",
+                href: "/agriculture/well-density"
+            },
+            {
+                label: "Ground Water Stress",
+                href: "/agriculture/groundwater-stress"
+            },
+            {
+                label: "HNSS & MIT Influence",
+                href: "/agriculture/hnss-influence"
             },
             {
                 label: "Well Characteristics",
@@ -215,22 +219,26 @@ const MORE_MENU_ITEMS = [
         href: "/resources/availability"
     },
     {
-        label: "Conservation Planning",
+        label: "Aquifer & Storage",
         href: "/#",
         heading: true,
         className: "mt-3"
     },
     {
-        label: "Existing Conservation Structures",
-        href: "/conservation/existing"
+        label: "Aquifer Demarcation",
+        href: "/aquifer/demarcation"
     },
     {
-        label: "Proposed Conservation Structures",
-        href: "/conservation/proposed"
+        label: "Aquifer Parameters",
+        href: "/aquifer/parameters"
     },
     {
-        label: "Village-Level Implementation",
-        href: "/conservation/village-level"
+        label: "Groundwater In-Storage Estimation",
+        href: "/aquifer/storage-estimation"
+    },
+    {
+        label: "Sustainability Indicators",
+        href: "/aquifer/sustainability"
     },
     {
         label: "Case Studies",
@@ -285,14 +293,14 @@ function Header() {
                                         size: 12
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 120,
+                                        lineNumber: 122,
                                         columnNumber: 63
                                     }, this),
                                     " Call Us: 1800-425-xxxx"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                lineNumber: 120,
+                                lineNumber: 122,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -302,20 +310,20 @@ function Header() {
                                         size: 12
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 121,
+                                        lineNumber: 123,
                                         columnNumber: 63
                                     }, this),
                                     " support@gmail.com"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                lineNumber: 121,
+                                lineNumber: 123,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                        lineNumber: 119,
+                        lineNumber: 121,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -326,7 +334,7 @@ function Header() {
                                 children: "Skip to Main Content"
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                lineNumber: 124,
+                                lineNumber: 126,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -336,26 +344,26 @@ function Header() {
                                         size: 12
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 125,
+                                        lineNumber: 127,
                                         columnNumber: 78
                                     }, this),
                                     " English"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                lineNumber: 125,
+                                lineNumber: 127,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                        lineNumber: 123,
+                        lineNumber: 125,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                lineNumber: 118,
+                lineNumber: 120,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -375,12 +383,12 @@ function Header() {
                                     priority: true
                                 }, void 0, false, {
                                     fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                    lineNumber: 132,
+                                    lineNumber: 134,
                                     columnNumber: 25
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                lineNumber: 131,
+                                lineNumber: 133,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -391,7 +399,7 @@ function Header() {
                                         children: "KADA-GWIS"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 141,
+                                        lineNumber: 143,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -399,19 +407,19 @@ function Header() {
                                         children: "Govt. of Andhra Pradesh"
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 144,
+                                        lineNumber: 146,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                lineNumber: 140,
+                                lineNumber: 142,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                        lineNumber: 130,
+                        lineNumber: 132,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -428,7 +436,7 @@ function Header() {
                                             children: item.label
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                            lineNumber: 159,
+                                            lineNumber: 161,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -460,35 +468,35 @@ function Header() {
                                                                     className: "w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-primary transition-colors duration-200"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                                    lineNumber: 186,
+                                                                    lineNumber: 188,
                                                                     columnNumber: 53
                                                                 }, this),
                                                                 subItem.label
                                                             ]
                                                         }, subItem.label, true, {
                                                             fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                            lineNumber: 181,
+                                                            lineNumber: 183,
                                                             columnNumber: 49
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                    lineNumber: 179,
+                                                    lineNumber: 181,
                                                     columnNumber: 41
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                lineNumber: 172,
+                                                lineNumber: 174,
                                                 columnNumber: 37
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                            lineNumber: 170,
+                                            lineNumber: 172,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, item.label, true, {
                                     fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                    lineNumber: 153,
+                                    lineNumber: 155,
                                     columnNumber: 25
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -504,13 +512,13 @@ function Header() {
                                                 size: 14
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                lineNumber: 209,
+                                                lineNumber: 211,
                                                 columnNumber: 34
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 203,
+                                        lineNumber: 205,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -539,7 +547,7 @@ function Header() {
                                                         children: item.label
                                                     }, idx, false, {
                                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                        lineNumber: 224,
+                                                        lineNumber: 226,
                                                         columnNumber: 49
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                         href: item.href,
@@ -549,41 +557,41 @@ function Header() {
                                                                 className: "w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-primary transition-colors duration-200"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                                lineNumber: 233,
+                                                                lineNumber: 235,
                                                                 columnNumber: 53
                                                             }, this),
                                                             item.label
                                                         ]
                                                     }, idx, true, {
                                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                        lineNumber: 228,
+                                                        lineNumber: 230,
                                                         columnNumber: 49
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                lineNumber: 221,
+                                                lineNumber: 223,
                                                 columnNumber: 37
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                            lineNumber: 214,
+                                            lineNumber: 216,
                                             columnNumber: 33
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 212,
+                                        lineNumber: 214,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                lineNumber: 198,
+                                lineNumber: 200,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                        lineNumber: 151,
+                        lineNumber: 153,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -593,24 +601,24 @@ function Header() {
                             size: 24
                         }, void 0, false, {
                             fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                            lineNumber: 250,
+                            lineNumber: 252,
                             columnNumber: 39
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$menu$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Menu$3e$__["Menu"], {
                             size: 24
                         }, void 0, false, {
                             fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                            lineNumber: 250,
+                            lineNumber: 252,
                             columnNumber: 57
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                        lineNumber: 246,
+                        lineNumber: 248,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                lineNumber: 129,
+                lineNumber: 131,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -645,13 +653,13 @@ function Header() {
                                                         className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])("transition-transform duration-300 text-gray-400 group-hover:text-primary", expandedMobileItem === item.label ? "rotate-180 text-primary" : "")
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                        lineNumber: 273,
+                                                        lineNumber: 275,
                                                         columnNumber: 49
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                lineNumber: 268,
+                                                lineNumber: 270,
                                                 columnNumber: 45
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -684,29 +692,29 @@ function Header() {
                                                                         className: "w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-primary transition-colors duration-200"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                                        lineNumber: 292,
+                                                                        lineNumber: 294,
                                                                         columnNumber: 69
                                                                     }, this),
                                                                     subItem.label
                                                                 ]
                                                             }, subItem.label, true, {
                                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                                lineNumber: 286,
+                                                                lineNumber: 288,
                                                                 columnNumber: 65
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                        lineNumber: 284,
+                                                        lineNumber: 286,
                                                         columnNumber: 57
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                    lineNumber: 277,
+                                                    lineNumber: 279,
                                                     columnNumber: 53
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                lineNumber: 275,
+                                                lineNumber: 277,
                                                 columnNumber: 45
                                             }, this)
                                         ]
@@ -717,12 +725,12 @@ function Header() {
                                         children: item.label
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 302,
+                                        lineNumber: 304,
                                         columnNumber: 41
                                     }, this)
                                 }, item.label, false, {
                                     fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                    lineNumber: 265,
+                                    lineNumber: 267,
                                     columnNumber: 33
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -738,13 +746,13 @@ function Header() {
                                                 className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$clsx$2f$dist$2f$clsx$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])("transition-transform duration-300 text-gray-400 group-hover:text-primary", expandedMobileItem === "More Resources" ? "rotate-180 text-primary" : "")
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                lineNumber: 320,
+                                                lineNumber: 322,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 315,
+                                        lineNumber: 317,
                                         columnNumber: 33
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$components$2f$AnimatePresence$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["AnimatePresence"], {
@@ -773,7 +781,7 @@ function Header() {
                                                         children: item.label
                                                     }, idx, false, {
                                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                        lineNumber: 334,
+                                                        lineNumber: 336,
                                                         columnNumber: 57
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                                         href: item.href,
@@ -784,57 +792,57 @@ function Header() {
                                                                 className: "w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-primary transition-colors duration-200"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                                lineNumber: 344,
+                                                                lineNumber: 346,
                                                                 columnNumber: 61
                                                             }, this),
                                                             item.label
                                                         ]
                                                     }, idx, true, {
                                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                        lineNumber: 338,
+                                                        lineNumber: 340,
                                                         columnNumber: 57
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                                lineNumber: 331,
+                                                lineNumber: 333,
                                                 columnNumber: 45
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                            lineNumber: 324,
+                                            lineNumber: 326,
                                             columnNumber: 41
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                        lineNumber: 322,
+                                        lineNumber: 324,
                                         columnNumber: 33
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                                lineNumber: 314,
+                                lineNumber: 316,
                                 columnNumber: 29
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                        lineNumber: 263,
+                        lineNumber: 265,
                         columnNumber: 25
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                    lineNumber: 257,
+                    lineNumber: 259,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-                lineNumber: 255,
+                lineNumber: 257,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/Desktop/KADACO/src/components/layout/Header.tsx",
-        lineNumber: 116,
+        lineNumber: 118,
         columnNumber: 9
     }, this);
 }
@@ -2615,7 +2623,7 @@ function CurrentStatusPage() {
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$KADACO$2f$node_modules$2f$recharts$2f$es6$2f$component$2f$LabelList$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["LabelList"], {
                                                                         dataKey: "rise",
                                                                         position: "right",
-                                                                        formatter: (val)=>`${val} m`,
+                                                                        formatter: (val)=>val != null ? `${val} m` : '',
                                                                         style: {
                                                                             fontWeight: 'bold'
                                                                         }
