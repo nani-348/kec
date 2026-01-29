@@ -73,10 +73,48 @@ export default function RealTimeWaterLevelPage() {
     const fetchSheetData = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('/api/sheets?category=Groundwater&table=REAL-TIME WATER LEVELS');
-            const result = await response.json();
+            // Try multiple possible table names
+            const tableNames = [
+                'REAL-TIME WATER LEVELS',
+                'REAL-TIME',
+                'Real-Time Water Levels',
+                'Real-Time',
+                'REALTIME',
+                '📊 REAL-TIME WATER LEVELS',
+                '🚰 REAL-TIME WATER LEVELS',
+                '💧 REAL-TIME WATER LEVELS'
+            ];
+            
+            let result = null;
+            for (const tableName of tableNames) {
+                const response = await fetch(`/api/sheets?category=Groundwater&table=${encodeURIComponent(tableName)}`);
+                const data = await response.json();
+                if (data.success && data.data && data.data.length > 0) {
+                    result = data;
+                    console.log(`Found data with table name: ${tableName}`);
+                    break;
+                }
+            }
+            
+            // If no specific table found, try getting all tables from Groundwater category
+            if (!result) {
+                const allResponse = await fetch('/api/sheets?category=Groundwater');
+                const allData = await allResponse.json();
+                console.log('Available Groundwater tables:', allData.tables);
+                
+                // Look for any table containing "REAL" or "real" in the name
+                if (allData.tables) {
+                    const realTimeTable = allData.tables.find((t: string) => 
+                        t.toLowerCase().includes('real') || t.toLowerCase().includes('time')
+                    );
+                    if (realTimeTable && allData.data && allData.data[realTimeTable]) {
+                        result = { success: true, data: allData.data[realTimeTable] };
+                        console.log(`Found real-time table: ${realTimeTable}`);
+                    }
+                }
+            }
 
-            if (result.success && result.data.length > 0) {
+            if (result && result.success && result.data.length > 0) {
                 // Log the first row to see available column names
                 console.log('Sheet columns available:', Object.keys(result.data[0]));
                 console.log('First row data:', result.data[0]);
