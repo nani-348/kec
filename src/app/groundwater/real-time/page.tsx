@@ -74,44 +74,39 @@ export default function RealTimeWaterLevelPage() {
     }, [filteredData]);
     const fetchSheetData = async () => {
         setIsLoading(true);
+        setConnectionStatus('syncing');
         try {
-            // Try multiple possible table names
-            const tableNames = [
-                'REAL-TIME WATER LEVELS',
-                'REAL-TIME',
-                'Real-Time Water Levels',
-                'Real-Time',
-                'REALTIME',
-                '📊 REAL-TIME WATER LEVELS',
-                '🚰 REAL-TIME WATER LEVELS',
-                '💧 REAL-TIME WATER LEVELS'
-            ];
+            // Make ONE API call to get all Groundwater tables
+            const response = await fetch('/api/sheets?category=Groundwater');
+            const allData = await response.json();
+            
+            console.log('Available Groundwater tables:', allData.tables);
             
             let result = null;
-            for (const tableName of tableNames) {
-                const response = await fetch(`/api/sheets?category=Groundwater&table=${encodeURIComponent(tableName)}`);
-                const data = await response.json();
-                if (data.success && data.data && data.data.length > 0) {
-                    result = data;
-                    console.log(`Found data with table name: ${tableName}`);
-                    break;
-                }
-            }
             
-            // If no specific table found, try getting all tables from Groundwater category
-            if (!result) {
-                const allResponse = await fetch('/api/sheets?category=Groundwater');
-                const allData = await allResponse.json();
-                console.log('Available Groundwater tables:', allData.tables);
+            if (allData.success && allData.tables && allData.data) {
+                // Search for table containing real-time related keywords
+                const realTimeTable = allData.tables.find((t: string) => {
+                    const lower = t.toLowerCase();
+                    return lower.includes('real') || 
+                           lower.includes('time') || 
+                           lower.includes('water level') ||
+                           lower.includes('monitor') ||
+                           lower.includes('current') ||
+                           lower.includes('live');
+                });
                 
-                // Look for any table containing "REAL" or "real" in the name
-                if (allData.tables) {
-                    const realTimeTable = allData.tables.find((t: string) => 
-                        t.toLowerCase().includes('real') || t.toLowerCase().includes('time')
+                if (realTimeTable && allData.data[realTimeTable]) {
+                    result = { success: true, data: allData.data[realTimeTable] };
+                    console.log(`Found table: "${realTimeTable}" with ${allData.data[realTimeTable].length} rows`);
+                } else {
+                    // If no matching table, use the first table with data
+                    const firstTableWithData = allData.tables.find((t: string) => 
+                        allData.data[t] && allData.data[t].length > 0
                     );
-                    if (realTimeTable && allData.data && allData.data[realTimeTable]) {
-                        result = { success: true, data: allData.data[realTimeTable] };
-                        console.log(`Found real-time table: ${realTimeTable}`);
+                    if (firstTableWithData) {
+                        result = { success: true, data: allData.data[firstTableWithData] };
+                        console.log(`Using first available table: "${firstTableWithData}"`);
                     }
                 }
             }
@@ -203,7 +198,7 @@ export default function RealTimeWaterLevelPage() {
     };
     useEffect(() => {
         fetchSheetData();
-        const interval = setInterval(fetchSheetData, 5000); // 5 seconds for real-time sync
+        const interval = setInterval(fetchSheetData, 30000); // 30 seconds to avoid Google Sheets quota limits
         return () => clearInterval(interval);
     }, []);
     const CustomTooltip = ({ active, payload, label }: any) => {
@@ -257,7 +252,7 @@ export default function RealTimeWaterLevelPage() {
                                     Last Sync: <span className="font-semibold text-gray-700">{lastUpdated}</span>
                                 </span>
                                 <span className="text-gray-400 text-xs">
-                                    (Auto-sync every 5 sec)
+                                    (Auto-sync every 30 sec)
                                 </span>
                             </div>
                             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 font-serif tracking-tight">
