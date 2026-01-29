@@ -3,7 +3,7 @@ import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/home/HeroSection";
 import LeadershipSection from "@/components/home/LeadershipSection";
 import ServiceGrid from "@/components/home/ServiceGrid";
-import StatsSection from "@/components/home/StatsSection";
+
 import SchemesSection from "@/components/home/SchemesSection";
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
         <HeroSection />
         <LeadershipSection />
         <ServiceGrid />
-        <StatsSection />
+
         <SchemesSection />
       </main>
       <Footer />

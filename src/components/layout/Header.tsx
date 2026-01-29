@@ -63,9 +63,9 @@ const NAV_ITEMS = [
     },
     {
         label: "Water Balance",
-        href: "/water-balance/groundwater-balance",
+        href: "/water-balance/monthly-gwr",
         subItems: [
-            { label: "Groundwater Water Balance", href: "/water-balance/groundwater-balance" },
+
             { label: "Monthly Ground Water Resources", href: "/water-balance/monthly-gwr" },
             { label: "Annual GW Estimation", href: "/groundwater/gw-estimation" },
         ]
@@ -130,7 +130,7 @@ export default function Header() {
                     <div className="relative h-12 w-12 lg:h-14 lg:w-14">
                         <Image
                             src="/images/logo.png"
-                            alt="KADA-GWIS Logo"
+                            alt="KADA-GWRS Logo"
                             fill
                             className="object-contain"
                             priority
@@ -138,7 +138,7 @@ export default function Header() {
                     </div>
                     <div className="flex flex-col">
                         <h1 className="text-xl lg:text-3xl font-bold leading-none font-serif tracking-tight text-primary">
-                            KADA-GWIS
+                            KADA-GWRS
                         </h1>
                         <p className="text-[9px] lg:text-[11px] text-secondary font-bold uppercase tracking-[0.25em] mt-1.5 opacity-90 whitespace-nowrap">
                             Govt. of Andhra Pradesh
