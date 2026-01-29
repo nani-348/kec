@@ -1,43 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { google } from 'googleapis';
 
 export const dynamic = 'force-dynamic';
 
-// Real-Time Water Levels Sheet ID - Create a new sheet and put the ID here
-const REALTIME_SHEET_ID = process.env.GOOGLE_SHEETS_ID_REALTIME || process.env.GOOGLE_SHEETS_ID_GROUNDWATER;
-
-const CLIENT_EMAIL = process.env.GOOGLE_SHEETS_CLIENT_EMAIL;
-const PRIVATE_KEY = process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n');
+// Published Google Sheet URL (CSV format for easy parsing)
+const PUBLISHED_SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT2SBcUQ1g9uUEYPqLU1PfjTvWQT-GrlzY5pisEyOTTC3m0lRyRWh-t5UKv7wnqaqFAd5VUDaCuC3xj/pub?gid=0&single=true&output=csv';
 
 export async function GET(request: NextRequest) {
     try {
-        if (!CLIENT_EMAIL || !PRIVATE_KEY || !REALTIME_SHEET_ID) {
-            return NextResponse.json({
-                success: false,
-                error: 'API not configured',
-                message: 'Missing Google Sheets credentials or sheet ID'
-            }, { status: 500 });
+        // Fetch the published CSV directly (no API key needed!)
+        const response = await fetch(PUBLISHED_SHEET_CSV, {
+            cache: 'no-store', // Always get fresh data
+            redirect: 'follow', // Follow redirects
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch sheet: ${response.status}`);
         }
 
-        const auth = new google.auth.GoogleAuth({
-            credentials: {
-                client_email: CLIENT_EMAIL,
-                private_key: PRIVATE_KEY,
-            },
-            scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-        });
-
-        const sheets = google.sheets({ version: 'v4', auth });
-
-        // Read all data from the sheet (first sheet/tab)
-        const response = await sheets.spreadsheets.values.get({
-            spreadsheetId: REALTIME_SHEET_ID,
-            range: 'A:J', // Columns A to J (Mandal to 1 Hr Ago)
-        });
-
-        const rows = response.data.values;
+        const csvText = await response.text();
         
-        if (!rows || rows.length < 2) {
+        // Parse CSV
+        const lines = csvText.split('\n').filter(line => line.trim());
+        
+        if (lines.length < 2) {
             return NextResponse.json({
                 success: false,
                 error: 'No data found',
@@ -45,20 +30,19 @@ export async function GET(request: NextRequest) {
             });
         }
 
-        // First row is headers
-        const headers = rows[0].map((h: string) => h.trim());
+        // Parse headers (first row)
+        const headers = parseCSVLine(lines[0]);
         
-        // Convert remaining rows to objects
-        const data = rows.slice(1).map((row: any[]) => {
+        // Parse data rows
+        const data = lines.slice(1).map(line => {
+            const values = parseCSVLine(line);
             const obj: Record<string, any> = {};
-            headers.forEach((header: string, index: number) => {
-                let value = row[index] || null;
+            
+            headers.forEach((header, index) => {
+                let value: any = values[index] || null;
                 
-                // Convert numeric columns to numbers
-                if (index >= 2 && value !== null && value !== '' && value !== '—') {
-                    const num = parseFloat(value);
-                    value = isNaN(num) ? null : num;
-                }
+                // Clean up the header name
+                const cleanHeader = header.trim();
                 
                 // Map header names to expected keys
                 const keyMap: Record<string, string> = {
@@ -74,11 +58,21 @@ export async function GET(request: NextRequest) {
                     '1 Hr Ago': 'oneHrAgo',
                 };
                 
-                const key = keyMap[header] || header.toLowerCase().replace(/\s+/g, '');
+                const key = keyMap[cleanHeader] || cleanHeader.toLowerCase().replace(/\s+/g, '');
+                
+                // Convert numeric columns to numbers (skip mandal and village)
+                if (key !== 'mandal' && key !== 'village' && value !== null && value !== '' && value !== '—') {
+                    const num = parseFloat(value);
+                    value = isNaN(num) ? null : num;
+                } else if (value === '—' || value === '-') {
+                    value = null;
+                }
+                
                 obj[key] = value;
             });
+            
             return obj;
-        });
+        }).filter(row => row.mandal || row.village); // Filter out empty rows
 
         return NextResponse.json({
             success: true,
@@ -86,20 +80,11 @@ export async function GET(request: NextRequest) {
             headers: headers,
             data: data,
             lastFetched: new Date().toISOString(),
+            source: 'Published Google Sheet'
         });
 
     } catch (error: any) {
         console.error('Real-Time API Error:', error);
-        
-        // Handle quota exceeded error
-        if (error.code === 429) {
-            return NextResponse.json({
-                success: false,
-                error: 'Rate limit exceeded',
-                message: 'Too many requests. Please wait a minute and try again.',
-                retryAfter: 60
-            }, { status: 429 });
-        }
         
         return NextResponse.json({
             success: false,
@@ -107,4 +92,27 @@ export async function GET(request: NextRequest) {
             message: error.message || 'Unknown error'
         }, { status: 500 });
     }
+}
+
+// Helper function to parse CSV line (handles quoted values)
+function parseCSVLine(line: string): string[] {
+    const result: string[] = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    
+    result.push(current.trim());
+    return result;
 }

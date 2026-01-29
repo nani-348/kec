@@ -24,15 +24,15 @@ const NAV_ITEMS = [
     },
     {
         label: "Groundwater Levels",
-        href: "/groundwater/current-status",
+        href: "/groundwater/real-time",
         subItems: [
-            { label: "Current Status", href: "/groundwater/current-status" },
-            { label: "Annual & Long-Term Trends", href: "/groundwater/annual-trends" },
-            { label: "Piezometer Observations", href: "/groundwater/piezometer-obs" },
             { label: "Real-Time Water Levels", href: "/groundwater/real-time" },
+            { label: "Annual & Long-Term Trends", href: "/groundwater/annual-trends" },
+            { label: "Spatial Distribution", href: "/groundwater/spatial-distribution" },
             { label: "Seasonal Fluctuation", href: "/groundwater/seasonal-fluctuation" },
             { label: "Seasonal GIS Analysis", href: "/groundwater/seasonal-gis" },
-            { label: "Spatial Distribution", href: "/groundwater/spatial-distribution" },
+            { label: "Current Status", href: "/groundwater/current-status" },
+            { label: "Piezometer Observations", href: "/groundwater/piezometer-obs" },
         ]
     },
     {
