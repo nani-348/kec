@@ -295,7 +295,7 @@ export default function SpatialDistributionPage() {
                                 <div className="p-4">
                                     <div className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-blue-300 transition-all">
                                         <img
-                                            src="/images/1.jpeg"
+                                            src="/images/about-kada/1.jpeg"
                                             alt="Ground Water Levels in KADA Region (Jan-2025)"
                                             className="w-full h-auto cursor-zoom-in hover:scale-105 transition-transform duration-300"
                                             onClick={(e) => {
@@ -323,7 +323,7 @@ export default function SpatialDistributionPage() {
                                 <div className="p-4">
                                     <div className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-amber-300 transition-all">
                                         <img
-                                            src="/images/2.jpeg"
+                                            src="/images/about-kada/2.jpeg"
                                             alt="Ground Water Levels in KADA Region (May-2025)"
                                             className="w-full h-auto cursor-zoom-in hover:scale-105 transition-transform duration-300"
                                             onClick={(e) => {
@@ -351,7 +351,7 @@ export default function SpatialDistributionPage() {
                                 <div className="p-4">
                                     <div className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-green-300 transition-all">
                                         <img
-                                            src="/images/3.jpeg"
+                                            src="/images/about-kada/3.jpeg"
                                             alt="Ground Water Levels in KADA Region (Nov-2025)"
                                             className="w-full h-auto cursor-zoom-in hover:scale-105 transition-transform duration-300"
                                             onClick={(e) => {
@@ -379,7 +379,7 @@ export default function SpatialDistributionPage() {
                                 <div className="p-4">
                                     <div className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-purple-300 transition-all">
                                         <img
-                                            src="/images/4.jpeg"
+                                            src="/images/about-kada/4.jpeg"
                                             alt="Ground Water Levels in KADA Region (Jan-2026)"
                                             className="w-full h-auto cursor-zoom-in hover:scale-105 transition-transform duration-300"
                                             onClick={(e) => {
