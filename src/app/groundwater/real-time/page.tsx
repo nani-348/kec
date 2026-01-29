@@ -75,19 +75,66 @@ export default function RealTimeWaterLevelPage() {
         try {
             const response = await fetch('/api/sheets?category=Groundwater&table=REAL-TIME WATER LEVELS');
             const result = await response.json();
+
             if (result.success && result.data.length > 0) {
-                const sheetData: WaterDataRow[] = result.data.map((row: any) => ({
-                    mandal: row.mandal || '', village: row.village || '',
-                    jan1stWeek: Number(row.jan1stWeek) || 0, jan2ndWeek: Number(row.jan2ndWeek) || 0,
-                    jan3rdWeek: Number(row.jan3rdWeek) || 0, jan4thWeek: Number(row.jan4thWeek) || 0,
-                    currentMonth: Number(row.currentMonth) || 0, yesterday: row.yesterday ? Number(row.yesterday) : null,
-                    today: row.today ? Number(row.today) : null, oneHrAgo: row.oneHrAgo ? Number(row.oneHrAgo) : null,
-                }));
-                setData(sheetData);
-                setLastUpdated(new Date().toLocaleTimeString());
-            } else { setLastUpdated("Using cached data"); }
-        } catch (error) { console.error("Failed to fetch:", error); setLastUpdated("Offline mode"); }
-        finally { setIsLoading(false); }
+                // Helper function to find value from multiple possible column names
+                const getValue = (row: any, possibleKeys: string[]): any => {
+                    for (const key of possibleKeys) {
+                        if (row[key] !== undefined && row[key] !== null && row[key] !== '') {
+                            return row[key];
+                        }
+                    }
+                    return null;
+                };
+
+                const sheetData: WaterDataRow[] = result.data.map((row: any) => {
+                    // Normalize column names - handle various possible naming conventions
+                    const mandal = getValue(row, ['mandal', 'Mandal', 'MANDAL', 'Mandal Name']);
+                    const village = getValue(row, ['village', 'Village', 'VILLAGE', 'Village Name', 'Station', 'station']);
+
+                    const jan1stWeek = getValue(row, ['jan1stWeek', 'Jan 1st Week', 'JAN 1ST WEEK', '1st Week', 'Week 1', 'week1']);
+                    const jan2ndWeek = getValue(row, ['jan2ndWeek', 'Jan 2nd Week', 'JAN 2ND WEEK', '2nd Week', 'Week 2', 'week2']);
+                    const jan3rdWeek = getValue(row, ['jan3rdWeek', 'Jan 3rd Week', 'JAN 3RD WEEK', '3rd Week', 'Week 3', 'week3']);
+                    const jan4thWeek = getValue(row, ['jan4thWeek', 'Jan 4th Week', 'JAN 4TH WEEK', '4th Week', 'Week 4', 'week4']);
+                    const currentMonth = getValue(row, ['currentMonth', 'Current Month', 'CURRENT MONTH', 'Current', 'current']);
+
+                    const yesterday = getValue(row, ['yesterday', 'Yesterday', 'YESTERDAY', 'Prev Day']);
+                    const today = getValue(row, ['today', 'Today', 'TODAY', 'Current Day']);
+                    const oneHrAgo = getValue(row, ['oneHrAgo', 'One Hr Ago', 'ONE HR AGO', '1 Hr Ago', 'Last Hour']);
+
+                    return {
+                        mandal: mandal || '',
+                        village: village || '',
+                        jan1stWeek: jan1stWeek ? Number(jan1stWeek) : 0,
+                        jan2ndWeek: jan2ndWeek ? Number(jan2ndWeek) : 0,
+                        jan3rdWeek: jan3rdWeek ? Number(jan3rdWeek) : 0,
+                        jan4thWeek: jan4thWeek ? Number(jan4thWeek) : 0,
+                        currentMonth: currentMonth ? Number(currentMonth) : 0,
+                        yesterday: yesterday ? Number(yesterday) : null,
+                        today: today ? Number(today) : null,
+                        oneHrAgo: oneHrAgo ? Number(oneHrAgo) : null,
+                    };
+                });
+
+                // Only update if we got valid data
+                if (sheetData.length > 0 && sheetData.some(row => row.village)) {
+                    setData(sheetData);
+                    setLastUpdated(new Date().toLocaleTimeString());
+                    console.log('Real-time data updated:', sheetData.length, 'stations');
+                } else {
+                    console.warn('Sheet data empty or invalid, keeping fallback data');
+                    setLastUpdated("Using cached data");
+                }
+            } else {
+                console.warn('No data returned from API');
+                setLastUpdated("Using cached data");
+            }
+        } catch (error) {
+            console.error("Failed to fetch real-time data:", error);
+            setLastUpdated("Offline mode");
+        } finally {
+            setIsLoading(false);
+        }
     };
     useEffect(() => {
         fetchSheetData();
