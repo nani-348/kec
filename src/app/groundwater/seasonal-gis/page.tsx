@@ -257,12 +257,28 @@ export default function GroundWaterScenarioPage() {
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {GIS_MAPS.map((map, i) => (
-                                    <div key={i} className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+                                    <div key={i} className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden group hover:shadow-2xl transition-all">
                                         <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-emerald-50 to-blue-50">
                                             <h3 className="font-bold text-gray-900">{map.title}</h3>
                                         </div>
                                         <div className="p-4">
-                                            <Image src={map.src} alt={map.title} width={600} height={500} className="w-full h-auto rounded-lg" />
+                                            <div className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-emerald-300 transition-all">
+                                                <Image 
+                                                    src={map.src} 
+                                                    alt={map.title} 
+                                                    width={600} 
+                                                    height={500} 
+                                                    className="w-full h-auto cursor-zoom-in hover:scale-105 transition-transform duration-300" 
+                                                    onClick={(e) => {
+                                                        const img = e.currentTarget;
+                                                        if (img.requestFullscreen) img.requestFullscreen();
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
+                                                <Info size={14} />
+                                                <span>Click image to view fullscreen</span>
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
