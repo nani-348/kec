@@ -71,7 +71,7 @@ export default function SeasonalGWisPage() {
                             <Droplets size={14} /> Seasonal Analysis
                         </div>
                         <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 font-serif leading-tight">
-                            Seasonal GWis <span className="text-blue-600">Monitoring</span>
+                            Seasonal GWRS <span className="text-blue-600">Monitoring</span>
                         </h1>
                         <p className="text-gray-600 mt-4 text-lg leading-relaxed">
                             Comparative analysis of groundwater levels (m bgl) across different monsoonal periods.

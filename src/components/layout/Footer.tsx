@@ -31,7 +31,7 @@ export default function Footer() {
                             />
                             <div>
                                 <h3 className="font-bold text-xl leading-none text-secondary font-serif tracking-tight">KADA</h3>
-                                <h3 className="font-bold text-xl leading-none text-white font-serif tracking-tight">GWIS</h3>
+                                <h3 className="font-bold text-xl leading-none text-white font-serif tracking-tight">GWRS</h3>
                             </div>
                         </div>
                         <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
@@ -122,7 +122,7 @@ export default function Footer() {
                 <hr className="border-white/10 mb-6" />
 
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-                    <p>© 2026 KADA GWIS, Govt. of Andhra Pradesh. All rights reserved.</p>
+                    <p>© 2026 KADA GWRS, Govt. of Andhra Pradesh. All rights reserved.</p>
                     <p className="flex items-center gap-2">
                         Designed & Developed by{" "}
                         <Link
