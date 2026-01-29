@@ -42,7 +42,7 @@ export default function SchemesSection() {
                                 groundwater management strategies based on hydrogeological assessments.
                             </p>
                             <Link
-                                href="/conservation/proposed"
+                                href="/conservation/water-conservation-plan"
                                 className="flex items-center gap-2 text-blue-600 font-semibold group-hover:gap-3 transition-all duration-300 ease-in-out"
                             >
                                 View Analysis <ArrowRight className="w-4 h-4" />
