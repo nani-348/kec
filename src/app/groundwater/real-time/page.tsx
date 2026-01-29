@@ -55,6 +55,8 @@ export default function RealTimeWaterLevelPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedMandal, setSelectedMandal] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
+    const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'syncing'>('syncing');
+    const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
     const mandals = ["All", ...Array.from(new Set(data.map(item => item.mandal)))];
     const filteredData = useMemo(() => {
         return data.filter(row => {
@@ -176,26 +178,32 @@ export default function RealTimeWaterLevelPage() {
                 // Only update if we got valid data
                 if (sheetData.length > 0 && sheetData.some(row => row.village)) {
                     setData(sheetData);
-                    setLastUpdated(new Date().toLocaleTimeString());
-                    console.log('Real-time data updated:', sheetData.length, 'stations');
+                    const now = new Date();
+                    setLastSyncTime(now);
+                    setLastUpdated(now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
+                    setConnectionStatus('connected');
+                    console.log('Real-time data updated:', sheetData.length, 'stations at', now.toLocaleTimeString());
                 } else {
                     console.warn('Sheet data empty or invalid, keeping fallback data');
-                    setLastUpdated("Using cached data");
+                    setLastUpdated("No data in sheets");
+                    setConnectionStatus('disconnected');
                 }
             } else {
                 console.warn('No data returned from API');
-                setLastUpdated("Using cached data");
+                setLastUpdated("No data found");
+                setConnectionStatus('disconnected');
             }
         } catch (error) {
             console.error("Failed to fetch real-time data:", error);
-            setLastUpdated("Offline mode");
+            setLastUpdated("Connection failed");
+            setConnectionStatus('disconnected');
         } finally {
             setIsLoading(false);
         }
     };
     useEffect(() => {
         fetchSheetData();
-        const interval = setInterval(fetchSheetData, 1000); // 1 second for real-time updates
+        const interval = setInterval(fetchSheetData, 5000); // 5 seconds for real-time sync
         return () => clearInterval(interval);
     }, []);
     const CustomTooltip = ({ active, payload, label }: any) => {
@@ -223,19 +231,41 @@ export default function RealTimeWaterLevelPage() {
                     {/* Header */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
                         <div>
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="bg-red-50 text-red-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider animate-pulse flex items-center gap-2 border border-red-100">
-                                    <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span></span>
-                                    Live Sync Active
+                            <div className="flex items-center gap-2 mb-2 flex-wrap">
+                                {connectionStatus === 'connected' ? (
+                                    <span className="bg-green-50 text-green-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 border border-green-100">
+                                        <span className="relative flex h-2 w-2">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                        </span>
+                                        Connected to Sheets
+                                    </span>
+                                ) : connectionStatus === 'syncing' ? (
+                                    <span className="bg-yellow-50 text-yellow-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 border border-yellow-100">
+                                        <RefreshCw size={12} className="animate-spin" />
+                                        Syncing...
+                                    </span>
+                                ) : (
+                                    <span className="bg-red-50 text-red-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 border border-red-100">
+                                        <span className="relative flex h-2 w-2">
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                                        </span>
+                                        Disconnected
+                                    </span>
+                                )}
+                                <span className="text-gray-500 text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+                                    Last Sync: <span className="font-semibold text-gray-700">{lastUpdated}</span>
                                 </span>
-                                <span className="text-gray-400 text-xs font-mono">Synced: {lastUpdated}</span>
+                                <span className="text-gray-400 text-xs">
+                                    (Auto-sync every 5 sec)
+                                </span>
                             </div>
                             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 font-serif tracking-tight">
                                 Real-Time <span className="text-primary">Water Monitor</span>
                             </h1>
                             <p className="text-gray-600 mt-3 max-w-2xl text-lg">Ground Water Levels in KADA Region - January 2026</p>
                         </div>
-                        <button onClick={fetchSheetData} disabled={isLoading} className="bg-gray-900 hover:bg-black text-white px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all shadow-lg">
+                        <button onClick={() => { setConnectionStatus('syncing'); fetchSheetData(); }} disabled={isLoading} className="bg-gray-900 hover:bg-black text-white px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all shadow-lg">
                             <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
                             {isLoading ? "Syncing..." : "Sync Now"}
                         </button>
