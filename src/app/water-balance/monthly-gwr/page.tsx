@@ -219,7 +219,7 @@ export default function MonthlyGWRPage() {
                                             radius={[3, 3, 0, 0]}
                                             maxBarSize={35}
                                         >
-                                            <LabelList dataKey="june2024" position="top" fontSize={8} fill="#374151" formatter={(value: number) => value.toFixed(3)} />
+                                            <LabelList dataKey="june2024" position="top" fontSize={8} fill="#374151" formatter={(value) => typeof value === 'number' ? value.toFixed(3) : value} />
                                         </Bar>
                                         <Bar
                                             dataKey="feb2025"
@@ -228,7 +228,7 @@ export default function MonthlyGWRPage() {
                                             radius={[3, 3, 0, 0]}
                                             maxBarSize={35}
                                         >
-                                            <LabelList dataKey="feb2025" position="top" fontSize={8} fill="#374151" formatter={(value: number) => value.toFixed(3)} />
+                                            <LabelList dataKey="feb2025" position="top" fontSize={8} fill="#374151" formatter={(value) => typeof value === 'number' ? value.toFixed(3) : value} />
                                         </Bar>
                                         <Bar
                                             dataKey="june2025"
@@ -237,7 +237,7 @@ export default function MonthlyGWRPage() {
                                             radius={[3, 3, 0, 0]}
                                             maxBarSize={35}
                                         >
-                                            <LabelList dataKey="june2025" position="top" fontSize={8} fill="#374151" formatter={(value: number) => value.toFixed(3)} />
+                                            <LabelList dataKey="june2025" position="top" fontSize={8} fill="#374151" formatter={(value) => typeof value === 'number' ? value.toFixed(3) : value} />
                                         </Bar>
                                         <Bar
                                             dataKey="jan2026"
@@ -246,7 +246,7 @@ export default function MonthlyGWRPage() {
                                             radius={[3, 3, 0, 0]}
                                             maxBarSize={35}
                                         >
-                                            <LabelList dataKey="jan2026" position="top" fontSize={8} fill="#374151" formatter={(value: number) => value.toFixed(3)} />
+                                            <LabelList dataKey="jan2026" position="top" fontSize={8} fill="#374151" formatter={(value) => typeof value === 'number' ? value.toFixed(3) : value} />
                                         </Bar>
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -309,7 +309,7 @@ export default function MonthlyGWRPage() {
                                                 fontSize={13}
                                                 fontWeight="bold"
                                                 fill="#374151"
-                                                formatter={(value: number) => `${value.toFixed(2)} TMC`}
+                                                formatter={(value) => typeof value === 'number' ? `${value.toFixed(2)} TMC` : value}
                                             />
                                         </Bar>
                                     </BarChart>
