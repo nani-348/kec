@@ -19,7 +19,14 @@ export default function AnnualTrendsPage() {
             const response = await fetch('/api/sheets?category=Groundwater&table=ANNUAL TRENDS');
             const result = await response.json();
             if (result.success && result.data.length > 0) {
-                setTrendData(result.data);
+                // Normalize keys for the chart
+                const formattedData = result.data.map((item: any) => ({
+                    month: item.month || item.Month || item.MONTH,
+                    DecadalAvg: Number(item.DecadalAvg || item['Decadal Avg'] || item['DECADAL AVG'] || 0),
+                    PreviousYear: Number(item.PreviousYear || item['Previous Year'] || item['PREVIOUS YEAR'] || item['2024'] || 0),
+                    CurrentYear: Number(item.CurrentYear || item['Current Year'] || item['CURRENT YEAR'] || item['2025'] || 0),
+                }));
+                setTrendData(formattedData);
             }
         } catch (error) {
             console.error("Failed to fetch trend data:", error);

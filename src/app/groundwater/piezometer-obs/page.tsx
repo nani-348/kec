@@ -8,10 +8,10 @@ import clsx from "clsx";
 const FALLBACK_STATION_DATA = [
     // Gudi Palle Mandal
     { id: 1, name: "Dravida University", mandal: "Gudupalle", may: 15.88, nov: 12.87, status: "Moderate" },
-    { id: 2, name: "Gudupalle HQ", mandal: "Gudupalle", may: 34.42, nov: 31.07, status: "Critical" },
-    { id: 3, name: "Solachinthanapalli", mandal: "Gudupalle", may: 41.92, nov: 39.24, status: "Critical" },
+    { id: 2, name: "Gudupalle HQ", mandal: "Gudupalle", may: 34.42, nov: 31.07, status: "Low" },
+    { id: 3, name: "Solachinthanapalli", mandal: "Gudupalle", may: 41.92, nov: 39.24, status: "Low" },
     // Kuppam Mandal
-    { id: 4, name: "Adaviboduguru", mandal: "Kuppam", may: 30.69, nov: 25.41, status: "Critical" },
+    { id: 4, name: "Adaviboduguru", mandal: "Kuppam", may: 30.69, nov: 25.41, status: "Low" },
     { id: 5, name: "Kangundhi", mandal: "Kuppam", may: 8.03, nov: 3.52, status: "Safe" },
     // Rama Kuppam Mandal
     { id: 6, name: "Balla", mandal: "Ramakuppam", may: 19.96, nov: 12.91, status: "Moderate" },
@@ -116,9 +116,9 @@ export default function PiezometerObsPage() {
                             const rise = (station.may - station.nov).toFixed(2);
                             const isImprovement = parseFloat(rise) > 0;
                             const statusColor = station.status === "Safe" ? "text-green-600 bg-green-50" :
-                                station.status === "Critical" ? "text-red-600 bg-red-50" : "text-yellow-600 bg-yellow-50";
+                                station.status === "Low" ? "text-red-600 bg-red-50" : "text-yellow-600 bg-yellow-50";
                             const BorderColor = station.status === "Safe" ? "border-green-200" :
-                                station.status === "Critical" ? "border-red-200" : "border-yellow-200";
+                                station.status === "Low" ? "border-red-200" : "border-yellow-200";
                             return (
                                 <div key={station.id} className={`bg-white rounded-xl border ${BorderColor} shadow-sm p-5 hover:shadow-md transition-shadow relative overflow-hidden group`}>
                                     <div className="flex justify-between items-start mb-3">
@@ -205,7 +205,7 @@ export default function PiezometerObsPage() {
                                             <td className="px-6 py-3 text-center">
                                                 {station.status === "Safe" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700"><CheckCircle size={12} /> Safe</span>}
                                                 {station.status === "Moderate" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-yellow-100 text-yellow-700"><AlertTriangle size={12} /> Moderate</span>}
-                                                {station.status === "Critical" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-700"><AlertTriangle size={12} /> Critical</span>}
+                                                {station.status === "Low" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-700"><AlertTriangle size={12} /> Low</span>}
                                             </td>
                                         </tr>
                                     ))}

@@ -10,13 +10,13 @@ import {
 import clsx from "clsx";
 // --- Data Definitions ---
 // Aggregated Mandal Stats (Derived from Station Data)
-// Status Logic: Safe (<10m), Moderate (10-20m), Critical (>20m)
+// Status Logic: Safe (<10m), Moderate (10-20m), Low (>20m)
 const MANDAL_SNAPSHOTS = [
     {
         id: "gdp",
         name: "Gudupalle",
         avgDepth: 27.72,
-        status: "Critical",
+        status: "Low",
         trend: "Stable",
         stations: 3,
         coordinates: { x: 20, y: 30 },
@@ -56,14 +56,14 @@ const MANDAL_SNAPSHOTS = [
 const DEPTH_RANGES = [
     { name: "Safe (<10m)", value: 4, color: "#22c55e" },
     { name: "Moderate (10-20m)", value: 5, color: "#eab308" },
-    { name: "Critical (>20m)", value: 4, color: "#ef4444" },
+    { name: "Low (>20m)", value: 4, color: "#ef4444" },
 ];
 // Fallback station data
 const FALLBACK_STATIONS = [
     { id: 1, name: "Dravida University", mandal: "Gudupalle", depth: 13.56, status: "Moderate" },
-    { id: 2, name: "Gudupalle", mandal: "Gudupalle", depth: 31.77, status: "Critical" },
-    { id: 3, name: "Solachinthanapalli", mandal: "Gudupalle", depth: 40.04, status: "Critical" },
-    { id: 4, name: "Adaviboduguru", mandal: "Kuppam", depth: 28.37, status: "Critical" },
+    { id: 2, name: "Gudupalle", mandal: "Gudupalle", depth: 31.77, status: "Low" },
+    { id: 3, name: "Solachinthanapalli", mandal: "Gudupalle", depth: 40.04, status: "Low" },
+    { id: 4, name: "Adaviboduguru", mandal: "Kuppam", depth: 28.37, status: "Low" },
     { id: 5, name: "Kangundhi", mandal: "Kuppam", depth: 3.74, status: "Safe" },
     { id: 6, name: "Balla", mandal: "Ramakuppam", depth: 13.65, status: "Moderate" },
     { id: 7, name: "Cheldiganipalle", mandal: "Ramakuppam", depth: 16.90, status: "Moderate" },
@@ -162,7 +162,7 @@ export default function SpatialDistributionPage() {
                                             <h3 className="font-bold text-sm lg:text-base leading-tight">{mandal.name}</h3>
                                             <p className="text-xs font-medium mt-1 opacity-80">{mandal.avgDepth.toFixed(1)}m Avg</p>
                                             {/* Pulse Effect for Critical */}
-                                            {mandal.status === "Critical" && (
+                                            {mandal.status === "Low" && (
                                                 <span className="absolute inset-0 rounded-full border-4 border-red-400 opacity-20 animate-ping"></span>
                                             )}
                                         </div>
@@ -184,7 +184,7 @@ export default function SpatialDistributionPage() {
                                                 {MANDAL_SNAPSHOTS.find(m => m.id === selectedMandal)?.name}
                                                 <span className={clsx(
                                                     "text-xs px-2 py-0.5 rounded-full border",
-                                                    MANDAL_SNAPSHOTS.find(m => m.id === selectedMandal)?.status === "Critical" ? "bg-red-50 border-red-200 text-red-700" :
+                                                    MANDAL_SNAPSHOTS.find(m => m.id === selectedMandal)?.status === "Low" ? "bg-red-50 border-red-200 text-red-700" :
                                                         "bg-yellow-50 border-yellow-200 text-yellow-700"
                                                 )}>
                                                     {MANDAL_SNAPSHOTS.find(m => m.id === selectedMandal)?.status}
@@ -254,7 +254,7 @@ export default function SpatialDistributionPage() {
                             {/* Quick Stats Grid */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-red-50 p-4 rounded-xl border border-red-100">
-                                    <p className="text-xs font-bold text-red-400 uppercase">Critical Zone</p>
+                                    <p className="text-xs font-bold text-red-400 uppercase">Low Zone</p>
                                     <p className="text-2xl font-bold text-red-900 mt-1">Gudupalle</p>
                                     <p className="text-xs text-red-700 mt-1">Avg 27.7m Depth</p>
                                 </div>
@@ -266,6 +266,197 @@ export default function SpatialDistributionPage() {
                             </div>
                         </div>
                     </div>
+
+                    {/* GIS Maps - Temporal Analysis Section */}
+                    <div className="mb-12">
+                        <div className="flex items-center justify-between mb-8">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900 font-serif flex items-center gap-2">
+                                    <Layers className="text-primary" size={28} />
+                                    GIS Maps - Spatial Distribution
+                                </h2>
+                                <p className="text-gray-600 mt-2">
+                                    Temporal analysis of groundwater levels across KADA region showing seasonal variations
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Maps Grid */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                            {/* Map 1: Jan-2025 */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-all">
+                                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-100">
+                                    <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                                        <MapPin size={18} className="text-blue-600" />
+                                        January 2025 - Post-Monsoon Status
+                                    </h3>
+                                    <p className="text-sm text-gray-600 mt-1">Initial assessment after monsoon season</p>
+                                </div>
+                                <div className="p-4">
+                                    <div className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-blue-300 transition-all">
+                                        <img
+                                            src="/images/1.jpeg"
+                                            alt="Ground Water Levels in KADA Region (Jan-2025)"
+                                            className="w-full h-auto cursor-zoom-in hover:scale-105 transition-transform duration-300"
+                                            onClick={(e) => {
+                                                const img = e.currentTarget;
+                                                if (img.requestFullscreen) img.requestFullscreen();
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
+                                        <Info size={14} />
+                                        <span>Click image to zoom • Shows recovery after monsoon</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Map 2: May-2025 */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-all">
+                                <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-4 border-b border-gray-100">
+                                    <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                                        <MapPin size={18} className="text-amber-600" />
+                                        May 2025 - Pre-Monsoon Status
+                                    </h3>
+                                    <p className="text-sm text-gray-600 mt-1">Peak summer stress period</p>
+                                </div>
+                                <div className="p-4">
+                                    <div className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-amber-300 transition-all">
+                                        <img
+                                            src="/images/2.jpeg"
+                                            alt="Ground Water Levels in KADA Region (May-2025)"
+                                            className="w-full h-auto cursor-zoom-in hover:scale-105 transition-transform duration-300"
+                                            onClick={(e) => {
+                                                const img = e.currentTarget;
+                                                if (img.requestFullscreen) img.requestFullscreen();
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
+                                        <AlertTriangle size={14} className="text-amber-600" />
+                                        <span>Click image to zoom • Deepest water levels observed</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Map 3: Nov-2025 */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-all">
+                                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 border-b border-gray-100">
+                                    <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                                        <MapPin size={18} className="text-green-600" />
+                                        November 2025 - Post-Monsoon Recovery
+                                    </h3>
+                                    <p className="text-sm text-gray-600 mt-1">Significant improvement after monsoon</p>
+                                </div>
+                                <div className="p-4">
+                                    <div className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-green-300 transition-all">
+                                        <img
+                                            src="/images/3.jpeg"
+                                            alt="Ground Water Levels in KADA Region (Nov-2025)"
+                                            className="w-full h-auto cursor-zoom-in hover:scale-105 transition-transform duration-300"
+                                            onClick={(e) => {
+                                                const img = e.currentTarget;
+                                                if (img.requestFullscreen) img.requestFullscreen();
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
+                                        <CheckCircle size={14} className="text-green-600" />
+                                        <span>Click image to zoom • Best recovery observed</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Map 4: Jan-2026 */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-all">
+                                <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 border-b border-gray-100">
+                                    <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                                        <MapPin size={18} className="text-purple-600" />
+                                        January 2026 - Current Status
+                                    </h3>
+                                    <p className="text-sm text-gray-600 mt-1">Latest groundwater assessment</p>
+                                </div>
+                                <div className="p-4">
+                                    <div className="relative overflow-hidden rounded-lg border border-gray-200 group-hover:border-purple-300 transition-all">
+                                        <img
+                                            src="/images/4.jpeg"
+                                            alt="Ground Water Levels in KADA Region (Jan-2026)"
+                                            className="w-full h-auto cursor-zoom-in hover:scale-105 transition-transform duration-300"
+                                            onClick={(e) => {
+                                                const img = e.currentTarget;
+                                                if (img.requestFullscreen) img.requestFullscreen();
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="mt-3 flex items-center gap-2 text-xs text-gray-500">
+                                        <Droplets size={14} className="text-purple-600" />
+                                        <span>Click image to zoom • Sustained improvement trend</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Legend and Key Insights */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {/* Legend */}
+                            <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 text-white">
+                                <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                                    <Layers size={20} />
+                                    GW Zone Legend
+                                </h3>
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded bg-green-500 border-2 border-white shadow-sm"></div>
+                                        <div>
+                                            <p className="font-semibold">Shallow (&lt;10m)</p>
+                                            <p className="text-xs text-gray-300">Safe groundwater levels</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded bg-yellow-400 border-2 border-white shadow-sm"></div>
+                                        <div>
+                                            <p className="font-semibold">Medium (10-20m)</p>
+                                            <p className="text-xs text-gray-300">Moderate stress levels</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded bg-red-500 border-2 border-white shadow-sm"></div>
+                                        <div>
+                                            <p className="font-semibold">Deep (&gt;20m)</p>
+                                            <p className="text-xs text-gray-300">Low water availability - needs intervention</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Key Insights */}
+                            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                                <h3 className="font-bold text-lg mb-4 text-gray-900 flex items-center gap-2">
+                                    <Info size={20} className="text-blue-600" />
+                                    Key Observations
+                                </h3>
+                                <ul className="space-y-3 text-sm text-gray-700">
+                                    <li className="flex items-start gap-2">
+                                        <ArrowUpRight size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
+                                        <span><strong>Gudupalle</strong> shows persistent deep water levels (red zones) requiring urgent recharge interventions</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <ArrowUpRight size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
+                                        <span><strong>Seasonal variation</strong> clearly visible between May (pre-monsoon) and Nov (post-monsoon) periods</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <ArrowUpRight size={16} className="text-purple-600 mt-0.5 flex-shrink-0" />
+                                        <span><strong>Shanthipuram & Ramakuppam</strong> maintain relatively better groundwater status (green zones)</span>
+                                    </li>
+                                    <li className="flex items-start gap-2">
+                                        <ArrowUpRight size={16} className="text-amber-600 mt-0.5 flex-shrink-0" />
+                                        <span><strong>Recovery trend</strong> observed from Nov-2025 to Jan-2026 indicating effective monsoon recharge</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Bottom: Detailed Data Grid */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                         <div className="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -284,7 +475,7 @@ export default function SpatialDistributionPage() {
                                         <option value="All">All Status</option>
                                         <option value="Safe">Safe</option>
                                         <option value="Moderate">Moderate</option>
-                                        <option value="Critical">Critical</option>
+                                        <option value="Low">Low</option>
                                     </select>
                                     <Filter size={14} className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
                                 </div>
@@ -318,7 +509,7 @@ export default function SpatialDistributionPage() {
                                                 <td className="px-6 py-3 text-center">
                                                     {station.status === "Safe" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700"><CheckCircle size={12} /> Safe</span>}
                                                     {station.status === "Moderate" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700"><AlertTriangle size={12} /> Moderate</span>}
-                                                    {station.status === "Critical" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700"><AlertTriangle size={12} /> Critical</span>}
+                                                    {station.status === "Low" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700"><AlertTriangle size={12} /> Low</span>}
                                                 </td>
                                             </tr>
                                         ))

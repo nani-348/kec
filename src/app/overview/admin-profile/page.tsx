@@ -29,8 +29,8 @@ export default function AdminProfilePage() {
     ];
     // Placeholder data for Assessment Units - to be verified/expanded with PDF data
     const assessmentUnits = [
-        { id: "CTR_PALAR_CHINNAERU_NADIMURU", basin: "Palar", watershed: "Chinnaeru Nadimuru", area: "15,240 Ha", category: "Critical" },
-        { id: "CTR_PALAR_PEDDAVANKA", basin: "Palar", watershed: "Peddavanka", area: "12,110 Ha", category: "Semi-Critical" },
+        { id: "CTR_PALAR_CHINNAERU_NADIMURU", basin: "Palar", watershed: "Chinnaeru Nadimuru", area: "15,240 Ha", category: "Low" },
+        { id: "CTR_PALAR_PEDDAVANKA", basin: "Palar", watershed: "Peddavanka", area: "12,110 Ha", category: "Moderate" },
         { id: "CTR_PONNIAR_KOUNDINYA", basin: "Ponniar", watershed: "Koundinya", area: "9,850 Ha", category: "Safe" },
         // Add more rows as extracted
     ];

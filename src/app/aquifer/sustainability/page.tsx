@@ -32,8 +32,8 @@ import clsx from "clsx";
 // Key definitions:
 // SOD (Stage of Development) = (Gross Groundwater Draft / Net Groundwater Availability) * 100
 // < 70% : Safe
-// 70-90% : Semi-Critical
-// 90-100% : Critical
+// 70-90% : Moderate
+// 90-100% : Low
 // > 100% : Over-Exploited
 
 const SUSTAINABILITY_DATA = [
@@ -44,7 +44,7 @@ const SUSTAINABILITY_DATA = [
         draft: 14.2,        // Gross Groundwater Draft (MCM)
         sod: 113.6,         // Calculated SOD %
         category: "Over-Exploited",
-        description: "Extraction exceeds recharge. Critical need for artificial recharge structures.",
+        description: "Extraction exceeds recharge. Urgent need for artificial recharge structures.",
         trend: "worsening"
     },
     {
@@ -53,7 +53,7 @@ const SUSTAINABILITY_DATA = [
         availability: 18.2,
         draft: 16.5,
         sod: 90.6,
-        category: "Critical",
+        category: "Low",
         description: "High urban demand putting stress on aquifers. Near 100% utilization.",
         trend: "stable"
     },
@@ -63,7 +63,7 @@ const SUSTAINABILITY_DATA = [
         availability: 15.8,
         draft: 11.2,
         sod: 70.9,
-        category: "Semi-Critical",
+        category: "Moderate",
         description: "Agricultural extraction is high but balanced by good recharge zones.",
         trend: "improving"
     },
@@ -88,8 +88,8 @@ const AVG_SOD = (TOTAL_DRAFT / TOTAL_AVAILABILITY) * 100;
 const getCategoryColor = (category: string) => {
     switch (category) {
         case "Safe": return "text-green-600 bg-green-50 border-green-200";
-        case "Semi-Critical": return "text-yellow-600 bg-yellow-50 border-yellow-200";
-        case "Critical": return "text-orange-600 bg-orange-50 border-orange-200";
+        case "Moderate": return "text-yellow-600 bg-yellow-50 border-yellow-200";
+        case "Low": return "text-orange-600 bg-orange-50 border-orange-200";
         case "Over-Exploited": return "text-red-600 bg-red-50 border-red-200";
         default: return "text-gray-600 bg-gray-50 border-gray-200";
     }
