@@ -76,99 +76,30 @@ export default function RealTimeWaterLevelPage() {
         setIsLoading(true);
         setConnectionStatus('syncing');
         try {
-            // Make ONE API call to get all Groundwater tables
-            const response = await fetch('/api/sheets?category=Groundwater');
-            const allData = await response.json();
+            // Use the dedicated real-time API endpoint
+            const response = await fetch('/api/realtime');
+            const result = await response.json();
             
-            console.log('Available Groundwater tables:', allData.tables);
-            
-            let result = null;
-            
-            if (allData.success && allData.tables && allData.data) {
-                // Search for table containing real-time related keywords
-                const realTimeTable = allData.tables.find((t: string) => {
-                    const lower = t.toLowerCase();
-                    return lower.includes('real') || 
-                           lower.includes('time') || 
-                           lower.includes('water level') ||
-                           lower.includes('monitor') ||
-                           lower.includes('current') ||
-                           lower.includes('live');
-                });
-                
-                if (realTimeTable && allData.data[realTimeTable]) {
-                    result = { success: true, data: allData.data[realTimeTable] };
-                    console.log(`Found table: "${realTimeTable}" with ${allData.data[realTimeTable].length} rows`);
-                } else {
-                    // If no matching table, use the first table with data
-                    const firstTableWithData = allData.tables.find((t: string) => 
-                        allData.data[t] && allData.data[t].length > 0
-                    );
-                    if (firstTableWithData) {
-                        result = { success: true, data: allData.data[firstTableWithData] };
-                        console.log(`Using first available table: "${firstTableWithData}"`);
-                    }
-                }
-            }
+            console.log('Real-Time API Response:', result);
 
-            if (result && result.success && result.data.length > 0) {
+            if (result.success && result.data && result.data.length > 0) {
                 // Log the first row to see available column names
                 console.log('Sheet columns available:', Object.keys(result.data[0]));
                 console.log('First row data:', result.data[0]);
 
-                // Helper function to find value from multiple possible column names
-                const getValue = (row: any, possibleKeys: string[]): any => {
-                    for (const key of possibleKeys) {
-                        if (row[key] !== undefined && row[key] !== null && row[key] !== '') {
-                            return row[key];
-                        }
-                    }
-                    // Also try case-insensitive and trimmed matching
-                    const rowKeys = Object.keys(row);
-                    for (const possibleKey of possibleKeys) {
-                        const matchedKey = rowKeys.find(k => 
-                            k.toLowerCase().trim() === possibleKey.toLowerCase().trim()
-                        );
-                        if (matchedKey && row[matchedKey] !== undefined && row[matchedKey] !== null && row[matchedKey] !== '') {
-                            return row[matchedKey];
-                        }
-                    }
-                    return null;
-                };
-
-                const sheetData: WaterDataRow[] = result.data.map((row: any, index: number) => {
-                    // Normalize column names - handle various possible naming conventions
-                    const mandal = getValue(row, ['mandal', 'Mandal', 'MANDAL', 'Mandal Name']);
-                    const village = getValue(row, ['village', 'Village', 'VILLAGE', 'Village Name', 'Station', 'station']);
-
-                    const jan1stWeek = getValue(row, ['jan1stWeek', 'Jan 1st Week', 'JAN 1ST WEEK', '1st Week', 'Week 1', 'week1']);
-                    const jan2ndWeek = getValue(row, ['jan2ndWeek', 'Jan 2nd Week', 'JAN 2ND WEEK', '2nd Week', 'Week 2', 'week2']);
-                    const jan3rdWeek = getValue(row, ['jan3rdWeek', 'Jan 3rd Week', 'JAN 3RD WEEK', '3rd Week', 'Week 3', 'week3']);
-                    const jan4thWeek = getValue(row, ['jan4thWeek', 'Jan 4th Week', 'JAN 4TH WEEK', '4th Week', 'Week 4', 'week4']);
-                    const currentMonth = getValue(row, ['currentMonth', 'Current Month', 'CURRENT MONTH', 'Current', 'current']);
-
-                    const yesterday = getValue(row, ['yesterday', 'Yesterday', 'YESTERDAY', 'Prev Day', 'yesterday ', 'Yesterday ', ' Yesterday', 'yesterDay']);
-                    const today = getValue(row, ['today', 'Today', 'TODAY', 'Current Day', 'today ', 'Today ', ' Today', 'toDay']);
-                    const oneHrAgo = getValue(row, ['oneHrAgo', 'One Hr Ago', 'ONE HR AGO', '1 Hr Ago', 'Last Hour', '1 hr ago', '1hr ago', '1hrago', 'oneHrAgo ', '1 hr Ago', '1 Hr ago', 'One hr Ago', 'one hr ago', '1hr Ago', ' 1 Hr Ago']);
-
-                    // Log real-time values for debugging (first 3 rows)
-                    if (index < 3) {
-                        console.log(`Row ${index} real-time values:`, { yesterday, today, oneHrAgo, rawRow: row });
-                    }
-
-                    return {
-                        mandal: mandal || '',
-                        village: village || '',
-                        jan1stWeek: jan1stWeek ? Number(jan1stWeek) : 0,
-                        jan2ndWeek: jan2ndWeek ? Number(jan2ndWeek) : 0,
-                        jan3rdWeek: jan3rdWeek ? Number(jan3rdWeek) : 0,
-                        jan4thWeek: jan4thWeek ? Number(jan4thWeek) : 0,
-                        currentMonth: currentMonth ? Number(currentMonth) : 0,
-                        yesterday: yesterday ? Number(yesterday) : null,
-                        today: today ? Number(today) : null,
-                        oneHrAgo: oneHrAgo ? Number(oneHrAgo) : null,
-                    };
-                });
+                // Data is already formatted by the API
+                const sheetData: WaterDataRow[] = result.data.map((row: any) => ({
+                    mandal: row.mandal || '',
+                    village: row.village || '',
+                    jan1stWeek: row.jan1stWeek ?? 0,
+                    jan2ndWeek: row.jan2ndWeek ?? 0,
+                    jan3rdWeek: row.jan3rdWeek ?? 0,
+                    jan4thWeek: row.jan4thWeek ?? 0,
+                    currentMonth: row.currentMonth ?? 0,
+                    yesterday: row.yesterday,
+                    today: row.today,
+                    oneHrAgo: row.oneHrAgo,
+                }));
 
                 // Only update if we got valid data
                 if (sheetData.length > 0 && sheetData.some(row => row.village)) {
@@ -184,8 +115,8 @@ export default function RealTimeWaterLevelPage() {
                     setConnectionStatus('disconnected');
                 }
             } else {
-                console.warn('No data returned from API');
-                setLastUpdated("No data found");
+                console.warn('No data returned from API:', result.error || result.message);
+                setLastUpdated(result.message || "No data found");
                 setConnectionStatus('disconnected');
             }
         } catch (error) {
