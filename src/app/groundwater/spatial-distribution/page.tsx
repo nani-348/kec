@@ -282,7 +282,7 @@ export default function SpatialDistributionPage() {
                         </div>
 
                         {/* Maps Grid */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                             {/* Map 1: Jan-2025 */}
                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group hover:shadow-lg transition-all">
                                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-100">
