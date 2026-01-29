@@ -5,6 +5,21 @@ const SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
 const CLIENT_EMAIL = process.env.GOOGLE_SHEETS_CLIENT_EMAIL;
 const PRIVATE_KEY = process.env.GOOGLE_SHEETS_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
+// Category-specific spreadsheet IDs
+const CATEGORY_SPREADSHEET_IDS: Record<string, string | undefined> = {
+    'Overview': process.env.GOOGLE_SHEETS_ID_OVERVIEW,
+    'Groundwater': process.env.GOOGLE_SHEETS_ID_GROUNDWATER,
+    'Aquifer': process.env.GOOGLE_SHEETS_ID_AQUIFER,
+    'MITanks': process.env.GOOGLE_SHEETS_ID_MITANKS,
+    'WaterBalance': process.env.GOOGLE_SHEETS_ID_WATERBALANCE,
+    'Hydrology': process.env.GOOGLE_SHEETS_ID_HYDROLOGY,
+    'Agriculture': process.env.GOOGLE_SHEETS_ID_AGRICULTURE,
+    'Conservation': process.env.GOOGLE_SHEETS_ID_CONSERVATION,
+    'DataMethods': process.env.GOOGLE_SHEETS_ID_DATAMETHODS,
+    'Resources': process.env.GOOGLE_SHEETS_ID_RESOURCES,
+    'CaseStudies': process.env.GOOGLE_SHEETS_ID_CASESTUDIES,
+};
+
 if (!CLIENT_EMAIL || !PRIVATE_KEY) {
     console.warn('Google Sheets credentials not configured. Using mock data.');
 }
@@ -56,15 +71,20 @@ export interface TableInfo {
 export async function getCategoryData(
     categoryName: CategorySheet
 ): Promise<(string | number | boolean | null)[][]> {
-    if (!sheets || !SPREADSHEET_ID) {
+    // Get the specific spreadsheet ID for this category
+    const categorySpreadsheetId = CATEGORY_SPREADSHEET_IDS[categoryName];
+
+    if (!sheets || !categorySpreadsheetId) {
         console.warn(`Sheet data not available for ${categoryName}. Using fallback.`);
         return [];
     }
 
     try {
+        // Fetch all data from the first sheet (or we can specify a sheet name)
+        // Using 'A:ZZ' to read all columns
         const response = await sheets.spreadsheets.values.get({
-            spreadsheetId: SPREADSHEET_ID,
-            range: categoryName,
+            spreadsheetId: categorySpreadsheetId,
+            range: 'A:ZZ', // Read all columns
         });
 
         return (response.data.values || []) as (string | number | boolean | null)[][];

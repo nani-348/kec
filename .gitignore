@@ -1,40 +1,54 @@
-# Dependencies
-node_modules
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
 /.pnp
 .pnp.js
 .yarn/install-state.gz
 
-# Testing
+# testing
 /coverage
 
-# Next.js
+# next.js
 /.next/
 /out/
 
-# Production
+# production
 /build
 
-# Misc
+# misc
 .DS_Store
 *.pem
 
-# Debug
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
-# Local env files
+# local env files
 .env*.local
-.env
+.env.local.bak
 
-# Vercel
+# vercel
 .vercel
 
-# TypeScript
+# typescript
 *.tsbuildinfo
 next-env.d.ts
 
 # IDE
-.idea
-.vscode
+.vscode/
+.idea/
+
+# Test files
+test-sheet.js
+test-sheet.ts
+*.csv
+
+# Documentation (optional - uncomment if you don't want to push docs)
+# *.md
+
+# Large data files
+KADA_GWD_Final_V1.pdf
+assets/Natural_Animation_Video_Generation.mp4
+assets/pdf-images/
