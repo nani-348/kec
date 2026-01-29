@@ -218,60 +218,6 @@ export default function WellDensityPage() {
                     </div>
                 </div>
 
-                {/* Ground Water Stress Section */}
-                <div className="mt-12">
-                    <div className="text-center mb-8">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 border border-red-100 text-red-700 text-xs font-bold uppercase tracking-wide mb-4">
-                            <Droplets size={14} />
-                            Stress Analysis
-                        </div>
-                        <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 font-serif mb-4">
-                            Ground Water Stress
-                        </h2>
-                    </div>
-
-                    {/* Description Card */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-2xl border border-blue-100 mb-8">
-                        <p className="text-gray-700 text-lg leading-relaxed">
-                            During well inventory, about <strong className="text-blue-600">500 No of Wells</strong> were observed in the KADA Region.
-                            By indexing the entire area, it is classified into <strong>3 categories</strong>:
-                        </p>
-                        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="bg-white p-4 rounded-xl border-l-4 border-emerald-500 shadow-sm">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm">1</div>
-                                    <h4 className="font-bold text-emerald-700">Less Stressed Area</h4>
-                                </div>
-                                <p className="text-gray-600 text-sm">Partially working open wells</p>
-                            </div>
-                            <div className="bg-white p-4 rounded-xl border-l-4 border-amber-500 shadow-sm">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-sm">2</div>
-                                    <h4 className="font-bold text-amber-700">Moderately Stressed Area</h4>
-                                </div>
-                                <p className="text-gray-600 text-sm">Working bore wells</p>
-                            </div>
-                            <div className="bg-white p-4 rounded-xl border-l-4 border-red-500 shadow-sm">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-bold text-sm">3</div>
-                                    <h4 className="font-bold text-red-700">More Stressed Area</h4>
-                                </div>
-                                <p className="text-gray-600 text-sm">Partially working bore wells</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Stress Map Image */}
-                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <MagnifyingImageViewer
-                            src="/images/about-kada/stress.jpg"
-                            alt="Groundwater Stress Classification Map of KADA Region"
-                            title="KADA Region Groundwater Stress Map"
-                            className="w-full"
-                        />
-                    </div>
-                </div>
-
             </main>
             <Footer />
         </div>
