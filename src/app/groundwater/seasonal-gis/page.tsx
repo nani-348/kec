@@ -40,10 +40,10 @@ const FLUCTUATION_DATA: FluctuationRow[] = [
 ];
 // GIS Map images
 const GIS_MAPS = [
-    { title: "Pre-Monsoon (May-2025)", src: "/images/gwl-charts/image3.jpeg" },
-    { title: "Post-Monsoon (Nov-2025)", src: "/images/gwl-charts/image4.jpeg" },
-    { title: "Last Year (Jan-2025)", src: "/images/gwl-charts/image2.jpeg" },
-    { title: "Current (Jan-2026)", src: "/images/gwl-charts/image1.jpeg" },
+    { title: "Last Year (Jan-2025)", src: "/images/about-kada/1.jpeg" },
+    { title: "Pre-Monsoon (May-2025)", src: "/images/about-kada/2.jpeg" },
+    { title: "Post-Monsoon (Nov-2025)", src: "/images/about-kada/3.jpeg" },
+    { title: "Current (Jan-2026)", src: "/images/about-kada/4.jpeg" },
 ];
 // Seasonal data for charts
 const SEASONAL_DATA = [

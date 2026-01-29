@@ -166,177 +166,83 @@ export default function SpatialDistributionPage() {
                                                 <span className="absolute inset-0 rounded-full border-4 border-red-400 opacity-20 animate-ping"></span>
                                             )}
                                         </div>
-                                    </button>
-                                ))}
-                                {/* Connecting Lines (Cosmetic) */}
-                                <svg className="absolute inset-0 pointer-events-none opacity-20" width="100%" height="100%">
-                                    <line x1="20%" y1="30%" x2="50%" y2="60%" stroke="#94a3b8" strokeWidth="2" strokeDasharray="5,5" />
-                                    <line x1="50%" y1="60%" x2="20%" y2="80%" stroke="#94a3b8" strokeWidth="2" strokeDasharray="5,5" />
-                                    <line x1="50%" y1="60%" x2="80%" y2="50%" stroke="#94a3b8" strokeWidth="2" strokeDasharray="5,5" />
-                                </svg>
-                            </div>
-                            {/* Selected Zone Info Panel */}
-                            {selectedMandal && (
-                                <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur border border-gray-200 shadow-lg rounded-xl p-4 z-20 animate-in slide-in-from-bottom-5">
-                                    <div className="flex justify-between items-start">
-                                        <div>
-                                            <h4 className="font-bold text-gray-900 text-lg flex items-center gap-2">
-                                                {MANDAL_SNAPSHOTS.find(m => m.id === selectedMandal)?.name}
-                                                <span className={clsx(
-                                                    "text-xs px-2 py-0.5 rounded-full border",
-                                                    MANDAL_SNAPSHOTS.find(m => m.id === selectedMandal)?.status === "Low" ? "bg-red-50 border-red-200 text-red-700" :
-                                                        "bg-yellow-50 border-yellow-200 text-yellow-700"
-                                                )}>
-                                                    {MANDAL_SNAPSHOTS.find(m => m.id === selectedMandal)?.status}
-                                                </span>
-                                            </h4>
-                                            <p className="text-sm text-gray-500 mt-1 max-w-md">
-                                                {MANDAL_SNAPSHOTS.find(m => m.id === selectedMandal)?.description}
-                                            </p>
-                                        </div>
-                                        <button
-                                            onClick={() => setSelectedMandal(null)}
-                                            className="text-xs text-blue-600 font-bold hover:underline"
-                                        >
-                                            Close map view
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                        {/* Right: Analytics Panel */}
-                        <div className="lg:col-span-5 space-y-6">
-                            {/* Overall Distribution Chart */}
-                            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                                <div className="flex items-center gap-2 mb-6">
-                                    <Layers size={18} className="text-blue-600" />
-                                    <h3 className="font-bold text-gray-800">Groundwater Depth Zones</h3>
-                                </div>
-                                <div className="h-[200px] flex items-center justify-center">
-                                    {isMounted ? (
-                                        <ResponsiveContainer width="100%" height="100%">
-                                            <PieChart>
-                                                <Pie
-                                                    data={DEPTH_RANGES}
-                                                    innerRadius={60}
-                                                    outerRadius={80}
-                                                    paddingAngle={5}
-                                                    dataKey="value"
-                                                >
-                                                    {DEPTH_RANGES.map((entry, index) => (
-                                                        <Cell key={`cell-${index}`} fill={entry.color} />
-                                                    ))}
-                                                </Pie>
-                                                <Tooltip />
-                                                <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle">
-                                                    <tspan x="50%" dy="-0.5em" fontSize="24" fontWeight="bold" fill="#1f2937">
-                                                        {ALL_STATIONS.length}
-                                                    </tspan>
-                                                    <tspan x="50%" dy="1.5em" fontSize="12" fill="#6b7280">
-                                                        Stations
-                                                    </tspan>
-                                                </text>
-                                            </PieChart>
-                                        </ResponsiveContainer>
-                                    ) : (
-                                        <div className="text-gray-400 text-xs">Loading chart...</div>
-                                    )}
-                                </div>
-                                <div className="flex justify-center gap-4 mt-4 text-xs">
-                                    {DEPTH_RANGES.map((range) => (
-                                        <div key={range.name} className="flex items-center gap-1.5">
-                                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: range.color }}></span>
-                                            <span className="text-gray-600">{range.name}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                            {/* Quick Stats Grid */}
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="bg-red-50 p-4 rounded-xl border border-red-100">
-                                    <p className="text-xs font-bold text-red-400 uppercase">Low Zone</p>
-                                    <p className="text-2xl font-bold text-red-900 mt-1">Gudupalle</p>
-                                    <p className="text-xs text-red-700 mt-1">Avg 27.7m Depth</p>
-                                </div>
-                                <div className="bg-green-50 p-4 rounded-xl border border-green-100">
-                                    <p className="text-xs font-bold text-green-600 uppercase">Safest Zone</p>
-                                    <p className="text-2xl font-bold text-green-900 mt-1">Shanthipuram</p>
-                                    <p className="text-xs text-green-700 mt-1">Avg 10.1m Depth</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    {/* Bottom: Detailed Data Grid */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div className="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div className="flex items-center gap-2">
-                                <Droplets size={18} className="text-blue-500" />
-                                <h3 className="font-semibold text-gray-800">Station-Level Data Grid</h3>
-                            </div>
-                            {/* Grid Filters */}
-                            <div className="flex items-center gap-3">
-                                <div className="relative">
-                                    <select
-                                        className="appearance-none bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg pl-3 pr-8 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:outline-none"
-                                        value={filterStatus}
-                                        onChange={(e) => setFilterStatus(e.target.value)}
-                                    >
-                                        <option value="All">All Status</option>
-                                        <option value="Safe">Safe</option>
-                                        <option value="Moderate">Moderate</option>
-                                        <option value="Low">Low</option>
-                                    </select>
-                                    <Filter size={14} className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
-                                </div>
-                                {selectedMandal && (
-                                    <button
-                                        onClick={() => setSelectedMandal(null)}
-                                        className="text-xs font-medium text-red-600 bg-red-50 px-3 py-2 rounded-lg hover:bg-red-100 transition-colors"
-                                    >
-                                        Clear Map Selection
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left">
-                                <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
-                                    <tr>
-                                        <th className="px-6 py-3">Station Name</th>
-                                        <th className="px-6 py-3">Mandal</th>
-                                        <th className="px-6 py-3 text-right">Groundwater Depth (Nov)</th>
-                                        <th className="px-6 py-3 text-center">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100">
-                                    {filteredStations.length > 0 ? (
-                                        filteredStations.map((station, index) => (
-                                            <tr key={station.id ?? `station-${index}`} className="hover:bg-gray-50">
-                                                <td className="px-6 py-3 font-medium text-gray-900">{station.name}</td>
-                                                <td className="px-6 py-3 text-gray-500">{station.mandal}</td>
-                                                <td className="px-6 py-3 text-right font-bold text-gray-900">{station.depth != null ? station.depth.toFixed(2) : 'N/A'} m</td>
-                                                <td className="px-6 py-3 text-center">
-                                                    {station.status === "Safe" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700"><CheckCircle size={12} /> Safe</span>}
-                                                    {station.status === "Moderate" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700"><AlertTriangle size={12} /> Moderate</span>}
-                                                    {station.status === "Low" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700"><AlertTriangle size={12} /> Low</span>}
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
-                                                No stations found matching these filters.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                                        {/* Quick Stats Grid */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+                                            <div className="bg-red-50 p-4 rounded-xl border border-red-100">
+                                                <p className="text-xs font-bold text-red-400 uppercase">Low Zone</p>
+                                                <p className="text-2xl font-bold text-red-900 mt-1">Gudupalle</p>
+                                                <p className="text-xs text-red-700 mt-1">Avg 27.7m Depth</p>
+                                            </div>
+                                            <div className="bg-green-50 p-4 rounded-xl border border-green-100">
+                                                <p className="text-xs font-bold text-green-600 uppercase">Safest Zone</p>
+                                                <p className="text-2xl font-bold text-green-900 mt-1">Shanthipuram</p>
+                                                <p className="text-xs text-green-700 mt-1">Avg 10.1m Depth</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Bottom: Detailed Data Grid */}
+                                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                                            <div className="px-6 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                <div className="flex items-center gap-2">
+                                                    <Droplets size={18} className="text-blue-500" />
+                                                    <h3 className="font-semibold text-gray-800">Station-Level Data Grid</h3>
+                                                </div>
+                                                {/* Grid Filters */}
+                                                <div className="flex items-center gap-3">
+                                                    <div className="relative">
+                                                        <select
+                                                            className="appearance-none bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg pl-3 pr-8 py-2 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:outline-none"
+                                                            value={filterStatus}
+                                                            onChange={(e) => setFilterStatus(e.target.value)}
+                                                        >
+                                                            <option value="All">All Status</option>
+                                                            <option value="Safe">Safe</option>
+                                                            <option value="Moderate">Moderate</option>
+                                                            <option value="Low">Low</option>
+                                                        </select>
+                                                        <Filter size={14} className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="overflow-x-auto">
+                                                <table className="w-full text-sm text-left">
+                                                    <thead className="bg-gray-50 text-gray-500 uppercase text-xs">
+                                                        <tr>
+                                                            <th className="px-6 py-3">Station Name</th>
+                                                            <th className="px-6 py-3">Mandal</th>
+                                                            <th className="px-6 py-3 text-right">Groundwater Depth (Nov)</th>
+                                                            <th className="px-6 py-3 text-center">Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-gray-100">
+                                                        {filteredStations.length > 0 ? (
+                                                            filteredStations.map((station, index) => (
+                                                                <tr key={station.id ?? `station-${index}`} className="hover:bg-gray-50">
+                                                                    <td className="px-6 py-3 font-medium text-gray-900">{station.name}</td>
+                                                                    <td className="px-6 py-3 text-gray-500">{station.mandal}</td>
+                                                                    <td className="px-6 py-3 text-right font-bold text-gray-900">{station.depth != null ? station.depth.toFixed(2) : 'N/A'} m</td>
+                                                                    <td className="px-6 py-3 text-center">
+                                                                        {station.status === "Safe" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700"><CheckCircle size={12} /> Safe</span>}
+                                                                        {station.status === "Moderate" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700"><AlertTriangle size={12} /> Moderate</span>}
+                                                                        {station.status === "Low" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700"><AlertTriangle size={12} /> Low</span>}
+                                                                    </td>
+                                                                </tr>
+                                                            ))
+                                                        ) : (
+                                                            <tr>
+                                                                <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
+                                                                    No stations found matching these filters.
+                                                                </td>
+                                                            </tr>
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
             </main>
-            <Footer />
-        </div>
-    );
+                            <Footer />
+                        </div>
+                        );
 }
