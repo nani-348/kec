@@ -77,6 +77,10 @@ export default function RealTimeWaterLevelPage() {
             const result = await response.json();
 
             if (result.success && result.data.length > 0) {
+                // Log the first row to see available column names
+                console.log('Sheet columns available:', Object.keys(result.data[0]));
+                console.log('First row data:', result.data[0]);
+
                 // Helper function to find value from multiple possible column names
                 const getValue = (row: any, possibleKeys: string[]): any => {
                     for (const key of possibleKeys) {
@@ -84,10 +88,20 @@ export default function RealTimeWaterLevelPage() {
                             return row[key];
                         }
                     }
+                    // Also try case-insensitive and trimmed matching
+                    const rowKeys = Object.keys(row);
+                    for (const possibleKey of possibleKeys) {
+                        const matchedKey = rowKeys.find(k => 
+                            k.toLowerCase().trim() === possibleKey.toLowerCase().trim()
+                        );
+                        if (matchedKey && row[matchedKey] !== undefined && row[matchedKey] !== null && row[matchedKey] !== '') {
+                            return row[matchedKey];
+                        }
+                    }
                     return null;
                 };
 
-                const sheetData: WaterDataRow[] = result.data.map((row: any) => {
+                const sheetData: WaterDataRow[] = result.data.map((row: any, index: number) => {
                     // Normalize column names - handle various possible naming conventions
                     const mandal = getValue(row, ['mandal', 'Mandal', 'MANDAL', 'Mandal Name']);
                     const village = getValue(row, ['village', 'Village', 'VILLAGE', 'Village Name', 'Station', 'station']);
@@ -98,9 +112,14 @@ export default function RealTimeWaterLevelPage() {
                     const jan4thWeek = getValue(row, ['jan4thWeek', 'Jan 4th Week', 'JAN 4TH WEEK', '4th Week', 'Week 4', 'week4']);
                     const currentMonth = getValue(row, ['currentMonth', 'Current Month', 'CURRENT MONTH', 'Current', 'current']);
 
-                    const yesterday = getValue(row, ['yesterday', 'Yesterday', 'YESTERDAY', 'Prev Day']);
-                    const today = getValue(row, ['today', 'Today', 'TODAY', 'Current Day']);
-                    const oneHrAgo = getValue(row, ['oneHrAgo', 'One Hr Ago', 'ONE HR AGO', '1 Hr Ago', 'Last Hour']);
+                    const yesterday = getValue(row, ['yesterday', 'Yesterday', 'YESTERDAY', 'Prev Day', 'yesterday ', 'Yesterday ', ' Yesterday', 'yesterDay']);
+                    const today = getValue(row, ['today', 'Today', 'TODAY', 'Current Day', 'today ', 'Today ', ' Today', 'toDay']);
+                    const oneHrAgo = getValue(row, ['oneHrAgo', 'One Hr Ago', 'ONE HR AGO', '1 Hr Ago', 'Last Hour', '1 hr ago', '1hr ago', '1hrago', 'oneHrAgo ', '1 hr Ago', '1 Hr ago', 'One hr Ago', 'one hr ago', '1hr Ago', ' 1 Hr Ago']);
+
+                    // Log real-time values for debugging (first 3 rows)
+                    if (index < 3) {
+                        console.log(`Row ${index} real-time values:`, { yesterday, today, oneHrAgo, rawRow: row });
+                    }
 
                     return {
                         mandal: mandal || '',
