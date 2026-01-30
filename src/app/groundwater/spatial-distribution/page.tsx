@@ -54,10 +54,16 @@ const MANDAL_SNAPSHOTS = [
     }
 ];
 const DEPTH_RANGES = [
-    { name: "Safe (<10m)", value: 4, color: "#22c55e" },
-    { name: "Moderate (10-20m)", value: 5, color: "#eab308" },
-    { name: "Low (>20m)", value: 4, color: "#ef4444" },
+    { name: "Shallow (<10m)", value: 4, color: "#22c55e" },
+    { name: "Medium (10-20m)", value: 5, color: "#eab308" },
+    { name: "Deep (>20m)", value: 4, color: "#ef4444" },
 ];
+
+const STATUS_LABELS: Record<string, string> = {
+    Safe: "Shallow",
+    Moderate: "Medium",
+    Low: "Deep",
+};
 // Fallback station data
 const FALLBACK_STATIONS = [
     { id: 1, name: "Dravida University", mandal: "Gudupalle", depth: 13.56, status: "Moderate" },
@@ -176,12 +182,12 @@ export default function SpatialDistributionPage() {
                             {/* Quick Stats Grid */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="bg-red-50 p-4 rounded-xl border border-red-100">
-                                    <p className="text-xs font-bold text-red-400 uppercase">Low Zone</p>
+                                    <p className="text-xs font-bold text-red-400 uppercase">Deep Zone</p>
                                     <p className="text-2xl font-bold text-red-900 mt-1">Gudupalle</p>
                                     <p className="text-xs text-red-700 mt-1">Avg 27.7m Depth</p>
                                 </div>
                                 <div className="bg-green-50 p-4 rounded-xl border border-green-100">
-                                    <p className="text-xs font-bold text-green-600 uppercase">Safest Zone</p>
+                                    <p className="text-xs font-bold text-green-600 uppercase">Shallow Zone</p>
                                     <p className="text-2xl font-bold text-green-900 mt-1">Shanthipuram</p>
                                     <p className="text-xs text-green-700 mt-1">Avg 10.1m Depth</p>
                                 </div>
@@ -205,9 +211,9 @@ export default function SpatialDistributionPage() {
                                         onChange={(e) => setFilterStatus(e.target.value)}
                                     >
                                         <option value="All">All Status</option>
-                                        <option value="Safe">Safe</option>
-                                        <option value="Moderate">Moderate</option>
-                                        <option value="Low">Low</option>
+                                        <option value="Safe">Shallow</option>
+                                        <option value="Moderate">Medium</option>
+                                        <option value="Low">Deep</option>
                                     </select>
                                     <Filter size={14} className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
                                 </div>
@@ -231,9 +237,9 @@ export default function SpatialDistributionPage() {
                                                 <td className="px-6 py-3 text-gray-500">{station.mandal}</td>
                                                 <td className="px-6 py-3 text-right font-bold text-gray-900">{station.depth != null ? station.depth.toFixed(2) : 'N/A'} m</td>
                                                 <td className="px-6 py-3 text-center">
-                                                    {station.status === "Safe" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700"><CheckCircle size={12} /> Safe</span>}
-                                                    {station.status === "Moderate" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700"><AlertTriangle size={12} /> Moderate</span>}
-                                                    {station.status === "Low" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700"><AlertTriangle size={12} /> Low</span>}
+                                                    {station.status === "Safe" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700"><CheckCircle size={12} /> {STATUS_LABELS.Safe}</span>}
+                                                    {station.status === "Moderate" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700"><AlertTriangle size={12} /> {STATUS_LABELS.Moderate}</span>}
+                                                    {station.status === "Low" && <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700"><AlertTriangle size={12} /> {STATUS_LABELS.Low}</span>}
                                                 </td>
                                             </tr>
                                         ))

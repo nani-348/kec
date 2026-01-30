@@ -27,11 +27,11 @@ import {
 
 // --- Data: Ground Water Resources by Region ---
 const GWR_DATA = [
-    { region: "GUDI PALLE", june2024: 0.152, feb2025: 0.074, june2025: 0.154, jan2026: 0.292 },
-    { region: "KUPPAM", june2024: 0.359, feb2025: 1.064, june2025: 0.366, jan2026: 0.742 },
-    { region: "RAMA KUPPAM", june2024: 0.148, feb2025: 0.206, june2025: 0.151, jan2026: 0.667 },
-    { region: "SANTHI PURAM", june2024: 0.215, feb2025: 0.437, june2025: 0.219, jan2026: 0.466 },
-    { region: "KADA Region", june2024: 0.87, feb2025: 1.51, june2025: 0.89, jan2026: 2.22 },
+    { region: "GUDI PALLE", june2024: 0.152, feb2025: 0.074, june2025: 0.154, feb2026: 0.292 },
+    { region: "KUPPAM", june2024: 0.359, feb2025: 1.064, june2025: 0.366, feb2026: 0.742 },
+    { region: "RAMA KUPPAM", june2024: 0.148, feb2025: 0.206, june2025: 0.151, feb2026: 0.667 },
+    { region: "SANTHI PURAM", june2024: 0.215, feb2025: 0.437, june2025: 0.219, feb2026: 0.466 },
+    { region: "KADA Region", june2024: 0.87, feb2025: 1.51, june2025: 0.89, feb2026: 2.22 },
 ];
 
 // KADA Region Data for second chart
@@ -39,7 +39,7 @@ const KADA_REGION_DATA = [
     { period: "June 2024", value: 0.87, color: "#3b82f6" },
     { period: "Feb 2025", value: 1.51, color: "#f97316" },
     { period: "June 2025", value: 0.89, color: "#9ca3af" },
-    { period: "Jan 2026", value: 2.22, color: "#f59e0b" },
+    { period: "Feb 2026", value: 2.22, color: "#f59e0b" },
 ];
 
 // Chart colors
@@ -47,7 +47,7 @@ const CHART_COLORS = {
     june2024: "#3b82f6",
     feb2025: "#f97316",
     june2025: "#9ca3af",
-    jan2026: "#f59e0b"
+    feb2026: "#f59e0b"
 };
 
 // Key Insights
@@ -55,14 +55,14 @@ const KEY_INSIGHTS = [
     {
         title: "Net Annual Improvement",
         value: "0.71 TMC",
-        description: "Improvement in utilizable ground water resources in KADA Region from 1.51 TMC of Feb-2025 to 2.22 TMC of Jan 2026 due to net rise in ground water levels of 1.45 m (from 17.62 to 16.27)",
+        description: "Improvement in utilizable ground water resources in KADA Region from 1.51 TMC of Feb-2025 to 2.22 TMC of Feb 2026 due to net rise in ground water levels of 1.45 m (from 17.62 to 16.27)",
         color: "green",
         icon: TrendingUp
     },
     {
         title: "Present Water Year Improvement",
         value: "1.33 TMC",
-        description: "Net seasonal improvement from 0.89 TMC of June-2025 to 2.22 TMC of Jan 2026",
+        description: "Net seasonal improvement from 0.89 TMC of June-2025 to 2.22 TMC of Feb 2026",
         color: "blue",
         icon: Droplets
     },
@@ -240,13 +240,13 @@ export default function MonthlyGWRPage() {
                                             <LabelList dataKey="june2025" position="top" fontSize={8} fill="#374151" formatter={(value) => typeof value === 'number' ? value.toFixed(3) : value} />
                                         </Bar>
                                         <Bar
-                                            dataKey="jan2026"
-                                            name="Jan 2026"
-                                            fill={CHART_COLORS.jan2026}
+                                            dataKey="feb2026"
+                                            name="Feb 2026"
+                                            fill={CHART_COLORS.feb2026}
                                             radius={[3, 3, 0, 0]}
                                             maxBarSize={35}
                                         >
-                                            <LabelList dataKey="jan2026" position="top" fontSize={8} fill="#374151" formatter={(value) => typeof value === 'number' ? value.toFixed(3) : value} />
+                                            <LabelList dataKey="feb2026" position="top" fontSize={8} fill="#374151" formatter={(value) => typeof value === 'number' ? value.toFixed(3) : value} />
                                         </Bar>
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -324,7 +324,7 @@ export default function MonthlyGWRPage() {
                                         <span className="text-xs font-bold uppercase">Present Year</span>
                                     </div>
                                     <p className="text-xl font-bold text-green-600">+1.33 TMC</p>
-                                    <p className="text-xs text-green-600 opacity-80">June 2025 → Jan 2026</p>
+                                    <p className="text-xs text-green-600 opacity-80">June 2025 → Feb 2026</p>
                                 </div>
                                 <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
                                     <div className="flex items-center gap-2 text-blue-700 mb-1">
@@ -355,7 +355,7 @@ export default function MonthlyGWRPage() {
                                     <th className="px-6 py-4 text-center font-bold bg-blue-50 text-blue-700">June 2024</th>
                                     <th className="px-6 py-4 text-center font-bold bg-orange-50 text-orange-700">Feb 2025</th>
                                     <th className="px-6 py-4 text-center font-bold bg-gray-100 text-gray-700">June 2025</th>
-                                    <th className="px-6 py-4 text-center font-bold bg-amber-50 text-amber-700">Jan 2026</th>
+                                    <th className="px-6 py-4 text-center font-bold bg-amber-50 text-amber-700">Feb 2026</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
@@ -372,7 +372,7 @@ export default function MonthlyGWRPage() {
                                         <td className="px-6 py-4 text-center text-blue-600">{row.june2024.toFixed(3)}</td>
                                         <td className="px-6 py-4 text-center text-orange-600">{row.feb2025.toFixed(3)}</td>
                                         <td className="px-6 py-4 text-center text-gray-600">{row.june2025.toFixed(3)}</td>
-                                        <td className="px-6 py-4 text-center text-amber-600 font-semibold">{row.jan2026.toFixed(3)}</td>
+                                        <td className="px-6 py-4 text-center text-amber-600 font-semibold">{row.feb2026.toFixed(3)}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -392,11 +392,11 @@ export default function MonthlyGWRPage() {
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 mt-2 shrink-0"></span>
-                                <span>The net annual improvement in utilizable ground water resources in KADA Region is <strong>0.71 TMC</strong> (from 1.51 TMC of Feb-2025 to 2.22 TMC of Jan 2026) due to net rise in ground water levels of <strong>1.45 m</strong> (from 17.62 to 16.27)</span>
+                                <span>The net annual improvement in utilizable ground water resources in KADA Region is <strong>0.71 TMC</strong> (from 1.51 TMC of Feb-2025 to 2.22 TMC of Feb 2026) due to net rise in ground water levels of <strong>1.45 m</strong> (from 17.62 to 16.27)</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 mt-2 shrink-0"></span>
-                                <span>In the present water year, the net seasonal improvement in utilizable ground water resources in KADA Region is <strong>1.33 TMC</strong> from 0.89 TMC of June-2025 to 2.22 TMC of Jan 2026.</span>
+                                <span>In the present water year, the net seasonal improvement in utilizable ground water resources in KADA Region is <strong>1.33 TMC</strong> from 0.89 TMC of June-2025 to 2.22 TMC of Feb 2026.</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 mt-2 shrink-0"></span>

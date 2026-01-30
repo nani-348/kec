@@ -71,7 +71,7 @@ const OVERALL_TOTALS = {
 
 const PIE_DATA = [
     { name: "Working", value: 5972, color: "#3b82f6" },
-    { name: "Partially Working", value: 4404, color: "#f97316" },
+    { name: "Seasonally Working", value: 4404, color: "#f97316" },
     { name: "Abandoned", value: 2003, color: "#9ca3af" },
 ];
 
@@ -152,7 +152,7 @@ export default function WellStatusPage() {
                         Status of Bore Wells in Kuppam Constituency
                     </h1>
                     <p className="text-gray-600 text-lg">
-                        Comprehensive breakdown of borewell functionality, including working, partially working, and abandoned wells across all Mandals.
+                        Comprehensive breakdown of borewell functionality, including working, seasonally working, and abandoned wells across all Mandals.
                     </p>
                 </div>
 
@@ -174,7 +174,7 @@ export default function WellStatusPage() {
                         <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
                             <CheckCircle2 size={64} className="text-blue-600" />
                         </div>
-                        <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Working Estimate</p>
+                        <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Working</p>
                         <p className="text-4xl font-bold text-blue-600">{OVERALL_TOTALS.working.toLocaleString()}</p>
                         <div className="mt-4 flex items-center gap-2 text-xs font-medium text-blue-700 bg-blue-50 px-2 py-1 rounded-md w-fit">
                             <ArrowUpRight size={12} />
@@ -186,7 +186,7 @@ export default function WellStatusPage() {
                         <div className="absolute right-0 top-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
                             <AlertTriangle size={64} className="text-orange-500" />
                         </div>
-                        <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Partially Working</p>
+                        <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Seasonally Working</p>
                         <p className="text-4xl font-bold text-orange-500">{OVERALL_TOTALS.partial.toLocaleString()}</p>
                         <div className="mt-4 flex items-center gap-2 text-xs font-medium text-orange-700 bg-orange-50 px-2 py-1 rounded-md w-fit">
                             <TrendingDown size={12} />
@@ -214,11 +214,11 @@ export default function WellStatusPage() {
                         <div className="flex items-center justify-between mb-8">
                             <div>
                                 <h2 className="text-xl font-bold text-gray-900">Mandal-wise Status Breakdown</h2>
-                                <p className="text-sm text-gray-500">Comparison of Working vs Partially Working vs Abandoned wells</p>
+                                <p className="text-sm text-gray-500">Comparison of Working vs Seasonally Working vs Abandoned wells</p>
                             </div>
                             <div className="flex gap-4 text-xs font-medium">
                                 <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-blue-500"></span> Working</div>
-                                <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-orange-500"></span> Partial</div>
+                                <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-orange-500"></span> Seasonal</div>
                                 <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-gray-400"></span> Abandoned</div>
                             </div>
                         </div>
@@ -246,7 +246,7 @@ export default function WellStatusPage() {
                                     <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f9fafb' }} />
 
                                     <Bar dataKey="working" name="Working" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                                    <Bar dataKey="partial" name="Partial" fill="#f97316" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="partial" name="Seasonal Working" fill="#f97316" radius={[4, 4, 0, 0]} />
                                     <Bar dataKey="abandoned" name="Abandoned" fill="#9ca3af" radius={[4, 4, 0, 0]} />
                                 </BarChart>
                             </ResponsiveContainer>
@@ -325,7 +325,7 @@ export default function WellStatusPage() {
                                         <Legend verticalAlign="top" height={36} />
 
                                         <Bar dataKey="working" name="Working" fill="#4f46e5" radius={[4, 4, 0, 0]} maxBarSize={60} />
-                                        <Bar dataKey="partial" name="Partial" fill="#f59e0b" radius={[4, 4, 0, 0]} maxBarSize={60} />
+                                        <Bar dataKey="partial" name="Seasonal Working" fill="#f59e0b" radius={[4, 4, 0, 0]} maxBarSize={60} />
                                         <Bar dataKey="abandoned" name="Abandoned" fill="#9ca3af" radius={[4, 4, 0, 0]} maxBarSize={60} />
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -345,7 +345,7 @@ export default function WellStatusPage() {
                                 <div className="mt-2 text-xs text-blue-400 font-medium">HNSS Support</div>
                             </div>
                             <div className="bg-orange-50/50 p-5 rounded-xl border border-orange-100 flex flex-col justify-center items-center text-center">
-                                <p className="text-xs font-bold text-orange-500 uppercase mb-2">Total Partial</p>
+                                <p className="text-xs font-bold text-orange-500 uppercase mb-2">Total Seasonal</p>
                                 <p className="text-3xl font-bold text-orange-600">4,404</p>
                                 <div className="mt-2 text-xs text-orange-400 font-medium">Seasonal Issues</div>
                             </div>
@@ -371,7 +371,7 @@ export default function WellStatusPage() {
                                     <th className="px-6 py-4">Mandal</th>
                                     <th className="px-6 py-4 text-center">Total Bore Wells</th>
                                     <th className="px-6 py-4 text-center text-blue-700 bg-blue-50/50">Working</th>
-                                    <th className="px-6 py-4 text-center text-orange-700 bg-orange-50/50">Partially Working</th>
+                                    <th className="px-6 py-4 text-center text-orange-700 bg-orange-50/50">Seasonally Working</th>
                                     <th className="px-6 py-4 text-center text-gray-600 bg-gray-100/50">Abandoned</th>
                                 </tr>
                             </thead>
@@ -415,11 +415,11 @@ export default function WellStatusPage() {
                                 <tr>
                                     {/* Non Command Headers */}
                                     <th className="px-2 py-2 text-center border-r border-slate-100 text-blue-600">Working</th>
-                                    <th className="px-2 py-2 text-center border-r border-slate-100 text-orange-600">Partial</th>
+                                    <th className="px-2 py-2 text-center border-r border-slate-100 text-orange-600">Seasonal</th>
                                     <th className="px-2 py-2 text-center border-r border-slate-200 text-slate-500">Abandoned</th>
                                     {/* HNSS Headers */}
                                     <th className="px-2 py-2 text-center border-r border-slate-100 text-indigo-600">Working</th>
-                                    <th className="px-2 py-2 text-center border-r border-slate-100 text-orange-600">Partial</th>
+                                    <th className="px-2 py-2 text-center border-r border-slate-100 text-orange-600">Seasonal</th>
                                     <th className="px-2 py-2 text-center text-slate-500">Abandoned</th>
                                 </tr>
                             </thead>

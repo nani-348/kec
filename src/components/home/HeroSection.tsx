@@ -6,7 +6,7 @@ import { Droplets, CloudRain, Database, Waves } from "lucide-react";
 
 const INDICATORS = [
     { label: "Recharge-worthy Area", value: "2,34,500", unit: "Ha", icon: Droplets, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "Average Rainfall", value: "780", unit: "mm", icon: CloudRain, color: "text-cyan-600", bg: "bg-cyan-50" },
+    { label: "Average Rainfall", value: "827", unit: "mm", icon: CloudRain, color: "text-cyan-600", bg: "bg-cyan-50" },
     { label: "Groundwater Availability", value: "12.8", unit: "TMC", icon: Database, color: "text-green-600", bg: "bg-green-50" },
     { label: "MI Tanks Analyzed", value: "1,247", unit: "No.", icon: Waves, color: "text-teal-600", bg: "bg-teal-50" },
 ];
