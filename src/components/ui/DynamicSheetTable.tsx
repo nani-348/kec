@@ -11,6 +11,7 @@ interface DynamicSheetTableProps {
     interval?: number;
     className?: string;
     data?: Array<Record<string, unknown>>; // Allow passing pre-fetched/filtered data
+    hideEmptyState?: boolean;
 }
 
 /**
@@ -25,6 +26,7 @@ export function DynamicSheetTable({
     interval = 5000,
     className = '',
     data: providedData,
+    hideEmptyState = false,
 }: DynamicSheetTableProps) {
     const { data: fetchedData, isLoading, lastSynced, error } = useSheetSync({
         category,
@@ -76,6 +78,9 @@ export function DynamicSheetTable({
     }
 
     if (!data || data.length === 0) {
+        if (hideEmptyState) {
+            return null;
+        }
         return (
             <div className={`p-6 border rounded-lg bg-gray-50 text-gray-500 text-center ${className}`}>
                 No data found for <strong>{table}</strong>.

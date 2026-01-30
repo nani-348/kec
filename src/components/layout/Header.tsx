@@ -59,6 +59,7 @@ const NAV_ITEMS = [
             { label: "MI Tank Storage Change", href: "/mi-tanks/storage-change" },
             { label: "HNSS-Linked MI Tanks", href: "/mi-tanks/hnss-linked" },
             { label: "HNSS Interventions", href: "/mi-tanks/hnss-interventions" },
+            { label: "HNSS & MIT Influence", href: "/agriculture/hnss-influence" },
         ]
     },
     {
@@ -77,7 +78,6 @@ const NAV_ITEMS = [
             { label: "Status of Bore Wells", href: "/agriculture/well-status" },
             { label: "Well Density", href: "/agriculture/well-density" },
             { label: "Ground Water Stress", href: "/agriculture/groundwater-stress" },
-            { label: "HNSS & MIT Influence", href: "/agriculture/hnss-influence" },
             { label: "Well Characteristics", href: "/agriculture/well-characteristics" },
             { label: "Cropping & Irrigation Practices", href: "/agriculture/cropping" },
         ]

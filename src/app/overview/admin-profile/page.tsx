@@ -113,23 +113,6 @@ export default function AdminProfilePage() {
                             </div>
                         </div>
                     </section>
-                    {/* Assessment Units Table */}
-                    <section className="mb-12">
-                        <div className="flex items-center gap-3 mb-8">
-                            <div className="p-2 bg-orange-100 rounded-lg text-orange-600">
-                                <Mountain size={24} />
-                            </div>
-                            <h2 className="text-2xl font-bold text-gray-900">Assessment Units (Watersheds)</h2>
-                        </div>
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-                            <DynamicSheetTable
-                                category="Overview"
-                                table="ASSESSMENT UNITS"
-                                title="Watershed Categorization"
-                                className="bg-transparent"
-                            />
-                        </div>
-                    </section>
                 </div>
             </main>
             <Footer />

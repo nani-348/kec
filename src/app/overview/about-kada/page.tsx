@@ -2,9 +2,16 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import RegionMap from "@/components/overview/RegionMap";
-import { Trees, CloudRain, Mountain, Map as MapIcon } from "lucide-react";
-import RainfallAnalysis from "@/components/overview/RainfallAnalysis";
+import { Trees, CloudRain, Mountain, Map as MapIcon, Droplets, TrendingUp, BarChart3 } from "lucide-react";
 import { useEffect, useState } from "react";
+
+// Mandal data with colors for visualization
+const MANDAL_COLORS: Record<string, { primary: string; bg: string; gradient: string }> = {
+    "Gudi Palle": { primary: "#3b82f6", bg: "bg-blue-500", gradient: "from-blue-500 to-blue-600" },
+    "Kuppam": { primary: "#8b5cf6", bg: "bg-violet-500", gradient: "from-violet-500 to-violet-600" },
+    "Rama Kuppam": { primary: "#10b981", bg: "bg-emerald-500", gradient: "from-emerald-500 to-emerald-600" },
+    "Santhi Puram": { primary: "#f59e0b", bg: "bg-amber-500", gradient: "from-amber-500 to-amber-600" },
+};
 export default function AboutKadaPage() {
     const [stats, setStats] = useState([
         {
@@ -162,8 +169,218 @@ export default function AboutKadaPage() {
                             </div>
                         ))}
                     </div>
-                    {/* Rainfall Analysis Section */}
-                    <RainfallAnalysis />
+
+                    {/* ==================== RAINFALL ANALYSIS SECTION ==================== */}
+                    <div className="mb-12">
+                        {/* Section Header */}
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl shadow-lg shadow-blue-200">
+                                <CloudRain className="w-6 h-6 text-white" />
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900 font-serif">Rainfall Analysis</h2>
+                                <p className="text-sm text-gray-500">30-Year Average Rainfall Distribution (1994-2023)</p>
+                            </div>
+                        </div>
+
+                        {/* Visual Charts Grid */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                            {/* Rainfall Bar Chart */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+                                        <BarChart3 className="w-5 h-5 text-blue-500" />
+                                        Mandal-wise Rainfall
+                                    </h3>
+                                    <span className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full font-medium">
+                                        mm/year
+                                    </span>
+                                </div>
+                                <div className="space-y-4">
+                                    {regionData.map((row) => {
+                                        const rainfall = parseInt(row.rainfall.replace(/,/g, ''));
+                                        const maxRainfall = 900;
+                                        const percentage = (rainfall / maxRainfall) * 100;
+                                        const colors = MANDAL_COLORS[row.region] || { primary: "#6b7280", gradient: "from-gray-500 to-gray-600" };
+                                        return (
+                                            <div key={row.region} className="group">
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className="text-sm font-medium text-gray-700">{row.region}</span>
+                                                    <span className="text-sm font-bold" style={{ color: colors.primary }}>
+                                                        {row.rainfall} mm
+                                                    </span>
+                                                </div>
+                                                <div className="h-8 bg-gray-100 rounded-lg overflow-hidden relative">
+                                                    <div
+                                                        className={`h-full bg-gradient-to-r ${colors.gradient} rounded-lg transition-all duration-700 ease-out group-hover:opacity-90 flex items-center justify-end pr-3`}
+                                                        style={{ width: `${percentage}%` }}
+                                                    >
+                                                        <Droplets className="w-4 h-4 text-white/80" />
+                                                    </div>
+                                                    {/* Average line marker */}
+                                                    <div 
+                                                        className="absolute top-0 bottom-0 w-0.5 bg-red-500 z-10"
+                                                        style={{ left: `${(827 / maxRainfall) * 100}%` }}
+                                                        title="Regional Average: 827mm"
+                                                    />
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                <div className="flex items-center justify-center gap-2 mt-4 pt-4 border-t border-gray-100">
+                                    <div className="w-3 h-0.5 bg-red-500" />
+                                    <span className="text-xs text-gray-500">Regional Average: {totalRainfallAvg} mm</span>
+                                </div>
+                            </div>
+
+                            {/* Area Distribution Donut Chart Visualization */}
+                            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="font-semibold text-gray-800 flex items-center gap-2">
+                                        <MapIcon className="w-5 h-5 text-emerald-500" />
+                                        Area Distribution
+                                    </h3>
+                                    <span className="text-xs bg-emerald-50 text-emerald-600 px-2 py-1 rounded-full font-medium">
+                                        Hectares
+                                    </span>
+                                </div>
+                                
+                                {/* Visual Donut Representation */}
+                                <div className="flex items-center justify-center mb-6">
+                                    <div className="relative w-48 h-48">
+                                        {/* Background circle */}
+                                        <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                            <circle cx="50" cy="50" r="40" fill="none" stroke="#e5e7eb" strokeWidth="12" />
+                                            {/* Geo Area - Full circle base */}
+                                            <circle 
+                                                cx="50" cy="50" r="40" fill="none" 
+                                                stroke="#3b82f6" strokeWidth="12"
+                                                strokeDasharray="251.2" strokeDashoffset="0"
+                                                className="drop-shadow-sm"
+                                            />
+                                            {/* Recharge Area */}
+                                            <circle 
+                                                cx="50" cy="50" r="40" fill="none" 
+                                                stroke="#10b981" strokeWidth="12"
+                                                strokeDasharray="251.2" strokeDashoffset="79.5"
+                                                className="drop-shadow-sm"
+                                            />
+                                            {/* Hilly Area */}
+                                            <circle 
+                                                cx="50" cy="50" r="40" fill="none" 
+                                                stroke="#f59e0b" strokeWidth="12"
+                                                strokeDasharray="251.2" strokeDashoffset="171.3"
+                                                className="drop-shadow-sm"
+                                            />
+                                        </svg>
+                                        {/* Center text */}
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                            <span className="text-2xl font-bold text-gray-900">105,190</span>
+                                            <span className="text-xs text-gray-500">Total Ha</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Legend */}
+                                <div className="grid grid-cols-3 gap-3">
+                                    <div className="text-center p-3 bg-blue-50 rounded-xl">
+                                        <div className="w-3 h-3 bg-blue-500 rounded-full mx-auto mb-1" />
+                                        <p className="text-lg font-bold text-blue-700">105,190</p>
+                                        <p className="text-xs text-blue-600">Geographical</p>
+                                    </div>
+                                    <div className="text-center p-3 bg-emerald-50 rounded-xl">
+                                        <div className="w-3 h-3 bg-emerald-500 rounded-full mx-auto mb-1" />
+                                        <p className="text-lg font-bold text-emerald-700">71,790</p>
+                                        <p className="text-xs text-emerald-600">Recharge</p>
+                                    </div>
+                                    <div className="text-center p-3 bg-amber-50 rounded-xl">
+                                        <div className="w-3 h-3 bg-amber-500 rounded-full mx-auto mb-1" />
+                                        <p className="text-lg font-bold text-amber-700">33,400</p>
+                                        <p className="text-xs text-amber-600">Hilly Area</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mandal Cards with Visual Stats */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                            {regionData.map((row) => {
+                                const colors = MANDAL_COLORS[row.region] || { primary: "#6b7280", bg: "bg-gray-500", gradient: "from-gray-500 to-gray-600" };
+                                const rainfall = parseInt(row.rainfall.replace(/,/g, ''));
+                                const isAboveAvg = rainfall > 827;
+                                return (
+                                    <div 
+                                        key={row.region}
+                                        className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 group"
+                                    >
+                                        {/* Gradient Header */}
+                                        <div className={`bg-gradient-to-r ${colors.gradient} p-4 text-white`}>
+                                            <h4 className="font-bold text-lg">{row.region}</h4>
+                                            <div className="flex items-center gap-1 mt-1">
+                                                <Droplets className="w-4 h-4" />
+                                                <span className="text-2xl font-bold">{row.rainfall}</span>
+                                                <span className="text-sm opacity-80">mm</span>
+                                                {isAboveAvg ? (
+                                                    <TrendingUp className="w-4 h-4 ml-1" />
+                                                ) : (
+                                                    <TrendingUp className="w-4 h-4 ml-1 rotate-180" />
+                                                )}
+                                            </div>
+                                        </div>
+                                        {/* Stats */}
+                                        <div className="p-4 space-y-3">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-500">Geographical</span>
+                                                <span className="text-sm font-semibold text-gray-800">{row.geoArea} Ha</span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-500">Recharge Area</span>
+                                                <span className="text-sm font-semibold text-emerald-600">{row.rechargeArea} Ha</span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-500">Hilly Area</span>
+                                                <span className="text-sm font-semibold text-amber-600">{row.hillyArea} Ha</span>
+                                            </div>
+                                            {/* Mini progress bar */}
+                                            <div className="pt-2">
+                                                <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                                    <div 
+                                                        className={`h-full bg-gradient-to-r ${colors.gradient} rounded-full`}
+                                                        style={{ width: `${(rainfall / 900) * 100}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {/* Summary Banner */}
+                        <div className="bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 rounded-2xl p-6 text-white shadow-xl shadow-blue-200/50">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                                <div>
+                                    <p className="text-blue-100 text-sm mb-1">Total Geographical Area</p>
+                                    <p className="text-3xl font-bold">105,190 <span className="text-lg font-normal">Ha</span></p>
+                                </div>
+                                <div>
+                                    <p className="text-blue-100 text-sm mb-1">Recharge Worthy Area</p>
+                                    <p className="text-3xl font-bold">71,790 <span className="text-lg font-normal">Ha</span></p>
+                                </div>
+                                <div>
+                                    <p className="text-blue-100 text-sm mb-1">Hilly Area</p>
+                                    <p className="text-3xl font-bold">33,400 <span className="text-lg font-normal">Ha</span></p>
+                                </div>
+                                <div>
+                                    <p className="text-blue-100 text-sm mb-1">30-Yr Avg Rainfall</p>
+                                    <p className="text-3xl font-bold">{totalRainfallAvg} <span className="text-lg font-normal">mm</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* ==================== END RAINFALL ANALYSIS ==================== */}
+
                     {/* Data Table */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                         <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">

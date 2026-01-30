@@ -49,6 +49,39 @@ const staggerContainer = {
 };
 
 export default function HnssInterventionsPage() {
+    const distributionRows = DISTRIBUTION_DATA.filter((row) => !row.isTotal);
+    const totalArea = DISTRIBUTION_DATA.find((row) => row.isTotal)?.area
+        ?? distributionRows.reduce((sum, row) => sum + row.area, 0);
+    const totalTanks = DISTRIBUTION_DATA.find((row) => row.isTotal)?.tanks
+        ?? distributionRows.reduce((sum, row) => sum + row.tanks, 0);
+
+    const distributionInsights = distributionRows.map((row) => {
+        const areaShare = totalArea ? (row.area / totalArea) * 100 : 0;
+        const tankShare = totalTanks ? (row.tanks / totalTanks) * 100 : 0;
+        const tankDensity = row.area ? (row.tanks / row.area) * 100 : 0; // tanks per 100 sq km
+        return {
+            ...row,
+            areaShare,
+            tankShare,
+            tankDensity,
+        };
+    });
+
+    const highestDensity = distributionInsights.reduce((best, row) => (
+        row.tankDensity > best.tankDensity ? row : best
+    ), distributionInsights[0]);
+    const largestArea = distributionInsights.reduce((best, row) => (
+        row.area > best.area ? row : best
+    ), distributionInsights[0]);
+    const mostChallenging = distributionInsights.find((row) => row.remarks.includes("Extremely"))
+        ?? distributionInsights.find((row) => row.remarks.includes("Difficult"))
+        ?? distributionInsights[0];
+
+    const totalGravityLength = GRAVITY_DATA.filter((row) => !row.isTotal)
+        .reduce((sum, row) => sum + row.length, 0);
+    const totalGravityConnected = GRAVITY_DATA.filter((row) => !row.isTotal)
+        .reduce((sum, row) => sum + row.connected, 0);
+
     return (
         <div className="flex flex-col min-h-screen bg-slate-50">
             <Header />
@@ -138,6 +171,79 @@ export default function HnssInterventionsPage() {
                             </div>
                         </div>
 
+                        <div className="p-6 border-b border-slate-100 bg-white">
+                            <div className="grid gap-6 lg:grid-cols-3">
+                                <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-5">
+                                    <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold">Key Insights</p>
+                                    <div className="mt-4 space-y-3 text-sm text-slate-600">
+                                        <div className="flex items-start gap-3">
+                                            <span className="mt-1 h-2 w-2 rounded-full bg-blue-500" />
+                                            <div>
+                                                <p className="font-semibold text-slate-800">Largest Coverage</p>
+                                                <p>{largestArea.region} spans {largestArea.area} sq km.</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <span className="mt-1 h-2 w-2 rounded-full bg-emerald-500" />
+                                            <div>
+                                                <p className="font-semibold text-slate-800">Highest Tank Density</p>
+                                                <p>{highestDensity.region} has {highestDensity.tankDensity.toFixed(1)} tanks per 100 sq km.</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <span className="mt-1 h-2 w-2 rounded-full bg-red-500" />
+                                            <div>
+                                                <p className="font-semibold text-slate-800">Most Challenging Zone</p>
+                                                <p>{mostChallenging.region}: {mostChallenging.remarks || "Requires special interventions"}.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="lg:col-span-2 grid gap-4">
+                                    <div className="rounded-2xl border border-slate-100 bg-white p-5">
+                                        <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">Area Share by Region</p>
+                                        <div className="space-y-3">
+                                            {distributionInsights.map((row) => (
+                                                <div key={`${row.region}-area`} className="space-y-2">
+                                                    <div className="flex items-center justify-between text-sm text-slate-600">
+                                                        <span className="font-medium text-slate-800">{row.region}</span>
+                                                        <span>{row.areaShare.toFixed(1)}% ({row.area} sq km)</span>
+                                                    </div>
+                                                    <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
+                                                        <div
+                                                            className="h-full rounded-full bg-blue-500"
+                                                            style={{ width: `${Math.max(row.areaShare, 2)}%` }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="rounded-2xl border border-slate-100 bg-white p-5">
+                                        <p className="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-4">Tank Share by Region</p>
+                                        <div className="space-y-3">
+                                            {distributionInsights.map((row) => (
+                                                <div key={`${row.region}-tanks`} className="space-y-2">
+                                                    <div className="flex items-center justify-between text-sm text-slate-600">
+                                                        <span className="font-medium text-slate-800">{row.region}</span>
+                                                        <span>{row.tankShare.toFixed(1)}% ({row.tanks} tanks)</span>
+                                                    </div>
+                                                    <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
+                                                        <div
+                                                            className="h-full rounded-full bg-emerald-500"
+                                                            style={{ width: `${Math.max(row.tankShare, 2)}%` }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="overflow-x-auto">
                             <table className="w-full text-sm text-left">
                                 <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
@@ -158,14 +264,19 @@ export default function HnssInterventionsPage() {
                                             <td className="px-6 py-4 text-right">{row.area}</td>
                                             <td className="px-6 py-4 text-right">{row.tanks}</td>
                                             <td className="px-6 py-4">
-                                                <span className={clsx("inline-block px-2 py-1 rounded text-xs",
-                                                    !row.remarks ? "" :
-                                                        row.remarks.includes("Difficult") ? "bg-red-50 text-red-700" :
-                                                            row.remarks.includes("Easy") ? "bg-green-50 text-green-700" :
-                                                                "bg-slate-100 text-slate-700"
-                                                )}>
-                                                    {row.remarks}
-                                                </span>
+                                                {row.remarks ? (
+                                                    <span className={clsx("inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-xs font-semibold",
+                                                        row.remarks.includes("Extremely") ? "bg-red-100 text-red-700" :
+                                                            row.remarks.includes("Difficult") ? "bg-amber-100 text-amber-700" :
+                                                                row.remarks.includes("Easy") ? "bg-emerald-100 text-emerald-700" :
+                                                                    "bg-slate-100 text-slate-700"
+                                                    )}>
+                                                        <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                                                        {row.remarks}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-xs text-slate-400">—</span>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
@@ -185,6 +296,19 @@ export default function HnssInterventionsPage() {
                                     <div>
                                         <h2 className="text-xl font-bold text-slate-800">Gravity Linkage</h2>
                                         <p className="text-sm text-slate-500">Natural flow connectivity analysis</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="px-6 pt-5 pb-2">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
+                                        <p className="text-xs uppercase tracking-wider text-emerald-700 font-semibold">Total Gravity Length</p>
+                                        <p className="text-2xl font-bold text-slate-900 mt-2">{totalGravityLength.toFixed(1)} km</p>
+                                    </div>
+                                    <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
+                                        <p className="text-xs uppercase tracking-wider text-emerald-700 font-semibold">Connected Tanks</p>
+                                        <p className="text-2xl font-bold text-slate-900 mt-2">{totalGravityConnected}</p>
                                     </div>
                                 </div>
                             </div>
@@ -222,6 +346,13 @@ export default function HnssInterventionsPage() {
                                         <h2 className="text-xl font-bold text-slate-800">Lift Scheme</h2>
                                         <p className="text-sm text-slate-500">Proposed mechanical interventions</p>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div className="px-6 pt-5 pb-2">
+                                <div className="rounded-xl border border-amber-100 bg-amber-50/60 p-4 text-sm text-slate-600">
+                                    <p className="text-xs uppercase tracking-wider text-amber-700 font-semibold">Implementation Focus</p>
+                                    <p className="mt-2">Lift + gravity schemes concentrate on high-head zones and critical interlinking points to stabilize command coverage.</p>
                                 </div>
                             </div>
 
