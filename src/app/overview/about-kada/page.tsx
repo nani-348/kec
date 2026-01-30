@@ -36,7 +36,7 @@ export default function AboutKadaPage() {
             color: "bg-orange-50 text-orange-600",
         },
         {
-            label: "Average Rainfall",
+            label: "Normal Rainfall",
             value: "827",
             unit: "mm",
             icon: CloudRain,
@@ -86,7 +86,7 @@ export default function AboutKadaPage() {
                     setStats(prevStats => prevStats.map(stat => {
                         let matchedMetric: any = null;
                         if (stat.label.includes("Geographical Area")) matchedMetric = profileMap.get("Geographical Area");
-                        if (stat.label.includes("Average Rainfall")) matchedMetric = profileMap.get("Average Rainfall");
+                        if (stat.label.includes("Normal Rainfall")) matchedMetric = profileMap.get("Average Rainfall");
                         // Keep hardcoded if not found in sheet (Recharge/Hilly area missing in sheet)
                         if (matchedMetric) {
                             return {

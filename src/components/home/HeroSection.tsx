@@ -3,10 +3,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Droplets, CloudRain, Database, Waves } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
 const INDICATORS = [
-    { label: "Recharge-worthy Area", value: "2,34,500", unit: "Ha", icon: Droplets, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "Average Rainfall", value: "827", unit: "mm", icon: CloudRain, color: "text-cyan-600", bg: "bg-cyan-50" },
+    { label: "Recharge-worthy Area", value: "71,790", unit: "Ha", icon: Droplets, color: "text-blue-600", bg: "bg-blue-50" },
+    { label: "Normal Rainfall", value: "827", unit: "mm", icon: CloudRain, color: "text-cyan-600", bg: "bg-cyan-50" },
     { label: "Groundwater Availability", value: "12.8", unit: "TMC", icon: Database, color: "text-green-600", bg: "bg-green-50" },
     { label: "MI Tanks Analyzed", value: "1,247", unit: "No.", icon: Waves, color: "text-teal-600", bg: "bg-teal-50" },
 ];
@@ -52,10 +54,38 @@ export default function HeroSection() {
                             </span>
                         </div>
 
-                        <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight font-serif drop-shadow-md">
-                            Groundwater Analysis & <br />
-                            <span className="text-secondary drop-shadow-sm">Hydrology Observatory</span>
-                        </h1>
+                        <div className="flex items-start justify-center gap-10 lg:gap-16">
+                            <Link href="/website-design-team" className="shrink-0 hover:scale-110 transition-transform duration-300 flex flex-col items-center">
+                                <Image
+                                    src="/images/about-kada/iit.jpg"
+                                    alt="IIT Kharagpur Logo"
+                                    width={160}
+                                    height={160}
+                                    unoptimized
+                                    className="w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-white p-2 shadow-2xl"
+                                />
+                                <span className="mt-2 text-white text-sm lg:text-base font-semibold drop-shadow-md text-center">
+                                    IIT Kharagpur
+                                </span>
+                            </Link>
+                            <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight font-serif drop-shadow-md">
+                                Groundwater Analysis & <br />
+                                <span className="text-secondary drop-shadow-sm">Hydrology Observatory</span>
+                            </h1>
+                            <Link href="/website-design-team" className="shrink-0 hover:scale-110 transition-transform duration-300 flex flex-col items-center">
+                                <Image
+                                    src="/images/about-kada/kpm.jpg"
+                                    alt="Kuppam Engineering College Logo"
+                                    width={160}
+                                    height={160}
+                                    unoptimized
+                                    className="w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-white p-2 shadow-2xl"
+                                />
+                                <span className="mt-2 text-white text-sm lg:text-base font-semibold drop-shadow-md text-center">
+                                    Kuppam Engineering College
+                                </span>
+                            </Link>
+                        </div>
 
                         <p className="text-lg lg:text-xl text-gray-100 max-w-3xl mx-auto leading-relaxed drop-shadow-sm font-medium">
                             A scientific, spatial and temporal analysis of groundwater levels, aquifer storage,
