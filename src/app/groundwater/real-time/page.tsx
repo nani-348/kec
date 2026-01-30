@@ -212,7 +212,7 @@ export default function RealTimeWaterLevelPage() {
                                     <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
                                         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                                         <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#6b7280' }} angle={-45} textAnchor="end" height={80} interval={0} />
-                                        <YAxis tick={{ fontSize: 11, fill: '#6b7280' }} label={{ value: 'Depth (m bgl)', angle: -90, position: 'insideLeft', style: { fontSize: 12 } }} />
+                                        <YAxis reversed tick={{ fontSize: 11, fill: '#6b7280' }} label={{ value: 'Depth (m bgl)', angle: -90, position: 'insideLeft', style: { fontSize: 12 } }} />
                                         <Tooltip content={<CustomTooltip />} />
                                         <Legend wrapperStyle={{ paddingTop: 20 }} />
                                         <Bar dataKey="Week 1" fill="#93c5fd" radius={[2, 2, 0, 0]} />
