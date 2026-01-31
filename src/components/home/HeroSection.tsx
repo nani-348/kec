@@ -58,14 +58,14 @@ export default function HeroSection() {
                             <Link href="/website-design-team" className="shrink-0 hover:scale-110 transition-transform duration-300 flex flex-col items-center">
                                 <Image
                                     src="/images/about-kada/iit.jpg"
-                                    alt="IIT Kharagpur Logo"
+                                    alt="IIT Kanpur Logo"
                                     width={160}
                                     height={160}
                                     unoptimized
                                     className="w-32 h-32 lg:w-40 lg:h-40 rounded-full bg-white p-2 shadow-2xl"
                                 />
                                 <span className="mt-2 text-white text-sm lg:text-base font-semibold drop-shadow-md text-center">
-                                    IIT Kharagpur
+                                    IIT Kanpur
                                 </span>
                             </Link>
                             <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight font-serif drop-shadow-md">

@@ -19,7 +19,6 @@ const NAV_ITEMS = [
             { label: "About KADA Region", href: "/overview/about-kada" },
             { label: "Administrative Profile", href: "/overview/admin-profile" },
             { label: "Rainfall Characteristics", href: "/overview/rainfall" },
-            { label: "Spatial Framework", href: "/overview/spatial-framework" },
         ]
     },
     {
@@ -27,11 +26,12 @@ const NAV_ITEMS = [
         href: "/groundwater/real-time",
         subItems: [
             { label: "Real-Time Water Levels", href: "/groundwater/real-time" },
-            { label: "Annual & Long-Term Trends", href: "/groundwater/annual-trends" },
-            { label: "Spatial Distribution", href: "/groundwater/spatial-distribution" },
-            { label: "Seasonal Fluctuation", href: "/groundwater/seasonal-fluctuation" },
             { label: "Seasonal GIS Analysis", href: "/groundwater/seasonal-gis" },
             { label: "Current Status", href: "/groundwater/current-status" },
+            { label: "Annual & Long-Term Trends", href: "/groundwater/annual-trends" },
+            { label: "Monsoonal Rise Analysis", href: "/groundwater/monsoonal-rise" },
+            { label: "Spatial Distribution", href: "/groundwater/spatial-distribution" },
+            { label: "Seasonal Fluctuation", href: "/groundwater/seasonal-fluctuation" },
             { label: "Piezometer Observations", href: "/groundwater/piezometer-obs" },
         ]
     },

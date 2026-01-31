@@ -23,12 +23,12 @@ const ANALYSIS_CATEGORIES = [
         href: "/groundwater/current-status"
     },
     {
-        label: "Aquifer & Storage Analysis",
-        description: "Aquifer characterization, storage coefficients, and capacity assessment",
+        label: "Conservation Planning",
+        description: "Water conservation strategies, intervention plans, and impact assessment",
         icon: Layers,
         color: "text-cyan-600",
         bg: "bg-cyan-50",
-        href: "/aquifer/storage-estimation"
+        href: "/conservation/water-conservation-plan"
     },
     {
         label: "Hydrology & Flow Analysis",

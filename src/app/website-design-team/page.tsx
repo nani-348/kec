@@ -37,17 +37,21 @@ const teamMembers = [
 
 const mentors = [
     {
-        name: "Dr. G.N. Kodanda Ramaiah",
-        role: "Professor, HOD , Director R&D",
+        name: "Dr. Kodanda Ramaiah, Ph.D., MIETE, MIEI",
+        role: "Director – R & D | Professor",
         department: "Electronics & Communication Engineering",
-        email: "hod_ece@kec.ac.in",
+        bio: "An accomplished academic leader and researcher with extensive experience in research management, innovation, and mentoring. Actively involved in leading research and development initiatives, fostering innovation ecosystems, and guiding faculty and students toward impactful research outcomes. Professional contributions span applied research, technology development, and institutional capacity building.",
+        areasOfInterest: ["Electronics & Communication Systems", "Research & Development Management", "Innovation & Entrepreneurship", "Applied Engineering Research"],
+        email: "ramaiah.gnk@gmail.com",
         image: "/images/mentor-gnk.jpg",
     },
     {
-        name: "Dr. M. Lakshmipathy",
+        name: "Dr. M. Lakshmipathy, Ph.D., MIEEE, LMISTE, MIAENG, MISRD, MISOC",
         role: "Associate Professor",
         department: "Electronics & Communication Engineering",
-        email: "mlakshmipathy@kec.ac.in",
+        bio: "An accomplished academician and educator with strong experience in teaching, research, and mentoring undergraduate and postgraduate students. Academic interests span core electronics, communication systems, and emerging technologies, with a focus on strengthening students' conceptual understanding and practical skills.",
+        areasOfInterest: ["Embedded Systems", "VLSI & Core Electronics", "Technology-Driven Social Responsibility Projects", "Emerging Technologies"],
+        email: "lakshmipathym@kec.ac.in",
         image: "/images/mentor-mlp.png",
     },
 ];
@@ -143,7 +147,7 @@ export default function WebsiteDesignTeamPage() {
                                 key={mentor.name}
                                 className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300"
                             >
-                                <div className="flex items-center gap-5">
+                                <div className="flex items-start gap-5 mb-4">
                                     <div className="w-24 h-32 rounded-xl overflow-hidden border-2 border-secondary/20 shrink-0 shadow-sm">
                                         <Image
                                             src={mentor.image}
@@ -170,6 +174,26 @@ export default function WebsiteDesignTeamPage() {
                                             <Mail size={12} />
                                             {mentor.email}
                                         </a>
+                                    </div>
+                                </div>
+
+                                {/* Bio */}
+                                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                                    {mentor.bio}
+                                </p>
+
+                                {/* Areas of Interest */}
+                                <div className="pt-4 border-t border-gray-100">
+                                    <p className="text-xs font-semibold text-gray-700 mb-2">Areas of Interest</p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {mentor.areasOfInterest.map((area) => (
+                                            <span
+                                                key={area}
+                                                className="px-2.5 py-1 text-xs bg-secondary/10 border border-secondary/20 rounded-full text-secondary"
+                                            >
+                                                {area}
+                                            </span>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
