@@ -40,7 +40,6 @@ const MANDAL_BREAKDOWN = [
   { name: "SANTHI PURAM", geoArea: 16340, rechargeArea: 16290, hillyArea: 50, rainfall: 813 },
 ];
 const TOTAL_BREAKDOWN = { geoArea: 105190, rechargeArea: 71790, hillyArea: 33400, avgRainfall: 827 };
-
 export default function RainfallAnalysis() {
   const [data, setData] = useState<RainfallApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
