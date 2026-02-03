@@ -287,7 +287,7 @@ export default function MonsoonalRisePage() {
                                         />
                                         <Tooltip
                                             cursor={{ fill: '#f3f4f6' }}
-                                            formatter={(value: number) => [value.toLocaleString(), "KWHr"]}
+                                            formatter={(value: number | undefined) => [value?.toLocaleString() ?? "0", "KWHr"]}
                                             contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
                                         />
                                         <Bar dataKey="value" radius={[8, 8, 0, 0]} barSize={50} animationDuration={1500}>
